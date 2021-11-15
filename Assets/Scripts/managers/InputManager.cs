@@ -21,7 +21,7 @@ public class InputManager : MonoBehaviour
             // RaycastHit hit;
             // Debug.DrawRay(ray.origin, ray.direction*10);
             // if(Physics.Raycast(ray, out hit)){
-            //     Debug.Log("hit.collider.nae");
+            //     Debug.Log("hit.collider.name");
             //     Debug.Log(hit.collider.name);
             // }
 
@@ -35,7 +35,7 @@ public class InputManager : MonoBehaviour
                                     hit.collider.gameObject.transform.position,
                                     Quaternion.identity);
                         Debug.Log("hit " + hit.collider.transform.position);
-                        Destroy(hit.collider.gameObject);
+                        // Destroy(hit.collider.gameObject);
                     }
                 }
             }

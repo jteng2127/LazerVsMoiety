@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4713571076360516083}
   m_Layer: 0
   m_Name: defendTile
-  m_TagString: defendTile
+  m_TagString: DefendTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

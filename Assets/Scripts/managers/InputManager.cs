@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    private bool isDraggingUnitCard = false;
+
     void Start()
     {
 
@@ -15,9 +17,22 @@ public class InputManager : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
 
-            Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);
+            // Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);
+            // Debug.Log(pos);
             // Debug.DrawRay(ray.origin, ray.direction*20);
-            if(touch.phase == TouchPhase.Ended){
+            // Debug.Log(touch.deltaPosition);
+            if(touch.phase == TouchPhase.Began){
+                Debug.Log("touch began");
+            }
+            else if(touch.phase == TouchPhase.Moved){
+                Debug.Log(touch.deltaPosition);
+                Debug.Log("touch moved");
+            }
+            else if(touch.phase == TouchPhase.Stationary){
+                // Debug.Log("touch stationary");
+            }
+            else if(touch.phase == TouchPhase.Ended){
+                Debug.Log("touch ended");
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
                 foreach(RaycastHit2D hit in hitAll){
                     if(hit.collider.tag == "defendTile"){

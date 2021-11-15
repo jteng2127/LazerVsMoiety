@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - defendTile
+  - UnitCard
+  - DefendTile
   layers:
   - Default
   - TransparentFX
@@ -39,8 +40,11 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: background
+  - name: BackGround
     uniqueID: 1666810447
+    locked: 0
+  - name: DefendGrid
+    uniqueID: 3809306179
     locked: 0
   - name: Default
     uniqueID: 0

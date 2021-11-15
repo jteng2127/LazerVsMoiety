@@ -9,7 +9,6 @@ public class DefendGrid : MonoBehaviour
     public int tileRowTotal = 5;
     public int tileColumnTotal = 9;
 
-    // private List<List<GameObject> > defendTile = new List<List<GameObject> >();
     private float tileWidth = 0;
     private float tileHeight = 0;
 

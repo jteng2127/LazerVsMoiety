@@ -14,6 +14,9 @@ public class DefendGrid : MonoBehaviour
 
     void Awake()
     {
+        BoxCollider2D totalBox = GetComponent<BoxCollider2D>();
+        tileWidth = totalBox.size.x / tileColumnTotal;
+        tileHeight = totalBox.size.y / tileRowTotal;
     }
 
     void Start()
@@ -26,10 +29,6 @@ public class DefendGrid : MonoBehaviour
     }
 
     public GameObject create_tile(int row, int col){
-        BoxCollider2D totalBox = GetComponent<BoxCollider2D>();
-        tileWidth = totalBox.size.x / tileColumnTotal;
-        tileHeight = totalBox.size.y / tileRowTotal;
-
         float dx = tileWidth*(col-tileColumnTotal/2);
         float dy = tileHeight*(row-tileRowTotal/2);
         Vector3 deltaPosition = new Vector3(dx, dy, 0);

@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
                 Debug.Log("touch began");
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
                 foreach(RaycastHit2D hit in hitAll){
-                    if(hit.collider.tag == "UnitCard"){ // drag
+                    if(hit.collider.tag == "UnitCard"){
                         isDragging = true;
                         draggingObject = hit.collider.gameObject;
                         break;
@@ -36,6 +36,12 @@ public class InputManager : MonoBehaviour
                 }
             }
             else if(touch.phase == TouchPhase.Moved){
+                if(isDragging){
+                    Vector3 deltaPos = 
+                        Camera.main.ScreenToWorldPoint(touch.position + touch.deltaPosition) -
+                        Camera.main.ScreenToWorldPoint(touch.position);
+                    draggingObject.transform.position += deltaPos;
+                }
             }
             else if(touch.phase == TouchPhase.Stationary){
             }
@@ -51,10 +57,6 @@ public class InputManager : MonoBehaviour
                 isDragging = false;
             }
 
-            if(isDragging){
-                Vector2 pos = Camera.main.ScreenToWorldPoint(touch.position);
-                draggingObject.transform.position = new Vector2(pos.x, pos.y);
-            }
         }
     }
 }

@@ -1,16 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UnitCard : MonoBehaviour
+public class UnitCard : MonoBehaviour, IPointerDownHandler
 {
-    void Start()
-    {
-        
+    public void OnPointerDown(PointerEventData eventData){
+        Debug.Log("on pointer down");
     }
+    public void generate_drag_preview(){
 
-    void Update()
-    {
-        
     }
 }

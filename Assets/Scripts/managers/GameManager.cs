@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject defendGrid;
-    private List<List<DefendTile> > defendTileList = new List<List<DefendTile> >();
+    // private List<List<DefendTile> > defendTileList = new List<List<DefendTile> >();
     public const int tileRowTotal = 5;
     public const int tileColumnTotal = 9;
     private GameObject[,] defendTileArray = new GameObject[tileRowTotal, tileColumnTotal];

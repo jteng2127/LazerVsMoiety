@@ -31,10 +31,11 @@ public class InputManager : MonoBehaviour
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
                 foreach(RaycastHit2D hit in hitAll){
                     if(hit.collider.tag == "defendTile"){
-                        Instantiate(cardPrefab,
-                                    hit.collider.gameObject.transform.position,
-                                    Quaternion.identity);
-                        Debug.Log("hit " + hit.collider.transform.position);
+                        hit.collider.gameObject.GetComponent<DefendTile>().set_defend_unit(1);
+                        // Instantiate(cardPrefab,
+                        //             hit.collider.gameObject.transform.position,
+                        //             Quaternion.identity);
+                        // Debug.Log("hit " + hit.collider.transform.position);
                         // Destroy(hit.collider.gameObject);
                     }
                 }

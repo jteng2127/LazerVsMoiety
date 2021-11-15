@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DefendTile : MonoBehaviour
 {
-    public GameObject cardPrefab;
-    private int unit_id = 0;
-    private GameObject unit_object;
+    public GameObject unitPrefab;
+    private int unitId = 0;
+    private GameObject unitObject;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,9 +20,9 @@ public class DefendTile : MonoBehaviour
     }
 
     public void set_defend_unit(int _id){
-        if(unit_id == 0){
-            unit_id = _id;
-            unit_object = Instantiate(cardPrefab,
+        if(unitId == 0){
+            unitId = _id;
+            unitObject = Instantiate(unitPrefab,
                                       transform.position,
                                       Quaternion.identity);
         }
@@ -30,9 +30,9 @@ public class DefendTile : MonoBehaviour
     }
 
     public void remove_unit(){
-        if(unit_id != 0){
-            unit_id = 0;
-            Destroy(unit_object);
+        if(unitId != 0){
+            unitId = 0;
+            Destroy(unitObject);
         }
     }
 }

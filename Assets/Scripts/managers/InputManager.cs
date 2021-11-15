@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    private bool isDraggingUnitCard = false;
+    private bool isDragging = false;
+    private GameObject draggingObject;
 
     void Start()
     {
@@ -21,25 +22,38 @@ public class InputManager : MonoBehaviour
             // Debug.Log(pos);
             // Debug.DrawRay(ray.origin, ray.direction*20);
             // Debug.Log(touch.deltaPosition);
+
+            // touch detect
             if(touch.phase == TouchPhase.Began){
                 Debug.Log("touch began");
+                RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
+                foreach(RaycastHit2D hit in hitAll){
+                    if(hit.collider.tag == "UnitCard"){ // drag
+                        isDragging = true;
+                        draggingObject = hit.collider.gameObject;
+                        break;
+                    }
+                }
             }
             else if(touch.phase == TouchPhase.Moved){
-                Debug.Log(touch.deltaPosition);
-                Debug.Log("touch moved");
             }
             else if(touch.phase == TouchPhase.Stationary){
-                // Debug.Log("touch stationary");
             }
             else if(touch.phase == TouchPhase.Ended){
                 Debug.Log("touch ended");
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
                 foreach(RaycastHit2D hit in hitAll){
-                    if(hit.collider.tag == "defendTile"){
+                    if(hit.collider.tag == "DefendTile"){
                         hit.collider.gameObject.GetComponent<DefendTile>().set_defend_unit(1);
-                        // Debug.Log("hit " + hit.collider.transform.position);
+                        break;
                     }
                 }
+                isDragging = false;
+            }
+
+            if(isDragging){
+                Vector2 pos = Camera.main.ScreenToWorldPoint(touch.position);
+                draggingObject.transform.position = new Vector2(pos.x, pos.y);
             }
         }
     }

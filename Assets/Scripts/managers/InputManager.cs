@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour
                 foreach(RaycastHit2D hit in hitAll){
                     if(hit.collider.tag == "UnitCard"){
                         isDragging = true;
-                        draggingObject = hit.collider.gameObject;
+                        draggingObject = hit.collider.gameObject.GetComponent<UnitCard>().generate_drag_preview();
                         break;
                     }
                 }

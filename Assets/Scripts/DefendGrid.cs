@@ -5,18 +5,20 @@ using UnityEngine;
 public class DefendGrid : MonoBehaviour
 {
     [SerializeField]
-    GameObject defendTilePrefab;
-    public int tileRowTotal = 5;
-    public int tileColumnTotal = 9;
+    private GameObject defendTilePrefab;
+    [SerializeField]
+    private GameObject enemyPrefab;
 
     private float tileWidth = 0;
     private float tileHeight = 0;
 
+    public float enemySpawnX;
+
     void Awake()
     {
         BoxCollider2D totalBox = GetComponent<BoxCollider2D>();
-        tileWidth = totalBox.size.x / tileColumnTotal;
-        tileHeight = totalBox.size.y / tileRowTotal;
+        tileWidth = totalBox.size.x / GameManager.tileColumnTotal;
+        tileHeight = totalBox.size.y / GameManager.tileRowTotal;
     }
 
     void Start()
@@ -29,8 +31,8 @@ public class DefendGrid : MonoBehaviour
     }
 
     public GameObject create_tile(int row, int col){
-        float dx = tileWidth*(col-tileColumnTotal/2);
-        float dy = tileHeight*(row-tileRowTotal/2);
+        float dx = tileWidth*(col-GameManager.tileColumnTotal/2);
+        float dy = tileHeight*(row-GameManager.tileRowTotal/2);
         Vector3 deltaPosition = new Vector3(dx, dy, 0);
         GameObject tile = Instantiate(
             defendTilePrefab,
@@ -40,5 +42,17 @@ public class DefendGrid : MonoBehaviour
         ) as GameObject;
         tile.GetComponent<BoxCollider2D>().size = new Vector2(tileWidth, tileHeight);
         return tile;
+    }
+
+    public GameObject spawn_enemy(int row){
+        float dy = tileHeight*(row-GameManager.tileRowTotal/2);
+        Vector3 deltaPosition = new Vector3(enemySpawnX, dy, 0);
+        GameObject enemy = Instantiate(
+            enemyPrefab,
+            transform.position + deltaPosition,
+            Quaternion.identity,
+            gameObject.transform
+        ) as GameObject;
+        return enemy;
     }
 }

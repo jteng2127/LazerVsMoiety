@@ -10,6 +10,7 @@ public class UnitCard : MonoBehaviour
         go.GetComponent<CanvasGroup>().alpha = .6f;
         go.transform.position = transform.position;
         go.transform.localScale = transform.localScale;
+        go.tag = "UnitCardPreview";
         return go;
     }
 }

@@ -48,15 +48,19 @@ public class InputManager : MonoBehaviour
             else if(touch.phase == TouchPhase.Ended){
                 Debug.Log("touch ended");
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
-                foreach(RaycastHit2D hit in hitAll){
-                    if(hit.collider.tag == "DefendTile"){
-                        hit.collider.gameObject.GetComponent<DefendTile>().set_defend_unit(1);
-                        break;
+                if(isDragging){
+                    if(draggingObject.tag == "UnitCardPreview"){
+                        foreach(RaycastHit2D hit in hitAll){
+                            if(hit.collider.tag == "DefendTile"){
+                                hit.collider.gameObject.GetComponent<DefendTile>().set_defend_unit(1);
+                                break;
+                            }
+                        }
+                        Destroy(draggingObject);
                     }
+                    isDragging = false;
                 }
-                isDragging = false;
             }
-
         }
     }
 }

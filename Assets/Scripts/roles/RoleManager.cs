@@ -71,9 +71,19 @@ public class FunctionalGroup : RoleManager
 {
     public string functinoalgroup;
     public int blood;
+
+    public FunctionalGroup()
+    {
+        roleType = new RoleType("FunctionalGroup");
+    }
 }
 
 public class Wave : RoleManager
 {
     public int wave;
+
+    public Wave()
+    {
+        roleType = new RoleType("Wave");
+    }
 }

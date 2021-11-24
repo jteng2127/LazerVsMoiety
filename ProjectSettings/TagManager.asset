@@ -6,6 +6,8 @@ TagManager:
   tags:
   - UnitCard
   - DefendTile
+  - Enemy
+  - UnitCardPreview
   layers:
   - Default
   - TransparentFX

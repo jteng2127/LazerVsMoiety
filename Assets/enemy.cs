@@ -6,6 +6,6 @@ public class enemy : MonoBehaviour
 {
     void FixedUpdate()
     {
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(0.0f,  -0.1f));
+        GetComponent<Rigidbody2D>().velocity = new Vector2(-3.0f, 0.0f);
     }
 }

@@ -1,24 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class RoleType
-{
-    string _type;
-    string roleType {get {return _type;}}
-
-    public RoleType(int type){
-        _type = type;
-    }
-}
+using System.IO;
 
 public class RoleManager: MonoBehaviour
 {
     public RoleType roleType;
     public const string pictureSrc; // picture Src
     public double transparency; // picture transparency
+
+    [SerializeField]
+    private class FWData
+    {
+        // functaional Group and wave
+        public int fg;
+        public int wave;
+    }
+
+    private List<FWData> _getFWData()
+    {
+        LoadFWdata = File.ReadAllText("../jsons/FW.json");
+        DataList = JsonUtility.FromJson<List<FWData>>(LoadFWdata);
+    }
+
+    // Can get Functaional Group with wave
+    public int getFunctional(int waveValue){
+        List<FWData> DataList = _getFWData();
+        foreach (FWData data in DataList)
+        {
+            if (data.wave == waveValue)
+            {
+                return data.fg;
+            }
+        }
+    }
+
+    // Can get wave with Functaional Group
+    public int getWave(int functionalValue){
+        List<FWData> DataList = _getFWData();
+        return DataList[functionalValue].wave;
+    }
     
-    void _move(Vector3 destination, double time = Time.deltaTime)
+    private void _move(Vector3 destination, double time = Time.deltaTime)
     {
         // object move(x, y)
         transform.position = 
@@ -32,7 +55,8 @@ public class RoleManager: MonoBehaviour
     public void moveAToBbyTime()
     {
         // position A, position B, time
-        Vector3 posY = new vector3(B, y, 0); 
+        Vector3 posY = new vector3(B, y, 0);
+        InvokeRepeating("_move", 0, time);
         _move(posY, time);
     }
 
@@ -43,7 +67,7 @@ public class RoleManager: MonoBehaviour
         _move(des, speed);
     }
 
-    void _transparent(double alpha = 1.0f)
+    private void _transparent(double alpha = 1.0f)
     {
         // change transparency
         transparency = alpha;
@@ -53,37 +77,16 @@ public class RoleManager: MonoBehaviour
 
     public void show()
     {
-        _transparent(1.0f)
+        _transparent(1.0f);
     }
 
     public void hide()
     {
-        _transparent(0.0f)
+        _transparent(0.0f);
     }
 
-    public void destory()
+    private void _destory()
     {
         Destory();
-    }
-}
-
-public class FunctionalGroup : RoleManager
-{
-    public string functinoalgroup;
-    public int blood;
-
-    public FunctionalGroup()
-    {
-        roleType = new RoleType("FunctionalGroup");
-    }
-}
-
-public class Wave : RoleManager
-{
-    public int wave;
-
-    public Wave()
-    {
-        roleType = new RoleType("Wave");
     }
 }

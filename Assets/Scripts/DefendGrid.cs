@@ -25,7 +25,6 @@ public class DefendGrid : MonoBehaviour
 
     void Update()
     {
-        
     }
 
     public GameObject create_tile(int row, int col){

@@ -11,16 +11,17 @@ public class Wave : RoleManager
     // Wave move right
     public void moveRight(int wave)
     {
-        _move();
+        moveAToBbySpeed();
     }
 
+    // Wave collision with functional group
     public void collision()
     {
         if(wave == -1)
         {
             // mower collision
             // do something 
-            _destory();
+            destory();
             return;
         }
         
@@ -28,7 +29,7 @@ public class Wave : RoleManager
         // suppose fgID is Functional Group ID
         if(getWave(fgID) == wave)
         {
-            _destory();
+            destory();
         }
     }
 }

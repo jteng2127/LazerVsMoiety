@@ -6,8 +6,10 @@ using System.IO;
 public class RoleManager: MonoBehaviour
 {
     public RoleType roleType;
-    public const string pictureSrc; // picture Src
+    public readonly string pictureSrc; // picture Src
     public double transparency; // picture transparency
+    public vector3 positionX;
+    public vector3 positionY;
 
     [SerializeField]
     private class FWData
@@ -35,6 +37,7 @@ public class RoleManager: MonoBehaviour
         }
     }
 
+    
     // Can get wave with Functaional Group
     public int getWave(int functionalValue){
         List<FWData> DataList = _getFWData();
@@ -60,17 +63,24 @@ public class RoleManager: MonoBehaviour
         _move(posY, time);
     }
 
-    public void moveAToBbySpeed()
+    /// <summary>
+    /// move position A to position B by speed
+    /// </summary>
+    /// <param name="direction">Direction, 1 is right, -1 is left</param>
+    /// <param name="speed">speed</param>
+    public void moveAToBbySpeed(int direction, int speed)
     {
-        // position A, postition B, Speed
-        Vector3 des = new Vector3(B, y, 0);
-        _move(des, speed);
+        // position A, position B, speed
+        Vector3 posY = new vector3(B, direction * y, 0);
+        InvokeRepeating("_move", 0, speed);
+        _move(posY, speed);
     }
 
     private void _transparent(double alpha = 1.0f)
     {
         // change transparency
         transparency = alpha;
+        this.moveAToBbySpeed(1,1);
         var render = gameObject.GetComponentInChildren(Renderer);    
         render.material.color.a = alpha;
     }
@@ -85,8 +95,8 @@ public class RoleManager: MonoBehaviour
         _transparent(0.0f);
     }
 
-    private void _destory()
+    private void destory()
     {
-        Destory();
+        _destory();
     }
 }

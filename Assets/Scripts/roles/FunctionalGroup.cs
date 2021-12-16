@@ -29,6 +29,6 @@ public class FunctionalGroup : RoleManager
 
     // Functional Group move left
     public void moveLeft(){
-        _move();
+        moveAToBbySpeed();
     }
 }

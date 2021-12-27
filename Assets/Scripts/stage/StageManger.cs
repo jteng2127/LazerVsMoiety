@@ -40,6 +40,7 @@ public class StageManger: MonoBehaviour
     [SerializeField]
     public List<int> enemy_and_ally_id_list; // = queryEnemyAndAllyIdList(5);
 
+    // TODO: add JsonManager
     public List<int> queryEnemyAndAllyIdList(int level){
         // string load_unit_data = File.ReadAllText("../jsons/StageUnit.json");
         // List<EnemyUnitData> data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);

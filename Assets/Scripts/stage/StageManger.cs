@@ -22,11 +22,11 @@ public class StageManger: MonoBehaviour
 
         public Coefficient(int level){
             level = level - 1;
-            _min_enemy_spawn_interval = min(Math.Pow(1.01f, level) - 0.51f, 0.35f);
-            _max_enemy_spawn_interval = min(Math.Pow(1.03f, level) + 1.97f, 2.0f);
+            _min_enemy_spawn_interval = Mathf.Min(Mathf.Pow(1.01f, level) - 0.51f, 0.35f);
+            _max_enemy_spawn_interval = Mathf.Min(Mathf.Pow(1.03f, level) + 1.97f, 2.0f);
             _min_ally_card_spawn_interval = 5.0f;
             _max_ally_card_spawn_interval = 10.0f;
-            _enemy_quantity = min(Math.Pow(1.051, level) - 0.051, 12) * 15;
+            _enemy_quantity = Mathf.Min(Mathf.Pow(1.051f, level) - 0.051f, 12) * 15;
         }
 
         public double enemy_spawn_time {get {
@@ -38,12 +38,13 @@ public class StageManger: MonoBehaviour
             }}
     }
     [SerializeField]
-    public List<int> enemy_and_ally_id_list = queryEnemyAndAllyIdList(this.level);
+    public List<int> enemy_and_ally_id_list; // = queryEnemyAndAllyIdList(5);
 
     public List<int> queryEnemyAndAllyIdList(int level){
-        load_unit_data = File.ReadAllText("../jsons/StageUnit.json");
-        data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);
-        return data_list;
+        // string load_unit_data = File.ReadAllText("../jsons/StageUnit.json");
+        // List<EnemyUnitData> data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);
+        // return data_list;
+        return new List<int>();
     }
     
     // public Coefficient coefficient = new Coefficient(checkpoint_level);

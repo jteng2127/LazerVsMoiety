@@ -8,11 +8,6 @@ public class EnemyUnit : RoleManager
     public int enemy_unit_id;
     public int blood;
 
-    public EnemyUnit()
-    {
-        role_type = new RoleType("EnemyUnit");
-    }
-
     [SerializeField]
     private class EnemyUnitData
     {
@@ -25,8 +20,8 @@ public class EnemyUnit : RoleManager
     /// </summary>
     private string _queryEnemyUnitData(int enemy_unit_query_id)
     {
-        load_enemy_unit_data = File.ReadAllText("../jsons/EnemyUnit.json");
-        data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);
+        string load_enemy_unit_data = File.ReadAllText("../jsons/EnemyUnit.json");
+        List<EnemyUnitData> data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);
         return data_list[enemy_unit_query_id].name;
     }
 
@@ -35,7 +30,7 @@ public class EnemyUnit : RoleManager
     /// </summary>
     public void moveLeft()
     {
-        moveAToBbySpeed();
+        // moveAToBbySpeed();
 
         // if the enemy arrive the left edge, then it must call mower.
     }

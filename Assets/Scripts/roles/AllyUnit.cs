@@ -10,17 +10,12 @@ public class AllyUnit : RoleManager
     /// </summary>
     public int ally_unit_id { get; }
 
-    public AllyUnit()
-    {
-        role_type = new RoleType("AllyUnit");
-    }
-
     /// <summary>
     /// AllyUnit move right
     /// </summary>
-    public void moveRight(int ally_unit_id, double speed = 1.0f)
+    public void moveRight(int ally_unit_id, float speed = 1.0f)
     {
-        moveAToBbySpeed(1, speed);
+        // moveAToBbySpeed(1, speed);
         
         // if the mower arrive right edge, then it must be destoryed
     }
@@ -28,22 +23,22 @@ public class AllyUnit : RoleManager
     /// <summary>
     /// Ally collision with Emeny
     /// </summary>
-    public void collision()
+    public void collision(int enemy_unit_id)
     {
         if(this.ally_unit_id == -1)
         {
             // mower collision
             // do something 
             GameObject enemy_unit = GameObject.Find("something");
-            enemy_unit.destory();
+            Destroy(enemy_unit);
             return;
         }
         
         // ally(wave) collision
         // suppose emeny_unit_id is emeny unit ID
-        if(getWave(emeny_unit_id) == this.ally_unit_id)
+        if(getAllyUnitId(enemy_unit_id) == this.ally_unit_id)
         {
-            this.destory();
+            Destroy(transform.gameObject);
         }
     }
 }

@@ -11,13 +11,14 @@ public class ScoreManger : MonoBehaviour
     /// Calculate the score of the player.
     /// </summary>
     public int calcScore(){
-        cost_time = stage.coefficient.enemy_spawn_time;
-        num = stage.coefficient.enemy_quantity;
-        count = 0; // count the number of ally
-        mower = 0; // count the number of mower
-        score = max(num * cost_time * 4 - time, 2) * 100 +
-                120 * max(num * 1.5 - count, -10) + 
-                mower * 300;
+        int score = 0;
+        // cost_time = stage.coefficient.enemy_spawn_time;
+        // num = stage.coefficient.enemy_quantity;
+        // count = 0; // count the number of ally
+        // mower = 0; // count the number of mower
+        // score = max(num * cost_time * 4 - time, 2) * 100 +
+        //         120 * max(num * 1.5 - count, -10) + 
+        //         mower * 300;
         return score;
     }
 

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+// TODO rename to Unit
+
 public class RoleManager: MonoBehaviour
 {
-    public RoleType role_type;
     public readonly string picture_src; // picture Src
     public double transparency; // picture transparency
     // public vector3 position;
@@ -28,8 +29,8 @@ public class RoleManager: MonoBehaviour
     /// </returns>
     private List<EnemyAndAllyData> _queryEnemyAndAllyDataList()
     {
-        load_enemy_and_ally_data = File.ReadAllText("../jsons/EnemyAndAlly.json");
-        data_list = JsonUtility.FromJson<List<EnemyAndAllyData>>(load_enemy_and_ally_data);
+        string load_enemy_and_ally_data = File.ReadAllText("../jsons/EnemyAndAlly.json");
+        List<EnemyAndAllyData> data_list = JsonUtility.FromJson<List<EnemyAndAllyData>>(load_enemy_and_ally_data);
         return data_list;
     }
 
@@ -64,7 +65,7 @@ public class RoleManager: MonoBehaviour
     /// <summary>
     /// GameObject move to the target position.
     /// </summary>
-    private void _move(Vector3 destination, double time = 0)
+    private void _move(Vector3 destination, float time = 0)
     {
         // object move(x, y)
         transform.position = 
@@ -81,9 +82,9 @@ public class RoleManager: MonoBehaviour
     public void moveAToBbyTime()
     {
         // position A, position B, time
-        Vector3 posY = new vector3(B, y, 0);
-        InvokeRepeating("_move", 0, time);
-        _move(posY, time);
+        // Vector3 posY = new Vector3(B, y, 0);
+        // InvokeRepeating("_move", 0, time);
+        // _move(posY, time);
     }
 
     /// <summary>
@@ -96,28 +97,28 @@ public class RoleManager: MonoBehaviour
     public void moveAToBbySpeed(int direction, int speed)
     {
         // position A, position B, speed
-        Vector3 posY = new vector3(B, direction * y, 0);
-        InvokeRepeating("_move", 0, speed);
-        _move(posY, speed);
+        // Vector3 posY = new vector3(B, direction * y, 0);
+        // InvokeRepeating("_move", 0, speed);
+        // _move(posY, speed);
     }
 
     /// <summary>
     /// Change Gameobject's transparency.
     /// </summary>
-    private void _transparent(double alpha = 1.0f)
-    {
-        // change transparency
-        transparency = alpha;
-        var render = gameObject.GetComponentInChildren(Renderer);    
-        render.material.color.a = alpha;
-    }
+    // private void _transparent(double alpha = 1.0f)
+    // {
+    //     // change transparency
+    //     transparency = alpha;
+    //     var render = gameObject.GetComponentInChildren(Renderer);    
+    //     render.material.color.a = alpha;
+    // }
 
     /// <summary>
     /// Let GameObject show.
     /// </summary>
     public void show()
     {
-        _transparent(1.0f);
+        // _transparent(1.0f);
     }
 
     /// <summary>
@@ -125,14 +126,14 @@ public class RoleManager: MonoBehaviour
     /// </summary>
     public void hide()
     {
-        _transparent(0.0f);
+        // _transparent(0.0f);
     }
 
     /// <summary>
     /// Let GameObject destory.
     /// </summary>
-    private void destory()
+    public void destroy()
     {
-        _destory();
+        Destroy(transform.gameObject);
     }
 }

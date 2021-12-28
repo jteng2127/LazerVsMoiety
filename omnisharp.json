@@ -2,8 +2,9 @@
   "FormattingOptions": {
     "newLine": "\n",
     "useTabs": false,
-    "tabSize": 2,
-    "indentationSize": 2,
+    "tabSize": 4,
+    "indentationSize": 4,
+    "smartIndent": 2,
     "SpaceAfterControlFlowStatementKeyword": true,
     "NewLinesForBracesInLambdaExpressionBody": false,
     "NewLinesForBracesInAnonymousMethods": false,

@@ -34,9 +34,11 @@ public class GameManager : ScriptableObject
 
     public enum SceneType
     {
+        /// <summary> Loding page </summary>
         Loading,
         Login,
         Menu,
+        /// <summary> Logout etc. </summary>
         User,
         Setting,
         StageSelect,

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : ScriptableObject
 {
     #region Singleton
+
     protected static GameManager s_Instance;
 
     public static GameManager Instance
@@ -21,14 +22,16 @@ public class GameManager : ScriptableObject
         }
     }
 
-    #endregion
-
     void OnEnable()
     {
         Debug.Log("GameManager Enable");
+        _initSceneTypeDictionary();
     }
 
+    #endregion
+
     #region Scene
+
     public enum SceneType
     {
         Loading,
@@ -40,6 +43,27 @@ public class GameManager : ScriptableObject
         Stage,
         GameOver,
     }
+
+    Dictionary<SceneType, string> _sceneTypeToString;
+    void _initSceneTypeDictionary(){
+        Debug.Log("Initial SceneTypeDictionary");
+        _sceneTypeToString = new Dictionary<SceneType, string>{
+            {SceneType.Loading, "Loading"},
+            {SceneType.Login, "Login"},
+            {SceneType.Menu, "Menu"},
+            {SceneType.User, "User"},
+            {SceneType.Setting, "Setting"},
+            {SceneType.StageSelect, "StageSelect"},
+            {SceneType.Stage, "Stage"},
+            {SceneType.GameOver, "GameOver"},
+        };
+    }
+
+    public void LoadScene(SceneType scene){
+        SceneManager.LoadScene(_sceneTypeToString[scene]);
+    }
+
+    #endregion
 
 
     public void Test()

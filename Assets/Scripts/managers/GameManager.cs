@@ -36,7 +36,7 @@ public class GameManager : ScriptableObject
     {
         /// <summary> Loding page </summary>
         Loading,
-        Login,
+        SignIn,
         Menu,
         /// <summary> Logout etc. </summary>
         User,
@@ -51,7 +51,7 @@ public class GameManager : ScriptableObject
         Debug.Log("Initial SceneTypeDictionary");
         _sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
-            {SceneType.Login, "Login"},
+            {SceneType.SignIn, "SignIn"},
             {SceneType.Menu, "Menu"},
             {SceneType.User, "User"},
             {SceneType.Setting, "Setting"},

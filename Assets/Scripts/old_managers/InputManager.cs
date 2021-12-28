@@ -62,5 +62,8 @@ public class InputManager : MonoBehaviour
                 }
             }
         }
+        if(Input.GetKeyDown(KeyCode.Space)){
+            GameManager.Instance.LoadScene(GameManager.SceneType.SignIn);
+        }
     }
 }

@@ -147,13 +147,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 83555601}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71b56fc20d14c984b9ebe28d4f503fd4, type: 3}
+  m_Script: {fileID: 11500000, guid: 43d57706ab35cc94db407e4db25e7da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   defendGridObject: {fileID: 693081000}
-  enemySpawnInterval: 2
+  enemySpawnInterval: 5.59
   cardConveyorObject: {fileID: 1891536280}
-  cardSpawnInterval: 2
+  cardSpawnInterval: 4.47
 --- !u!4 &83555603
 Transform:
   m_ObjectHideFlags: 0

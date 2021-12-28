@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System;
 using System.Reflection;
 
@@ -27,7 +28,7 @@ public class StageManager : MonoBehaviour {
         }
     }
 
-    static StageManager CreateNewInstance() {
+    static void CreateNewInstance() {
         Log("Create");
         if (s_Instance) {
             Log("Destroy last instance");
@@ -36,43 +37,53 @@ public class StageManager : MonoBehaviour {
         GameObject go = new GameObject("StageManager", typeof(StageManager));
         DontDestroyOnLoad(go);
         s_Instance = go.GetComponent<StageManager>();
-        return s_Instance;
     }
 
     #endregion
 
     #region Data
 
-    private class StageData {
-        public string StageName;
-        public string StageDescription;
+    public class StageData {
+        public string StageName { get; }
+        public string StageDescription { get; }
 
-        public List<int> EnemyType;
-        public int EnemyQuantity;
-        public float EnemySpeedMultiplier; // TODO: add a default speed, change to EnemySpeed = defalut*mul
-        public int Level; // -1: custom
-        public float EnemySpawnInterval;
-        public float EnemySpawnIntervalDeviation;
-        public float AllyCardSpawnInterval;
-        public float AllyCardSpawnIntervalDeviation;
+        public int Level { get; } // -1: custom
+        public List<int> EnemyType { get; }
+        public int EnemyQuantity { get; }
+        public float EnemySpeedMultiplier { get; } // TODO: add a default speed, change to EnemySpeed = defalut*mul
+        public float EnemySpawnInterval { get; }
+        public float EnemySpawnIntervalDeviation { get; }
+        public float EnemySpawnPositionX { get; }
+        public float AllyCardSpawnInterval { get; }
+        public float AllyCardSpawnIntervalDeviation { get; }
+        public float AllyCardSpawnPositionX { get; }
+        public int GridRowTotal { get; }
+        public int GridColumnTotal { get; }
 
         public StageData(   List<int> enemyType,
-                            int enemyQuantity = 10,
-                            float enemySpeedMultiplier = 1.0f,
-                            float enemySpawnInterval = 7.0f,
-                            float enemySpawnIntervalDeviation = 0.0f,
-                            float allyCardSpawnInterval = 6.5f,
-                            float allyCardSpawnIntervalDeviation = 0.0f,
-                            int level = -1) {
+                            int enemyQuantity,
+                            float enemySpeedMultiplier,
+                            float enemySpawnInterval,
+                            float enemySpawnIntervalDeviation,
+                            float enemySpawnPositionX,
+                            float allyCardSpawnInterval,
+                            float allyCardSpawnIntervalDeviation,
+                            float allyCardSpawnPositionX,
+                            int level,
+                            int gridRowTotal,
+                            int gridColumnTotal) {
             EnemyType = enemyType;
             EnemyQuantity = enemyQuantity;
             EnemySpeedMultiplier = enemySpeedMultiplier;
             EnemySpawnInterval = enemySpawnInterval;
             EnemySpawnIntervalDeviation = enemySpawnIntervalDeviation;
+            EnemySpawnPositionX = enemySpawnPositionX;
             AllyCardSpawnInterval = allyCardSpawnInterval;
             AllyCardSpawnIntervalDeviation = allyCardSpawnIntervalDeviation;
+            AllyCardSpawnPositionX = allyCardSpawnPositionX;
             Level = level;
-
+            GridRowTotal = gridRowTotal;
+            GridColumnTotal = gridColumnTotal;
             // TODO: check here
             // MinEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.01f, level - 1) - 0.51f, 0.35f);
             // MaxEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.03f, level - 1) + 1.97f, 2.0f);
@@ -82,7 +93,7 @@ public class StageManager : MonoBehaviour {
         }
     }
 
-    StageData _data { get; set; }
+    public StageData Data { get; set; }
 
     bool _isPlaying;
 
@@ -92,12 +103,18 @@ public class StageManager : MonoBehaviour {
 
     void InitialStage(StageData data) {
         GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
-        _data = data;
+        Data = data;
         _isPlaying = false;
     }
 
     void StageStart(){
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode){
+        SpawnManager.StartNewSpawner();
+        Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log(mode);
     }
 
     #endregion
@@ -109,18 +126,27 @@ public class StageManager : MonoBehaviour {
                                         float enemySpeedMultiplier = 1.0f,
                                         float enemySpawnInterval = 7.0f,
                                         float enemySpawnIntervalDeviation = 0.0f,
+                                        float enemySpawnPositionX = 12.0f,
                                         float allyCardSpawnInterval = 6.5f,
                                         float allyCardSpawnIntervalDeviation = 0.0f,
-                                        int level = -1) {
-        CreateNewInstance().InitialStage(new StageData(
+                                        float allyCardSpawnPositionX = 8.0f,
+                                        int level = -1,
+                                        int gridRowTotal = 5,
+                                        int gridColumnTotal = 9) {
+        CreateNewInstance();
+        Instance.InitialStage(new StageData(
             enemyType,
             enemyQuantity,
             enemySpeedMultiplier,
             enemySpawnInterval,
             enemySpawnIntervalDeviation,
+            enemySpawnPositionX,
             allyCardSpawnInterval,
             allyCardSpawnIntervalDeviation,
-            level
+            allyCardSpawnPositionX,
+            level,
+            gridRowTotal,
+            gridColumnTotal
         ));
         Instance.StageStart();
     }
@@ -135,11 +161,7 @@ public class StageManager : MonoBehaviour {
 
     #endregion
 
-    #region Monobehaviour
-
-    void FixedUpdate(){
-        Log("asf");
-    }
+    #region MonoBehaviour
 
     void OnEnable() {
         Log("Enable");

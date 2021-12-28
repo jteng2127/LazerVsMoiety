@@ -27,7 +27,7 @@ public class SpawnManager : MonoBehaviour {
         }
     }
 
-    static SpawnManager CreateNewInstance() {
+    static void CreateNewInstance() {
         Log("Create");
         if (s_Instance) {
             Log("Destroy last instance");
@@ -36,18 +36,13 @@ public class SpawnManager : MonoBehaviour {
         GameObject go = new GameObject("SpawnManager", typeof(SpawnManager));
         DontDestroyOnLoad(go);
         s_Instance = go.GetComponent<SpawnManager>();
-        return s_Instance;
     }
 
     #endregion
 
     #region Data
 
-    float _enemySpawnInterval;
-    float _enemySpawnIntervalDeviation;
-    float _allyCardSpawnInterval;
-    float _allyCardSpawnIntervalDeviation;
-
+    StageGrid _stageGrid;
     float _enemySpawnDelay;
     float _allyCardSpawnDelay;
 
@@ -57,46 +52,69 @@ public class SpawnManager : MonoBehaviour {
 
     #region Method
 
-    void InitialSpawner(float enemySpawnInterval,
-                        float enemySpawnIntervalDeviation,
-                        float allyCardSpawnInterval,
-                        float allyCardSpawnIntervalDeviation) {
-        _enemySpawnInterval = enemySpawnInterval;
-        _enemySpawnIntervalDeviation = enemySpawnIntervalDeviation;
-        _allyCardSpawnInterval = allyCardSpawnInterval;
-        _allyCardSpawnIntervalDeviation = allyCardSpawnIntervalDeviation;
-        _isSpawning = false;
-    }
-
-    void SpawnStart(){
+    void SpawnStart() {
         _isSpawning = true;
         _enemySpawnDelay = 0.0f;
         _allyCardSpawnDelay = 0.0f;
+    }
+
+    float GenerateRandomDelay(float interval, float deviation) {
+        return UnityEngine.Random.Range(interval - deviation, interval + deviation);
+    }
+
+    void Spawn(int type){
+        int spawnRow = UnityEngine.Random.Range(0, StageManager.Instance.Data.GridRowTotal);
+        Debug.Log(
+            "Spawn " + type + " at: " + 
+            StageManager.Instance.Data.EnemySpawnPositionX + ", " +
+            _stageGrid.RowYList[spawnRow]
+        );
+        // TODO: complete Unit class then back here to spawn
+    }
+
+    void CheckAndSpawn() {
+        if (_enemySpawnDelay <= 0.0f) {
+            _enemySpawnDelay = GenerateRandomDelay(
+                StageManager.Instance.Data.EnemySpawnInterval,
+                StageManager.Instance.Data.EnemySpawnIntervalDeviation
+            );
+            Spawn(0);
+        }
+        if (_allyCardSpawnDelay <= 0.0f) {
+            _allyCardSpawnDelay = GenerateRandomDelay(
+                StageManager.Instance.Data.AllyCardSpawnInterval,
+                StageManager.Instance.Data.AllyCardSpawnIntervalDeviation
+            );
+            Spawn(1);
+        }
     }
 
     #endregion
 
     #region Interface
 
-    static public void StartNewSpawner( float enemySpawnInterval,
-                                        float enemySpawnIntervalDeviation,
-                                        float allyCardSpawnInterval,
-                                        float allyCardSpawnIntervalDeviation) {
-        CreateNewInstance().InitialSpawner(
-            enemySpawnInterval,
-            enemySpawnIntervalDeviation,
-            allyCardSpawnInterval,
-            allyCardSpawnIntervalDeviation
-        );
+    static public void StartNewSpawner() {
+        CreateNewInstance();
         Instance.SpawnStart();
+    }
+
+    public void TriggerPause() {
+
     }
 
     #endregion
 
-    #region Monobehaviour
+    #region MonoBehaviour
 
-    void Update(){
-        if(_isSpawning){
+    void Start() {
+        _stageGrid = GameObject.Find("StageGrid").GetComponent<StageGrid>();
+    }
+
+    void Update() {
+        if (_isSpawning) {
+            _enemySpawnDelay -= Time.deltaTime;
+            _allyCardSpawnDelay -= Time.deltaTime;
+            CheckAndSpawn();
         }
     }
 

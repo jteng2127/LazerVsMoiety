@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-// TODO rename to Unit
-
-public class RoleManager: MonoBehaviour
+public class Unit: MonoBehaviour
 {
+    int _id; // unit id
     public readonly string picture_src; // picture Src
-    public double transparency; // picture transparency
-    // public vector3 position;
 
     [SerializeField]
     private class EnemyAndAllyData
     {
-        // functaional Group and wave
         public int enemy_unit_id;
         public int ally_unit_id;
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class AllyUnit : RoleManager
+public class AllyUnit : Unit
 {
     /// <summary>
     /// ally = -1 means that this the mower

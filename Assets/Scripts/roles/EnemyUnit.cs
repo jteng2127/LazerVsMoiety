@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class EnemyUnit : RoleManager
+public class EnemyUnit : Unit
 {
     public int enemy_unit_id;
     public int blood;

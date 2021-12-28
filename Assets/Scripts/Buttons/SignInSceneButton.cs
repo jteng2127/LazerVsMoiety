@@ -63,7 +63,8 @@ public class SignInSceneButton : MonoBehaviour
     public void Click(){
         if(!_isSignedIn) TriggerSignInWindow();
         else if(_isSignedIn){
-            GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
+            StageManager.StartNewStage(new List<int>(), 0, 0f);
+            // GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
         }
     }
 

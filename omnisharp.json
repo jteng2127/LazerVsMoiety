@@ -4,7 +4,7 @@
     "useTabs": false,
     "tabSize": 4,
     "indentationSize": 4,
-    "smartIndent": 2,
+    "smartIndent": 4,
     "SpaceAfterControlFlowStatementKeyword": true,
     "NewLinesForBracesInLambdaExpressionBody": false,
     "NewLinesForBracesInAnonymousMethods": false,

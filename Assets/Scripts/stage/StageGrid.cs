@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StageGrid : MonoBehaviour {
-    Renderer _renderer;
     RectTransform _rectTransform;
 
     readonly int _gridRowTotal = 5;
@@ -14,12 +13,10 @@ public class StageGrid : MonoBehaviour {
     GameObject _gridTilePrefab;
 
     void Awake() {
-        _renderer = GetComponent<Renderer>();
         _rectTransform = GetComponent<RectTransform>();
         _tileHeight = _rectTransform.sizeDelta.y / _gridRowTotal;
         _tileWidth = _rectTransform.sizeDelta.x / _gridColumnTotal;
         _gridTilePrefab = Resources.Load<GameObject>("Prefabs/GridTile");
-        Debug.Log("StageGrid: " + _renderer.bounds.size + " " + _tileHeight);
     }
 
     GameObject CreateTile(int row, int col) {
@@ -45,7 +42,6 @@ public class StageGrid : MonoBehaviour {
             }
             _gridList.Add(gridRow);
         }
-        Debug.Log("grid init " + _gridList.Count + " " + _gridList[0][0]);
     }
 
     void Start() {

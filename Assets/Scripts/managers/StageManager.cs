@@ -9,7 +9,7 @@ public class StageManager : MonoBehaviour {
 
     #region Debug
 
-    protected static void Log(string s){
+    protected static void Log(string s) {
         Debug.Log(MethodBase.GetCurrentMethod().DeclaringType + ": " + s);
     }
 
@@ -19,21 +19,18 @@ public class StageManager : MonoBehaviour {
 
     protected static StageManager s_Instance;
 
-    public static StageManager Instance
-    {
-        get
-        {
-            if(s_Instance == null)
-            {
+    public static StageManager Instance {
+        get {
+            if (s_Instance == null) {
                 throw new NullReferenceException();
             }
             return s_Instance;
         }
     }
 
-    static void CreateDefault(){
+    static void CreateDefault() {
         Log("Create");
-        if(s_Instance){
+        if (s_Instance) {
             Log("Destroy last instance");
             Destroy(s_Instance.gameObject);
         }
@@ -42,22 +39,15 @@ public class StageManager : MonoBehaviour {
         s_Instance = go.GetComponent<StageManager>();
     }
 
-    void OnEnable()
-    {
-        Log("Enable");
-    }
-
-    void OnDestroy(){
-        Log("Destroy");
-    }
-
     #endregion
+
+    #region Data
 
     private class StageData {
         public List<int> EnemyType;
         public int EnemyQuantity;
-        public float EnemySpeedMultiplier;
-        public int Level;
+        public float EnemySpeedMultiplier; // TODO: add a default speed, change to EnemySpeed = defalut*mul
+        public int Level; // -1: custom
 
         public string StageName;
         public string StageDescription;
@@ -67,40 +57,97 @@ public class StageManager : MonoBehaviour {
         private double _maxAllyCardSpawnInterval;
         private double _enemyQuantity;
 
-        public StageData(
-            List<int> enemyType,
-            int enemyQuantity,
-            float enemySpeedMultiplier,
-            int level = -1
-        ) {
-            level = level - 1;
-            _minEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.01f, level) - 0.51f, 0.35f);
-            _maxEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.03f, level) + 1.97f, 2.0f);
+        public StageData(List<int> enemyType,
+                         int enemyQuantity,
+                         float enemySpeedMultiplier,
+                         int level = -1) {
+            EnemyType = enemyType;
+            EnemyQuantity = enemyQuantity;
+            EnemySpeedMultiplier = enemySpeedMultiplier;
+            Level = level;
+
+            _minEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.01f, level - 1) - 0.51f, 0.35f);
+            _maxEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.03f, level - 1) + 1.97f, 2.0f);
             _minAllyCardSpawnInterval = 5.0f;
             _maxAllyCardSpawnInterval = 10.0f;
-            _enemyQuantity = Mathf.Min(Mathf.Pow(1.051f, level) - 0.051f, 12) * 15;
+            _enemyQuantity = Mathf.Min(Mathf.Pow(1.051f, level - 1) - 0.051f, 12) * 15;
         }
     }
 
-    int _level; // -1: custom
-    double _startTime;
-    StageData _data;
+    StageData _data { get; set; }
 
-    static public void StartNewStage(
-        List<int> enemyType,
-        int enemyQuantity,
-        float enemySpeedMultiplier,
-        int level = -1
-    ) {
+    bool _isPlaying;
+
+    #endregion
+
+    #region Method
+
+    void InitialStage(  List<int> enemyType,
+                        int enemyQuantity,
+                        float enemySpeedMultiplier,
+                        int level = -1) {
         GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
-        CreateDefault();
-        Instance._data = new StageData(
+        _data = new StageData(
             enemyType,
             enemyQuantity,
             enemySpeedMultiplier,
             level
         );
+
+        _isPlaying = false;
+        StageStart();
     }
+
+    void StageStart(){
+
+    }
+
+    #endregion
+
+    #region Interface
+
+    static public void StartNewStage(   List<int> enemyType,
+                                        int enemyQuantity,
+                                        float enemySpeedMultiplier,
+                                        int level = -1) {
+        CreateDefault();
+        Instance.InitialStage(
+            enemyType,
+            enemyQuantity,
+            enemySpeedMultiplier,
+            level = -1
+        );
+    }
+
+    public void TriggerPause() {
+
+    }
+
+    public void GameOver() {
+        Destroy(gameObject);
+    }
+
+    #endregion
+
+    #region Monobehaviour
+
+    void FixedUpdate(){
+        Log("asf");
+    }
+
+    void OnEnable() {
+        Log("Enable");
+    }
+
+    void OnDestroy() {
+        Log("Destroy");
+    }
+
+    #endregion
+
+
+    /* TODO: wait to check up
+    double _startTime;
 
     [SerializeField]
     public List<int> enemy_and_ally_id_list; // = queryEnemyAndAllyIdList(5);
@@ -117,5 +164,5 @@ public class StageManager : MonoBehaviour {
     // public Tuple<int, int> getRemainQuantity(){
     //     return new Tuple<int, int>(coefficient._wave_quantity, coefficient._fg_quantity);
     // }
-
+    */
 }

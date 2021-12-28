@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SignInSceneButton : MonoBehaviour
 {
     RectTransform _rectTransform;
+    Image _image;
     GameObject _signInWindow;
 
     Vector3 _startPosition;
@@ -12,18 +14,25 @@ public class SignInSceneButton : MonoBehaviour
     bool _isOpenSignInWindow;
     bool _isSignedIn;
 
+    Sprite _signInSprite;
+    Sprite _startSprite;
+
     void Awake(){
         // Initial variables
         _signInWindow = GameObject.Find("SignInWindow");
         _rectTransform = transform.GetComponent<RectTransform>();
+        _image = GetComponent<Image>();
         _startPosition = new Vector3(0.0f, -335.5f, 0.0f);
         _signInWindowPosition = new Vector3(0.0f, -265.0f, 0.0f);
+        _signInSprite = Resources.Load<Sprite>("SignInButton/sign_in_button");
+        _startSprite = Resources.Load<Sprite>("SignInButton/start_button");
 
         // Initial state
         _isSignedIn = false;
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
+        _image.sprite = _signInSprite;
     }
 
     #region Click behavior
@@ -33,7 +42,7 @@ public class SignInSceneButton : MonoBehaviour
             _isOpenSignInWindow = false;
             _signInWindow.SetActive(false);
             _rectTransform.anchoredPosition3D = _startPosition;
-            _isSignedIn = true;
+            SignIn();
         }
         else{
             _isOpenSignInWindow = true;
@@ -42,10 +51,9 @@ public class SignInSceneButton : MonoBehaviour
         }
     }
 
-    void CheckSignedIn(){
-        if(_isSignedIn){
-            
-        }
+    void SignIn(){
+        _isSignedIn = true;
+        _image.sprite = _startSprite;
     }
 
     #endregion
@@ -53,8 +61,10 @@ public class SignInSceneButton : MonoBehaviour
     #region interface
 
     public void Click(){
-        TriggerSignInWindow();
-        
+        if(!_isSignedIn) TriggerSignInWindow();
+        else if(_isSignedIn){
+            GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
+        }
     }
 
     #endregion

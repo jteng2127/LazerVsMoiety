@@ -24,8 +24,8 @@ public class SignInSceneButton : MonoBehaviour
         _image = GetComponent<Image>();
         _startPosition = new Vector3(0.0f, -335.5f, 0.0f);
         _signInWindowPosition = new Vector3(0.0f, -265.0f, 0.0f);
-        _signInSprite = Resources.Load<Sprite>("SignInButton/sign_in_button");
-        _startSprite = Resources.Load<Sprite>("SignInButton/start_button");
+        _signInSprite = Resources.Load<Sprite>("SignIn/sign_in_button");
+        _startSprite = Resources.Load<Sprite>("SignIn/start_button");
 
         // Initial state
         _isSignedIn = false;

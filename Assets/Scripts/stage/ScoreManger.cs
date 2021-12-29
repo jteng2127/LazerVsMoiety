@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+// TODO: need big modify
 public class ScoreManger : MonoBehaviour
 {
     public int score;

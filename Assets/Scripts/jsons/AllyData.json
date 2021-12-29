@@ -1,42 +1,42 @@
 [
     {
-        "id": 1,
-        "name": "1100"
+        "ally_id": 1,
+        "ally_name": "1100"
     },
     {
-        "id": 2,
-        "name": "1200"
+        "ally_id": 2,
+        "ally_name": "1200"
     },
     {
-        "id": 3,
-        "name": "1500"
+        "ally_id": 3,
+        "ally_name": "1500"
     },
     {
-        "id": 4,
-        "name": "1610"
+        "ally_id": 4,
+        "ally_name": "1610"
     },
     {
-        "id": 5,
-        "name": "1700"
+        "ally_id": 5,
+        "ally_name": "1700"
     },
     {
-        "id": 6,
-        "name": "2100"
+        "ally_id": 6,
+        "ally_name": "2100"
     },
     {
-        "id": 7,
-        "name": "2210"
+        "ally_id": 7,
+        "ally_name": "2210"
     },
     {
-        "id": 8,
-        "name": "3300"
+        "ally_id": 8,
+        "ally_name": "3300"
     },
     {
-        "id": 9,
-        "name": "3400"
+        "ally_id": 9,
+        "ally_name": "3400"
     },
     {
-        "id": 10,
-        "name": "3500"
+        "ally_id": 10,
+        "ally_name": "3500"
     }
 ]

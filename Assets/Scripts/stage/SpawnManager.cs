@@ -28,7 +28,7 @@ public class SpawnManager : MonoBehaviour {
     }
 
     static void CreateNewInstance() {
-        Log("Create");
+        Log("Create new instance");
         if (s_Instance) {
             Log("Destroy last instance");
             Destroy(s_Instance.gameObject);
@@ -36,6 +36,13 @@ public class SpawnManager : MonoBehaviour {
         GameObject go = new GameObject("SpawnManager", typeof(SpawnManager));
         DontDestroyOnLoad(go);
         s_Instance = go.GetComponent<SpawnManager>();
+    }
+
+    static void DestroyInstance(){
+        if (s_Instance) {
+            Log("Destroy instance");
+            Destroy(s_Instance.gameObject);
+        }
     }
 
     #endregion
@@ -96,6 +103,10 @@ public class SpawnManager : MonoBehaviour {
     static public void StartNewSpawner() {
         CreateNewInstance();
         Instance.SpawnStart();
+    }
+
+    static public void EndSpawn(){
+        DestroyInstance();
     }
 
     public void TriggerPause() {

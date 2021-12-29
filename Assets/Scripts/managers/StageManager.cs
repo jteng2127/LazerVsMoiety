@@ -29,7 +29,7 @@ public class StageManager : MonoBehaviour {
     }
 
     static void CreateNewInstance() {
-        Log("Create");
+        Log("Create new instance");
         if (s_Instance) {
             Log("Destroy last instance");
             Destroy(s_Instance.gameObject);
@@ -37,6 +37,14 @@ public class StageManager : MonoBehaviour {
         GameObject go = new GameObject("StageManager", typeof(StageManager));
         DontDestroyOnLoad(go);
         s_Instance = go.GetComponent<StageManager>();
+    }
+
+    static void DestroyInstance(){
+        if (s_Instance) {
+            Log("Destroy instance");
+            Destroy(s_Instance.gameObject);
+            s_Instance = null;
+        }
     }
 
     #endregion
@@ -113,8 +121,6 @@ public class StageManager : MonoBehaviour {
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode){
         SpawnManager.StartNewSpawner();
-        Debug.Log("OnSceneLoaded: " + scene.name);
-        Debug.Log(mode);
     }
 
     #endregion
@@ -156,7 +162,8 @@ public class StageManager : MonoBehaviour {
     }
 
     public void GameOver() {
-        Destroy(gameObject);
+        DestroyInstance();
+        SpawnManager.EndSpawn();
     }
 
     #endregion

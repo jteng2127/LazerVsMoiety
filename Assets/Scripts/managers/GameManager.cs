@@ -26,8 +26,7 @@ public class GameManager : MonoBehaviour
     }
 
     static void CreateDefault(){
-        GameObject go = new GameObject("cardPreview", typeof(GameManager));
-        go.name = "GameManager";
+        GameObject go = new GameObject("GameManager", typeof(GameManager));
         DontDestroyOnLoad(go);
         s_Instance = go.GetComponent<GameManager>();
         // reduce fps
@@ -40,7 +39,7 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         Debug.Log("GameManager Enable");
-        _initSceneTypeDictionary();
+        _initGameSceneManage();
     }
 
     #endregion
@@ -62,7 +61,8 @@ public class GameManager : MonoBehaviour
     }
 
     Dictionary<SceneType, string> _sceneTypeToString;
-    void _initSceneTypeDictionary(){
+
+    void _initGameSceneManage(){
         Debug.Log("Initial SceneTypeDictionary");
         _sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
@@ -98,9 +98,13 @@ public class GameManager : MonoBehaviour
 
     #region Interface
 
+
+
     public void LoadScene(SceneType scene, bool showLoading = true){
         Debug.Log("Loading " + _sceneTypeToString[scene] + "...");
+
         StartCoroutine(LoadingSceneAsync(scene));
+        // SceneManager.LoadScene(_sceneTypeToString[scene]);
     }
 
     #endregion

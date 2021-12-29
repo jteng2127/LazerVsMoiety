@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SignInSceneButton : MonoBehaviour
-{
+public class SignInSceneButton : MonoBehaviour {
     RectTransform _rectTransform;
     Image _image;
     GameObject _signInWindow;
@@ -17,7 +16,7 @@ public class SignInSceneButton : MonoBehaviour
     Sprite _signInSprite;
     Sprite _startSprite;
 
-    void Awake(){
+    void Awake() {
         // Initial variables
         _signInWindow = GameObject.Find("SignInWindow");
         _rectTransform = transform.GetComponent<RectTransform>();
@@ -37,21 +36,21 @@ public class SignInSceneButton : MonoBehaviour
 
     #region Click behavior
 
-    void TriggerSignInWindow(){
-        if(_isOpenSignInWindow == true){
+    void TriggerSignInWindow() {
+        if (_isOpenSignInWindow == true) {
             _isOpenSignInWindow = false;
             _signInWindow.SetActive(false);
             _rectTransform.anchoredPosition3D = _startPosition;
             SignIn();
         }
-        else{
+        else {
             _isOpenSignInWindow = true;
             _signInWindow.SetActive(true);
             _rectTransform.anchoredPosition3D = _signInWindowPosition;
         }
     }
 
-    void SignIn(){
+    void SignIn() {
         _isSignedIn = true;
         _image.sprite = _startSprite;
     }
@@ -60,11 +59,12 @@ public class SignInSceneButton : MonoBehaviour
 
     #region interface
 
-    public void Click(){
-        if(!_isSignedIn) TriggerSignInWindow();
-        else if(_isSignedIn){
-            StageManager.StartNewStage(new List<int>(), 0, 0f);
-            // GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
+    public void Click() {
+        if (!_isSignedIn) TriggerSignInWindow();
+        else if (_isSignedIn) {
+            StageManager.StartNewStage(
+                new List<int> { 1, 3, 4 }
+            );
         }
     }
 

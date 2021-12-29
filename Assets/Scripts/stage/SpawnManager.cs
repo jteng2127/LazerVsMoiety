@@ -72,6 +72,12 @@ public class SpawnManager : MonoBehaviour {
     /// <param name="type">0: Enemy, 1: AllyCard</param>
     void Spawn(int type){
         Vector3 spawnPosition;
+        int id;
+
+        List<int> enemyType = StageManager.Instance.Data.EnemyType;
+        int randomIndex = UnityEngine.Random.Range(0, enemyType.Count);
+        id = enemyType[randomIndex];
+
         if(type == 0){
             int spawnRow = UnityEngine.Random.Range(0, StageManager.Instance.Data.GridRowTotal);
             spawnPosition = new Vector3(
@@ -79,15 +85,16 @@ public class SpawnManager : MonoBehaviour {
                 _stageGrid.RowYList[spawnRow],
                 0.0f
             );
-            EnemyUnit.Spawn(1, spawnPosition);
+            EnemyUnit.Spawn(id, spawnPosition);
         }
+
         if(type == 1){
             spawnPosition = new Vector3(
                 StageManager.Instance.Data.AllyCardSpawnPositionX,
                 StageManager.Instance.Data.AllyCardSpawnPositionY,
                 0.0f
             );
-            AllyCard.Spawn(1, spawnPosition);
+            AllyCard.Spawn(id, spawnPosition);
         }
     }
 

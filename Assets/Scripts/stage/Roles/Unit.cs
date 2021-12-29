@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 
-public class Unit: MonoBehaviour
-{
+public class Unit : MonoBehaviour {
     #region Debug
 
     protected static void Log(string s) {
@@ -18,11 +17,12 @@ public class Unit: MonoBehaviour
     protected int _id; // unit id
     protected string _pictureSrc; // picture Src
     protected SpriteRenderer _sprite;
+    protected float _speed;
 
     #endregion
 
     #region Method
-         
+
     #endregion
 
     #region Interface
@@ -30,6 +30,6 @@ public class Unit: MonoBehaviour
     #endregion
 
     #region MonoBehaviour
-         
+
     #endregion
 }

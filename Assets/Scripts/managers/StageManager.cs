@@ -39,7 +39,7 @@ public class StageManager : MonoBehaviour {
         s_Instance = go.GetComponent<StageManager>();
     }
 
-    static void DestroyInstance(){
+    static void DestroyInstance() {
         if (s_Instance) {
             Log("Destroy instance");
             Destroy(s_Instance.gameObject);
@@ -58,10 +58,11 @@ public class StageManager : MonoBehaviour {
         public int Level { get; } // -1: custom
         public List<int> EnemyType { get; }
         public int EnemyQuantity { get; }
-        public float EnemySpeedMultiplier { get; } // TODO: add a default speed, change to EnemySpeed = defalut*mul
+        public float EnemySpeed { get; }
         public float EnemySpawnInterval { get; }
         public float EnemySpawnIntervalDeviation { get; }
         public float EnemySpawnPositionX { get; }
+        public float AllyCardSpeed { get; }
         public float AllyCardSpawnInterval { get; }
         public float AllyCardSpawnIntervalDeviation { get; }
         public float AllyCardSpawnPositionX { get; }
@@ -84,10 +85,11 @@ public class StageManager : MonoBehaviour {
                             int gridColumnTotal) {
             EnemyType = enemyType;
             EnemyQuantity = enemyQuantity;
-            EnemySpeedMultiplier = enemySpeedMultiplier;
+            EnemySpeed = _enemySpeedDefault * enemySpeedMultiplier;
             EnemySpawnInterval = enemySpawnInterval;
             EnemySpawnIntervalDeviation = enemySpawnIntervalDeviation;
             EnemySpawnPositionX = enemySpawnPositionX;
+            AllyCardSpeed = _allyCardSpeedDefault;
             AllyCardSpawnInterval = allyCardSpawnInterval;
             AllyCardSpawnIntervalDeviation = allyCardSpawnIntervalDeviation;
             AllyCardSpawnPositionX = allyCardSpawnPositionX;
@@ -106,6 +108,8 @@ public class StageManager : MonoBehaviour {
 
     public StageData Data { get; set; }
 
+    const float _enemySpeedDefault = 0.01f;
+    const float _allyCardSpeedDefault = 1.0f;
     bool _isPlaying;
 
     #endregion
@@ -118,11 +122,11 @@ public class StageManager : MonoBehaviour {
         _isPlaying = false;
     }
 
-    void StageStart(){
+    void StageStart() {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode){
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         SpawnManager.StartNewSpawner();
     }
 

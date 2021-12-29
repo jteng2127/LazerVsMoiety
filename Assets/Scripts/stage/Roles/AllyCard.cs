@@ -3,31 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class AllyCard : Unit
-{
+public class AllyCard : Unit {
     #region Data
 
-    static public GameObject _allyCardPrefab;
-    
+    static GameObject _allyCardPrefab;
+
+    Rigidbody2D _rigidbody2D;
+
     #endregion
 
     #region Method
 
-    void Initial(int id){
+    void Initial(int id) {
         _id = id;
         _pictureSrc = "Images/Ally/1x/Ally_" + id;
         _sprite = GetComponent<SpriteRenderer>();
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _speed = StageManager.Instance.Data.AllyCardSpeed;
 
         _sprite.sprite = Resources.Load<Sprite>(_pictureSrc);
-        Debug.Log(_pictureSrc);
     }
 
     #endregion
 
     #region Interface
 
-    static public GameObject Spawn(int id, Vector3 position){
-        if(_allyCardPrefab == null){
+    static public GameObject Spawn(int id, Vector3 position) {
+        if (_allyCardPrefab == null) {
             _allyCardPrefab = Resources.Load<GameObject>("Prefabs/Stage/AllyCard");
         }
         Debug.Log(_allyCardPrefab);
@@ -38,6 +40,14 @@ public class AllyCard : Unit
         );
         go.GetComponent<AllyCard>().Initial(id);
         return go;
+    }
+
+    #endregion
+
+    #region MonoBehaviour
+
+    void FixedUpdate() {
+        _rigidbody2D.velocity = new Vector2(-_speed, 0.0f);
     }
 
     #endregion
@@ -55,7 +65,7 @@ public class AllyCard : Unit
     //         Destroy(enemy_unit);
     //         return;
     //     }
-        
+
     //     // ally(wave) collision
     //     // suppose emeny_unit_id is emeny unit ID
     //     if(_id == enemy_unit_id)

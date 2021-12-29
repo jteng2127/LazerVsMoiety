@@ -69,6 +69,7 @@ public class SpawnManager : MonoBehaviour {
         return UnityEngine.Random.Range(interval - deviation, interval + deviation);
     }
 
+    /// <param name="type">0: Enemy, 1: AllyCard</param>
     void Spawn(int type){
         int spawnRow = UnityEngine.Random.Range(0, StageManager.Instance.Data.GridRowTotal);
         Debug.Log(

@@ -5,33 +5,39 @@ using System.IO;
 
 public class EnemyUnit : Unit
 {
-    public int enemy_unit_id;
-    public int blood;
+    #region Data
 
-    [SerializeField]
-    private class EnemyUnitData
-    {
-        public int enemy_unit_id;
-        public string name;
+    static public GameObject _enemyPrefab;
+
+    #endregion
+
+    #region Method
+
+    void Initial(int id){
+        _id = id;
+        _pictureSrc = "Images/Enemy/0.5x/enemy_" + id + "@0.5x";
+        _sprite = GetComponent<SpriteRenderer>();
+
+        _sprite.sprite = Resources.Load<Sprite>(_pictureSrc);
     }
 
-    /// <summary>
-    /// Query the enemy unit data from the Json.
-    /// </summary>
-    private string _queryEnemyUnitData(int enemy_unit_query_id)
-    {
-        string load_enemy_unit_data = File.ReadAllText("../jsons/EnemyUnit.json");
-        List<EnemyUnitData> data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);
-        return data_list[enemy_unit_query_id].name;
+    #endregion
+
+    #region Interface
+
+    static public GameObject Spawn(int id, Vector3 position){
+        if(_enemyPrefab == null){
+            _enemyPrefab = Resources.Load<GameObject>("Prefabs/Stage/EnemyUnit");
+        }
+        Debug.Log(_enemyPrefab);
+        GameObject go = GameObject.Instantiate(
+            _enemyPrefab,
+            position,
+            Quaternion.identity
+        );
+        go.GetComponent<EnemyUnit>().Initial(id);
+        return go;
     }
 
-    /// <summary>
-    /// Enemy unit move left
-    /// </summary>
-    public void moveLeft()
-    {
-        // moveAToBbySpeed();
-
-        // if the enemy arrive the left edge, then it must call mower.
-    }
+    #endregion
 }

@@ -71,13 +71,24 @@ public class SpawnManager : MonoBehaviour {
 
     /// <param name="type">0: Enemy, 1: AllyCard</param>
     void Spawn(int type){
-        int spawnRow = UnityEngine.Random.Range(0, StageManager.Instance.Data.GridRowTotal);
-        Debug.Log(
-            "Spawn " + type + " at: " + 
-            StageManager.Instance.Data.EnemySpawnPositionX + ", " +
-            _stageGrid.RowYList[spawnRow]
-        );
-        // TODO: complete Unit class then back here to spawn
+        Vector3 spawnPosition;
+        if(type == 0){
+            int spawnRow = UnityEngine.Random.Range(0, StageManager.Instance.Data.GridRowTotal);
+            spawnPosition = new Vector3(
+                StageManager.Instance.Data.EnemySpawnPositionX,
+                _stageGrid.RowYList[spawnRow],
+                0.0f
+            );
+            EnemyUnit.Spawn(1, spawnPosition);
+        }
+        if(type == 1){
+            spawnPosition = new Vector3(
+                StageManager.Instance.Data.AllyCardSpawnPositionX,
+                StageManager.Instance.Data.AllyCardSpawnPositionY,
+                0.0f
+            );
+            AllyCard.Spawn(1, spawnPosition);
+        }
     }
 
     void CheckAndSpawn() {

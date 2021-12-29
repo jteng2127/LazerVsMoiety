@@ -59,7 +59,7 @@ public class StageGrid : MonoBehaviour {
         _tileWidth = _rectTransform.sizeDelta.x / _gridColumnTotal;
         _gridList = new List<List<GameObject>>();
         RowYList = new List<float>();
-        _gridTilePrefab = Resources.Load<GameObject>("Prefabs/GridTile");
+        _gridTilePrefab = Resources.Load<GameObject>("Prefabs/Stage/GridTile");
     }
 
 

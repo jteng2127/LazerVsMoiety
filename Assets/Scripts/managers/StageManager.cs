@@ -65,6 +65,7 @@ public class StageManager : MonoBehaviour {
         public float AllyCardSpawnInterval { get; }
         public float AllyCardSpawnIntervalDeviation { get; }
         public float AllyCardSpawnPositionX { get; }
+        public float AllyCardSpawnPositionY { get; }
         public int GridRowTotal { get; }
         public int GridColumnTotal { get; }
 
@@ -77,6 +78,7 @@ public class StageManager : MonoBehaviour {
                             float allyCardSpawnInterval,
                             float allyCardSpawnIntervalDeviation,
                             float allyCardSpawnPositionX,
+                            float allyCardSpawnPositionY,
                             int level,
                             int gridRowTotal,
                             int gridColumnTotal) {
@@ -89,6 +91,7 @@ public class StageManager : MonoBehaviour {
             AllyCardSpawnInterval = allyCardSpawnInterval;
             AllyCardSpawnIntervalDeviation = allyCardSpawnIntervalDeviation;
             AllyCardSpawnPositionX = allyCardSpawnPositionX;
+            AllyCardSpawnPositionY = allyCardSpawnPositionY;
             Level = level;
             GridRowTotal = gridRowTotal;
             GridColumnTotal = gridColumnTotal;
@@ -136,6 +139,7 @@ public class StageManager : MonoBehaviour {
                                         float allyCardSpawnInterval = 6.5f,
                                         float allyCardSpawnIntervalDeviation = 0.0f,
                                         float allyCardSpawnPositionX = 8.0f,
+                                        float allyCardSpawnPositionY = 4.0f,
                                         int level = -1,
                                         int gridRowTotal = 5,
                                         int gridColumnTotal = 9) {
@@ -150,6 +154,7 @@ public class StageManager : MonoBehaviour {
             allyCardSpawnInterval,
             allyCardSpawnIntervalDeviation,
             allyCardSpawnPositionX,
+            allyCardSpawnPositionY,
             level,
             gridRowTotal,
             gridColumnTotal

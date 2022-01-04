@@ -22,9 +22,9 @@ public class SignInSceneButton : MonoBehaviour {
         _rectTransform = transform.GetComponent<RectTransform>();
         _image = GetComponent<Image>();
         _startPosition = new Vector3(0.0f, -335.5f, 0.0f);
-        _signInWindowPosition = new Vector3(0.0f, -265.0f, 0.0f);
-        _signInSprite = Resources.Load<Sprite>("Images/SignIn/sign_in_button");
-        _startSprite = Resources.Load<Sprite>("Images/SignIn/start_button");
+        _signInWindowPosition = new Vector3(0.0f, -335.5f, 0.0f);
+        _signInSprite = Resources.Load<Sprite>("Images/SignIn/1x/sign_in_button");
+        _startSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
 
         // Initial state
         _isSignedIn = false;

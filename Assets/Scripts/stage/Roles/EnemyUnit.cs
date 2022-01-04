@@ -1,25 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 
 public class EnemyUnit : Unit {
     #region Data
 
-    static public GameObject _enemyPrefab;
-
+    static GameObject _enemyUnitPrefab;
 
     #endregion
-
     #region Method
 
     void Initial(int id) {
         Id = id;
         _pictureSrc = "Images/Enemy/1x/enemy_" + id;
         _spriteRenderer = GetComponent<SpriteRenderer>();
-
+        _rigidbody2D = GetComponent<Rigidbody2D>();
         _speed = StageManager.Instance.Data.EnemySpeed;
 
+        /// set PixelPerUnit by Screen height and camera size (half screen height of units, default is 5)
         Texture2D texture = Resources.Load<Texture2D>(_pictureSrc);
         Sprite sprite = Sprite.Create(
             texture,
@@ -35,11 +33,11 @@ public class EnemyUnit : Unit {
     #region Interface
 
     static public GameObject Spawn(int id, Vector3 position) {
-        if (_enemyPrefab == null) {
-            _enemyPrefab = Resources.Load<GameObject>("Prefabs/Stage/EnemyUnit");
+        if (_enemyUnitPrefab == null) {
+            _enemyUnitPrefab = Resources.Load<GameObject>("Prefabs/Stage/EnemyUnit");
         }
         GameObject go = GameObject.Instantiate(
-            _enemyPrefab,
+            _enemyUnitPrefab,
             position,
             Quaternion.identity
         );
@@ -52,7 +50,7 @@ public class EnemyUnit : Unit {
     #region MonoBehaviour
 
     void FixedUpdate() {
-        transform.position = transform.position + new Vector3(-_speed, 0.0f, 0.0f);
+        _rigidbody2D.velocity = new Vector2(-_speed, 0.0f);
     }
 
     #endregion

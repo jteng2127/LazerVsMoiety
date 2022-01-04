@@ -22,7 +22,7 @@ public class StageManager : MonoBehaviour {
     public static StageManager Instance {
         get {
             if (s_Instance == null) {
-                throw new NullReferenceException();
+                throw new NullReferenceException("StageManager Not Exist!");
             }
             return s_Instance;
         }
@@ -41,7 +41,6 @@ public class StageManager : MonoBehaviour {
 
     static void DestroyInstance() {
         if (s_Instance) {
-            Log("Destroy instance");
             Destroy(s_Instance.gameObject);
             s_Instance = null;
         }
@@ -108,7 +107,7 @@ public class StageManager : MonoBehaviour {
 
     public StageData Data { get; set; }
 
-    const float _enemySpeedDefault = 0.006f;
+    const float _enemySpeedDefault = 0.5f;
     const float _allyCardSpeedDefault = 0.8f;
     bool _isPlaying;
 
@@ -201,7 +200,6 @@ public class StageManager : MonoBehaviour {
 
             /// touch detect
             if (touch.phase == TouchPhase.Began) {
-                Log("touch began");
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
                 foreach (RaycastHit2D hit in hitAll) {
                     if (hit.collider.tag == "AllyCard") {

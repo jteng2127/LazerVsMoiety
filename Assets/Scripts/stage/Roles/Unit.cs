@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour {
     public int Id { get; protected set; } // unit id
     protected string _pictureSrc; // picture Src
     protected SpriteRenderer _spriteRenderer;
+    protected Rigidbody2D _rigidbody2D;
     protected float _speed;
 
     #endregion

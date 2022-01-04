@@ -63,7 +63,7 @@ public class SignInSceneButton : MonoBehaviour {
         if (!_isSignedIn) TriggerSignInWindow();
         else if (_isSignedIn) {
             StageManager.StartNewStage(
-                new List<int> { 1 },
+                new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
                 enemySpawnInterval: 3.0f
             );
         }

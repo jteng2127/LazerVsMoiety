@@ -35,14 +35,19 @@ public class AllyCardDragPreview : MonoBehaviour {
     }
 
     void Update() {
-        Touch touch = Input.GetTouch(0);
-        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        if (Input.touchCount > 0) {
+            Touch touch = Input.GetTouch(0);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
 
-        if (touch.phase == TouchPhase.Moved) {
-            Dragging(touch);
+            if (touch.phase == TouchPhase.Moved) {
+                Dragging(touch);
+            }
+            else if (touch.phase == TouchPhase.Ended) {
+                EndDragging(ray);
+            }
         }
-        else if (touch.phase == TouchPhase.Ended) {
-            EndDragging(ray);
+        else {
+            Destroy(transform.gameObject);
         }
     }
 }

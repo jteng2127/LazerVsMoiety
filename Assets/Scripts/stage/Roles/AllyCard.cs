@@ -1,22 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 
 public class AllyCard : Unit {
     #region Data
 
     static GameObject _allyCardPrefab;
 
-    Rigidbody2D _rigidbody2D;
-
     #endregion
-
     #region Method
 
     void Initial(int id) {
         Id = id;
-        _pictureSrc = "Images/Ally/1x/Ally_" + id;
+        _pictureSrc = "Images/Ally/1x/Ally_" + Id;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _speed = StageManager.Instance.Data.AllyCardSpeed;
@@ -29,7 +25,6 @@ public class AllyCard : Unit {
             new Vector2(0.5f, 0.5f),
             (float)Screen.height / 10
         );
-
         _spriteRenderer.sprite = sprite;
     }
 
@@ -41,7 +36,6 @@ public class AllyCard : Unit {
         if (_allyCardPrefab == null) {
             _allyCardPrefab = Resources.Load<GameObject>("Prefabs/Stage/AllyCard");
         }
-        Debug.Log(_allyCardPrefab);
         GameObject go = GameObject.Instantiate(
             _allyCardPrefab,
             position,
@@ -52,8 +46,12 @@ public class AllyCard : Unit {
     }
 
     public GameObject CreateDragPreview() {
-
-        _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.5f);
+        _spriteRenderer.color = new Color(
+            _spriteRenderer.color.r,
+            _spriteRenderer.color.g,
+            _spriteRenderer.color.b,
+            0.2f
+        );
 
         GameObject go = new GameObject("AllyCardDragPreview", typeof(SpriteRenderer), typeof(AllyCardDragPreview));
         SpriteRenderer goSprite = go.GetComponent<SpriteRenderer>();

@@ -14,9 +14,9 @@ public class Unit : MonoBehaviour {
 
     #region Data
 
-    protected int _id; // unit id
+    public int Id { get; protected set; } // unit id
     protected string _pictureSrc; // picture Src
-    protected SpriteRenderer _sprite;
+    protected SpriteRenderer _spriteRenderer;
     protected float _speed;
 
     #endregion

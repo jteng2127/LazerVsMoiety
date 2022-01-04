@@ -4,10 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - UnitCard
-  - DefendTile
   - Enemy
-  - UnitCardPreview
+  - AllyCard
+  - StageGridTile
+  - DefendTile
+  - AllyCardDragPreview
   layers:
   - Default
   - TransparentFX
@@ -47,4 +48,7 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 963417867
     locked: 0

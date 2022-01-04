@@ -14,13 +14,20 @@ public class EnemyUnit : Unit {
     #region Method
 
     void Initial(int id) {
-        _id = id;
-        _pictureSrc = "Images/Enemy/0.5x/enemy_" + id + "@0.5x";
-        _sprite = GetComponent<SpriteRenderer>();
+        Id = id;
+        _pictureSrc = "Images/Enemy/1x/enemy_" + id;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
 
         _speed = StageManager.Instance.Data.EnemySpeed;
 
-        _sprite.sprite = Resources.Load<Sprite>(_pictureSrc);
+        Texture2D texture = Resources.Load<Texture2D>(_pictureSrc);
+        Sprite sprite = Sprite.Create(
+            texture,
+            new Rect(0, 0, texture.width, texture.height),
+            new Vector2(0.5f, 0.5f),
+            (float)Screen.height / 10
+        );
+        _spriteRenderer.sprite = sprite;
     }
 
     #endregion

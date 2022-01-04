@@ -15,13 +15,22 @@ public class AllyCard : Unit {
     #region Method
 
     void Initial(int id) {
-        _id = id;
+        Id = id;
         _pictureSrc = "Images/Ally/1x/Ally_" + id;
-        _sprite = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _speed = StageManager.Instance.Data.AllyCardSpeed;
 
-        _sprite.sprite = Resources.Load<Sprite>(_pictureSrc);
+        /// set PixelPerUnit by Screen height and camera size (half screen height of units, default is 5)
+        Texture2D texture = Resources.Load<Texture2D>(_pictureSrc);
+        Sprite sprite = Sprite.Create(
+            texture,
+            new Rect(0, 0, texture.width, texture.height),
+            new Vector2(0.5f, 0.5f),
+            (float)Screen.height / 10
+        );
+
+        _spriteRenderer.sprite = sprite;
     }
 
     #endregion
@@ -40,6 +49,26 @@ public class AllyCard : Unit {
         );
         go.GetComponent<AllyCard>().Initial(id);
         return go;
+    }
+
+    public GameObject CreateDragPreview() {
+
+        _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.5f);
+
+        GameObject go = new GameObject("AllyCardDragPreview", typeof(SpriteRenderer), typeof(AllyCardDragPreview));
+        SpriteRenderer goSprite = go.GetComponent<SpriteRenderer>();
+        goSprite.sprite = _spriteRenderer.sprite;
+        goSprite.sortingLayerName = "UI";
+        goSprite.sortingOrder = 10;
+        go.transform.position = transform.position;
+        go.transform.localScale = transform.localScale;
+        go.GetComponent<AllyCardDragPreview>().Origin = transform.gameObject;
+        go.tag = "AllyCardDragPreview";
+        return go;
+    }
+
+    public void DestroySelf() {
+        Destroy(transform.gameObject);
     }
 
     #endregion

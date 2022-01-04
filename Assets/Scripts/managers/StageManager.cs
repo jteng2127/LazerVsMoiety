@@ -108,8 +108,8 @@ public class StageManager : MonoBehaviour {
 
     public StageData Data { get; set; }
 
-    const float _enemySpeedDefault = 0.01f;
-    const float _allyCardSpeedDefault = 1.0f;
+    const float _enemySpeedDefault = 0.006f;
+    const float _allyCardSpeedDefault = 0.8f;
     bool _isPlaying;
 
     #endregion
@@ -185,6 +185,32 @@ public class StageManager : MonoBehaviour {
 
     void OnDestroy() {
         Log("Destroy");
+    }
+
+    void Update() {
+        /// Get touch input
+        if (Input.touchCount > 0) {
+            Touch touch = Input.GetTouch(0);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+
+            /// show Debug
+            // Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);
+            // Debug.Log(pos);
+            // Debug.DrawRay(ray.origin, ray.direction*20);
+            // Debug.Log(touch.deltaPosition);
+
+            /// touch detect
+            if (touch.phase == TouchPhase.Began) {
+                Log("touch began");
+                RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
+                foreach (RaycastHit2D hit in hitAll) {
+                    if (hit.collider.tag == "AllyCard") {
+                        hit.collider.gameObject.GetComponent<AllyCard>().CreateDragPreview();
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     #endregion

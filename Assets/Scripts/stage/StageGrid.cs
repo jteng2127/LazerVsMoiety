@@ -14,7 +14,7 @@ public class StageGrid : MonoBehaviour {
     float _tileWidth;
     List<List<GameObject>> _gridList;
     public List<float> RowYList { get; set; }
-    GameObject _gridTilePrefab;
+    GameObject _stageGridTilePrefab;
 
     #endregion
 
@@ -23,12 +23,13 @@ public class StageGrid : MonoBehaviour {
     GameObject CreateTile(float dx, float dy) {
         Vector3 deltaPosition = new Vector3(dx, dy, 0);
         GameObject tile = Instantiate(
-            _gridTilePrefab,
+            _stageGridTilePrefab,
             transform.position + deltaPosition,
             Quaternion.identity,
             gameObject.transform
         ) as GameObject;
         tile.GetComponent<BoxCollider2D>().size = new Vector2(_tileWidth, _tileHeight);
+        tile.tag = "StageGridTile";
         return tile;
     }
 
@@ -59,7 +60,7 @@ public class StageGrid : MonoBehaviour {
         _tileWidth = _rectTransform.sizeDelta.x / _gridColumnTotal;
         _gridList = new List<List<GameObject>>();
         RowYList = new List<float>();
-        _gridTilePrefab = Resources.Load<GameObject>("Prefabs/Stage/GridTile");
+        _stageGridTilePrefab = Resources.Load<GameObject>("Prefabs/Stage/StageGridTile");
     }
 
 

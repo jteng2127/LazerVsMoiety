@@ -4,11 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
   - AllyCard
   - StageGridTile
-  - DefendTile
   - AllyCardDragPreview
+  - EnemyUnit
+  - AllyUnit
   layers:
   - Default
   - TransparentFX

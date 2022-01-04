@@ -12,19 +12,23 @@ public class StageGridTile : MonoBehaviour {
     #region Interface
 
     public GameObject SetAllyUnit(int id) {
-        if (CurrentAllyId != -1) {
-            CurrentAlly.GetComponent<AllyUnit>().DestroySelf();
-        }
+        Clear();
         CurrentAllyId = id;
         CurrentAlly = AllyUnit.Spawn(id, transform);
         return CurrentAlly;
+    }
+
+    public void Clear(bool isInit = false){
+        if(!isInit && CurrentAlly != null) Destroy(CurrentAlly);
+        CurrentAllyId = -1;
+        CurrentAlly = null;
     }
 
     #endregion
     #region MonoBehaviour
 
     void Awake() {
-        CurrentAllyId = -1;
+        Clear(true);
     }
 
     #endregion

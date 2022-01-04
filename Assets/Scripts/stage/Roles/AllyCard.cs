@@ -54,14 +54,19 @@ public class AllyCard : Unit {
         );
 
         GameObject go = new GameObject("AllyCardDragPreview", typeof(SpriteRenderer), typeof(AllyCardDragPreview));
-        SpriteRenderer goSprite = go.GetComponent<SpriteRenderer>();
-        goSprite.sprite = _spriteRenderer.sprite;
-        goSprite.sortingLayerName = "UI";
-        goSprite.sortingOrder = 10;
         go.transform.position = transform.position;
         go.transform.localScale = transform.localScale;
-        go.GetComponent<AllyCardDragPreview>().Origin = transform.gameObject;
         go.tag = "AllyCardDragPreview";
+
+        SpriteRenderer goSpriteRenderer = go.GetComponent<SpriteRenderer>();
+        goSpriteRenderer.sprite = _spriteRenderer.sprite;
+        goSpriteRenderer.sortingLayerName = "UI";
+        goSpriteRenderer.sortingOrder = 10;
+
+        AllyCardDragPreview goAllyCardDragPreview = go.GetComponent<AllyCardDragPreview>();
+        goAllyCardDragPreview.Origin = transform.gameObject;
+        goAllyCardDragPreview.CurrentPosition = transform.position;
+
         return go;
     }
 

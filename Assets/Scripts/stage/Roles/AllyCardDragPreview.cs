@@ -4,27 +4,41 @@ using UnityEngine;
 
 public class AllyCardDragPreview : MonoBehaviour {
     public GameObject Origin { get; set; }
+    public Vector3 CurrentPosition { get; set; }
 
-    void Dragging(Touch touch) {
-        Vector3 deltaPos =
-            Camera.main.ScreenToWorldPoint(touch.position + touch.deltaPosition) -
-            Camera.main.ScreenToWorldPoint(touch.position);
-        transform.position += deltaPos;
-    }
-
-    void EndDragging(Ray ray) {
+    StageGridTile GetHitGrid(Ray ray){
+        StageGridTile stageGridTile = null;
         RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
-        bool isHitGrid = false;
         foreach (RaycastHit2D hit in hitAll) {
-            if (hit.collider.tag == "StageGridTile") {
-                hit.collider.gameObject.GetComponent<StageGridTile>().SetAllyUnit(Origin.GetComponent<AllyCard>().Id);
-                isHitGrid = true;
+            if (hit.collider.tag == "StageGridTile" &&
+                hit.collider.GetComponent<StageGridTile>().CurrentAllyId == -1) {
+                stageGridTile = hit.collider.GetComponent<StageGridTile>();
                 break;
             }
         }
+        return stageGridTile;
+    }
 
-        if (isHitGrid) {
-            Origin.GetComponent<AllyCard>().DestroySelf();
+    void Dragging(Touch touch, Ray ray) {
+        Vector3 deltaPos =
+            Camera.main.ScreenToWorldPoint(touch.position + touch.deltaPosition) -
+            Camera.main.ScreenToWorldPoint(touch.position);
+        CurrentPosition += deltaPos;
+
+        StageGridTile stageGridTile = GetHitGrid(ray);
+        if(stageGridTile == null) transform.position = CurrentPosition;
+        else transform.position = stageGridTile.gameObject.transform.position;
+    }
+
+    void EndDragging(Ray ray) {
+        StageGridTile stageGridTile = GetHitGrid(ray);
+        if(stageGridTile == null) transform.position = CurrentPosition;
+        else transform.position = stageGridTile.gameObject.transform.position;
+
+        if (stageGridTile != null) {
+            AllyCard allyCard = Origin.GetComponent<AllyCard>();
+            allyCard.DestroySelf();
+            stageGridTile.SetAllyUnit(allyCard.Id);
         }
         else {
             SpriteRenderer originSpriteRenderer = Origin.GetComponent<SpriteRenderer>();
@@ -40,7 +54,7 @@ public class AllyCardDragPreview : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
 
             if (touch.phase == TouchPhase.Moved) {
-                Dragging(touch);
+                Dragging(touch, ray);
             }
             else if (touch.phase == TouchPhase.Ended) {
                 EndDragging(ray);

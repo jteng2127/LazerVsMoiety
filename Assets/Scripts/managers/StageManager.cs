@@ -56,7 +56,7 @@ public class StageManager : MonoBehaviour {
 
         public int Level { get; } // -1: custom
         public List<int> EnemyType { get; }
-        public int EnemyQuantity { get; }
+        public readonly int EnemyQuantityTotal;
         public float EnemySpeed { get; }
         public float EnemySpawnInterval { get; }
         public float EnemySpawnIntervalDeviation { get; }
@@ -70,7 +70,7 @@ public class StageManager : MonoBehaviour {
         public int GridColumnTotal { get; }
 
         public StageData(   List<int> enemyType,
-                            int enemyQuantity,
+                            int enemyQuantityTotal,
                             float enemySpeedMultiplier,
                             float enemySpawnInterval,
                             float enemySpawnIntervalDeviation,
@@ -83,7 +83,7 @@ public class StageManager : MonoBehaviour {
                             int gridRowTotal,
                             int gridColumnTotal) {
             EnemyType = enemyType;
-            EnemyQuantity = enemyQuantity;
+            EnemyQuantityTotal = enemyQuantityTotal;
             EnemySpeed = _enemySpeedDefault * enemySpeedMultiplier;
             EnemySpawnInterval = enemySpawnInterval;
             EnemySpawnIntervalDeviation = enemySpawnIntervalDeviation;
@@ -134,12 +134,12 @@ public class StageManager : MonoBehaviour {
     #region Interface
 
     static public void StartNewStage(   List<int> enemyType,
-                                        int enemyQuantity = 10,
+                                        int enemyQuantityTotal = 10,
                                         float enemySpeedMultiplier = 1.0f,
                                         float enemySpawnInterval = 7.0f,
                                         float enemySpawnIntervalDeviation = 0.0f,
                                         float enemySpawnPositionX = 12.0f,
-                                        float allyCardSpawnInterval = 6.5f,
+                                        float allyCardSpawnInterval = 4.5f,
                                         float allyCardSpawnIntervalDeviation = 0.0f,
                                         float allyCardSpawnPositionX = 8.0f,
                                         float allyCardSpawnPositionY = 4.0f,
@@ -149,7 +149,7 @@ public class StageManager : MonoBehaviour {
         CreateNewInstance();
         Instance.InitialStage(new StageData(
             enemyType,
-            enemyQuantity,
+            enemyQuantityTotal,
             enemySpeedMultiplier,
             enemySpawnInterval,
             enemySpawnIntervalDeviation,

@@ -6,12 +6,14 @@ public class AllyUnit : Unit {
     #region Data
 
     static GameObject _allyUnitPrefab;
+    public Transform Tile { get; protected set; }
 
     #endregion
     #region Method
 
-    void Initial(int id) {
+    void Initial(int id, Transform tile) {
         Id = id;
+        Tile = tile;
         _pictureSrc = "Images/Ally/1x/Ally_" + id;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -42,17 +44,20 @@ public class AllyUnit : Unit {
             Quaternion.identity,
             tile
         );
-        go.GetComponent<AllyUnit>().Initial(id);
+        go.GetComponent<AllyUnit>().Initial(id, tile);
         return go;
     }
 
-    public void DestroySelf() {
-        Destroy(transform.gameObject);
-    }
-
     #endregion
-
     #region MonoBehaviour
+
+    void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.tag == "EnemyUnit" &&
+            collision.GetComponent<EnemyUnit>().Id == Id) {
+            Destroy(collision.gameObject);
+            Tile.GetComponent<StageGridTile>().Clear();
+        }
+    }
 
     #endregion
 }

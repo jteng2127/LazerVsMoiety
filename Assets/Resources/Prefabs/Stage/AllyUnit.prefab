@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2431268590215027082}
   - component: {fileID: 6163728617943954740}
   - component: {fileID: -1837937032178422371}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: AllyUnit
-  m_TagString: AllyCard
+  m_TagString: AllyUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -63,7 +63,9 @@ public class SignInSceneButton : MonoBehaviour {
         if (!_isSignedIn) TriggerSignInWindow();
         else if (_isSignedIn) {
             StageManager.StartNewStage(
-                new List<int> { 1, 2, 3 }
+                new StageManager.StageData(
+                    new List<int> { 1, 2, 3 }
+                )
             );
         }
     }

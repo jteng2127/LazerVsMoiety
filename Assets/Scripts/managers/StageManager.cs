@@ -6,7 +6,6 @@ using System;
 using System.Reflection;
 
 public class StageManager : MonoBehaviour {
-
     #region Debug
 
     protected static void Log(string s) {
@@ -14,7 +13,6 @@ public class StageManager : MonoBehaviour {
     }
 
     #endregion
-
     #region Singleton
 
     protected static StageManager s_Instance;
@@ -47,55 +45,80 @@ public class StageManager : MonoBehaviour {
     }
 
     #endregion
-
     #region Data
 
     public class StageData {
+        /// Level info
+        public int Level { get; } // -1: custom
         public string StageName { get; }
         public string StageDescription { get; }
 
-        public int Level { get; } // -1: custom
+        /// Grid info
+        static readonly int DefaultGridRowTotal = 5;
+        static readonly int DefaultGridColumnTotal = 9;
+        public readonly int GridRowTotal;
+        public readonly int GridColumnTotal;
+
+        /// Spawn info
+        static readonly float DefaultEnemySpawnPositionX = 12.0f;
+        static readonly float DefaultAllyCardSpawnPositionX = 8.0f;
+        static readonly float DefaultAllyCardSpawnPositionY = 4.0f;
+        public int EnemyQuantityTotal { get; }
+        public int EnemyQuantityLeft { get; set; }
         public List<int> EnemyType { get; }
-        public readonly int EnemyQuantityTotal;
-        public float EnemySpeed { get; }
         public float EnemySpawnInterval { get; }
         public float EnemySpawnIntervalDeviation { get; }
+        public float EnemySpawnTimeLeft { get; set; }
         public float EnemySpawnPositionX { get; }
-        public float AllyCardSpeed { get; }
         public float AllyCardSpawnInterval { get; }
         public float AllyCardSpawnIntervalDeviation { get; }
+        public float AllyCardSpawnTimeLeft { get; set; }
         public float AllyCardSpawnPositionX { get; }
         public float AllyCardSpawnPositionY { get; }
-        public int GridRowTotal { get; }
-        public int GridColumnTotal { get; }
 
-        public StageData(   List<int> enemyType,
-                            int enemyQuantityTotal,
-                            float enemySpeedMultiplier,
-                            float enemySpawnInterval,
-                            float enemySpawnIntervalDeviation,
-                            float enemySpawnPositionX,
-                            float allyCardSpawnInterval,
-                            float allyCardSpawnIntervalDeviation,
-                            float allyCardSpawnPositionX,
-                            float allyCardSpawnPositionY,
-                            int level,
-                            int gridRowTotal,
-                            int gridColumnTotal) {
-            EnemyType = enemyType;
+        /// Unit info
+        static readonly float DefaultEnemySpeed = 0.5f;
+        static readonly float DefaultAllyCardSpeed = 0.8f;
+        public float EnemySpeed { get; }
+        public float AllyCardSpeed { get; }
+
+        public StageData(
+                List<int> enemyType,
+                int level = -1,
+                int enemyQuantityTotal = 10,
+                float enemySpeedMultiplier = 1.0f,
+                float enemySpawnInterval = 7.0f,
+                float enemySpawnIntervalDeviation = 0.0f,
+                float allyCardSpawnInterval = 4.5f,
+                float allyCardSpawnIntervalDeviation = 0.0f) {
+
+            /// Level info
+            Level = level;
+            // StageName = ""
+            // StageDescription = ""
+
+            /// Grid info
+            GridRowTotal = DefaultGridRowTotal;
+            GridColumnTotal = DefaultGridColumnTotal;
+
+            /// Spawn info
             EnemyQuantityTotal = enemyQuantityTotal;
-            EnemySpeed = _enemySpeedDefault * enemySpeedMultiplier;
+            EnemyQuantityLeft = EnemyQuantityTotal;
+            EnemyType = enemyType;
             EnemySpawnInterval = enemySpawnInterval;
             EnemySpawnIntervalDeviation = enemySpawnIntervalDeviation;
-            EnemySpawnPositionX = enemySpawnPositionX;
-            AllyCardSpeed = _allyCardSpeedDefault;
+            EnemySpawnTimeLeft = EnemySpawnInterval;
+            EnemySpawnPositionX = DefaultEnemySpawnPositionX;
             AllyCardSpawnInterval = allyCardSpawnInterval;
             AllyCardSpawnIntervalDeviation = allyCardSpawnIntervalDeviation;
-            AllyCardSpawnPositionX = allyCardSpawnPositionX;
-            AllyCardSpawnPositionY = allyCardSpawnPositionY;
-            Level = level;
-            GridRowTotal = gridRowTotal;
-            GridColumnTotal = gridColumnTotal;
+            AllyCardSpawnTimeLeft = AllyCardSpawnInterval;
+            AllyCardSpawnPositionX = DefaultAllyCardSpawnPositionX;
+            AllyCardSpawnPositionY = DefaultAllyCardSpawnPositionY;
+
+            /// Unit info
+            EnemySpeed = DefaultEnemySpeed * enemySpeedMultiplier;
+            AllyCardSpeed = DefaultAllyCardSpeed;
+
             // TODO: check here
             // MinEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.01f, level - 1) - 0.51f, 0.35f);
             // MaxEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.03f, level - 1) + 1.97f, 2.0f);
@@ -107,84 +130,26 @@ public class StageManager : MonoBehaviour {
 
     public StageData Data { get; set; }
 
-    const float _enemySpeedDefault = 0.5f;
-    const float _allyCardSpeedDefault = 0.8f;
     bool _isPlaying;
 
     #endregion
-
     #region Method
 
     void InitialStage(StageData data) {
         GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
         Data = data;
         _isPlaying = false;
+        SpawnManager.CreateNewSpawner();
     }
 
     void StageStart() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        SpawnManager.StartNewSpawner();
-    }
-
-    #endregion
-
-    #region Interface
-
-    static public void StartNewStage(   List<int> enemyType,
-                                        int enemyQuantityTotal = 10,
-                                        float enemySpeedMultiplier = 1.0f,
-                                        float enemySpawnInterval = 7.0f,
-                                        float enemySpawnIntervalDeviation = 0.0f,
-                                        float enemySpawnPositionX = 12.0f,
-                                        float allyCardSpawnInterval = 4.5f,
-                                        float allyCardSpawnIntervalDeviation = 0.0f,
-                                        float allyCardSpawnPositionX = 8.0f,
-                                        float allyCardSpawnPositionY = 4.0f,
-                                        int level = -1,
-                                        int gridRowTotal = 5,
-                                        int gridColumnTotal = 9) {
-        CreateNewInstance();
-        Instance.InitialStage(new StageData(
-            enemyType,
-            enemyQuantityTotal,
-            enemySpeedMultiplier,
-            enemySpawnInterval,
-            enemySpawnIntervalDeviation,
-            enemySpawnPositionX,
-            allyCardSpawnInterval,
-            allyCardSpawnIntervalDeviation,
-            allyCardSpawnPositionX,
-            allyCardSpawnPositionY,
-            level,
-            gridRowTotal,
-            gridColumnTotal
-        ));
-        Instance.StageStart();
-    }
-
-    public void TriggerPause() {
-
-    }
-
-    public void GameOver() {
-        DestroyInstance();
-        SpawnManager.EndSpawn();
+        SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => {
+            SpawnManager.StartSpawn();
+        };
     }
 
     #endregion
-
     #region MonoBehaviour
-
-    void OnEnable() {
-        Log("Enable");
-    }
-
-    void OnDestroy() {
-        Log("Destroy");
-    }
 
     void Update() {
         /// Get touch input
@@ -212,7 +177,24 @@ public class StageManager : MonoBehaviour {
     }
 
     #endregion
+    #region Interface
 
+    static public void StartNewStage(StageData data) {
+        CreateNewInstance();
+        Instance.InitialStage(data);
+        Instance.StageStart();
+    }
+
+    public void TriggerPause() {
+
+    }
+
+    public void GameOver() {
+        DestroyInstance();
+        SpawnManager.EndSpawn();
+    }
+
+    #endregion
 
     /* TODO: wait to check up
     double _startTime;

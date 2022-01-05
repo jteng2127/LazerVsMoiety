@@ -102,14 +102,14 @@ public class GameManager : MonoBehaviour {
 
     #region Interface
 
-    public void LoadScene(SceneType scene, bool showLoading = true) {
+    public void LoadScene(SceneType scene, bool isAsync = false, bool showLoading = true) {
         Debug.Log("LoadScene: " + _sceneTypeToString[scene]);
 
-        StartCoroutine(LoadingSceneAsync(scene));
-        // SceneManager.LoadScene(_sceneTypeToString[scene]);
+        if (isAsync) StartCoroutine(LoadingSceneAsync(scene));
+        else SceneManager.LoadScene(_sceneTypeToString[scene]);
     }
 
-    public SceneType GetCurrentScene(){
+    public SceneType GetCurrentScene() {
         return _stringToSceneType[SceneManager.GetActiveScene().name];
     }
 

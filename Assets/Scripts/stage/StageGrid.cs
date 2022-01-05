@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StageGrid : MonoBehaviour {
-
     #region Data
 
     RectTransform _rectTransform;
@@ -17,7 +16,6 @@ public class StageGrid : MonoBehaviour {
     GameObject _stageGridTilePrefab;
 
     #endregion
-
     #region method
 
     GameObject CreateTile(float dx, float dy) {
@@ -55,7 +53,6 @@ public class StageGrid : MonoBehaviour {
     }
 
     #endregion
-
     #region MonoBehavior
 
     void Awake() {
@@ -73,10 +70,5 @@ public class StageGrid : MonoBehaviour {
     void Start() {
         InitialGridList();
     }
-
-    void Update() {
-
-    }
-
     #endregion
 }

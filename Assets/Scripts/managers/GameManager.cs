@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour {
     Dictionary<string, SceneType> _stringToSceneType;
 
     void _initGameSceneManage() {
-        Debug.Log("Initial SceneTypeDictionary");
         _sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
             {SceneType.SignIn, "SignIn"},

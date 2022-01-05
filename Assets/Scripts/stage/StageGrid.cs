@@ -38,6 +38,11 @@ public class StageGrid : MonoBehaviour {
         float dx, dy;
         for (var row = 0; row < _gridRowTotal; row++) {
             dy = TileHeight * (row - _gridRowTotal / 2);
+            AllyUnit.Spawn(0, transform.position + new Vector3(
+                TileWidth * (-1 - _gridColumnTotal / 2),
+                dy
+            ));
+
             RowYList.Add(transform.position.y + dy);
             List<GameObject> gridRow = new List<GameObject>();
             for (var col = 0; col < _gridColumnTotal; col++) {
@@ -46,6 +51,7 @@ public class StageGrid : MonoBehaviour {
             }
             _gridList.Add(gridRow);
         }
+
     }
 
     #endregion

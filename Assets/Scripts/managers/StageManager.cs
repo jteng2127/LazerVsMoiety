@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.Reflection;
+using System.Linq;
 
 public class StageManager : MonoBehaviour {
     #region Debug
@@ -186,10 +187,12 @@ public class StageManager : MonoBehaviour {
             /// touch detect
             if (touch.phase == TouchPhase.Began) {
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
-                foreach (RaycastHit2D hit in hitAll) {
-                    if (hit.collider.tag == "AllyCard") {
-                        hit.collider.gameObject.GetComponent<AllyCard>().CreateDragPreview();
-                        break;
+                if(!hitAll.Any(hit => hit.collider.tag == "AllyCardMask")){
+                    foreach (RaycastHit2D hit in hitAll) {
+                        if (hit.collider.tag == "AllyCard") {
+                            hit.collider.gameObject.GetComponent<AllyCard>().CreateDragPreview();
+                            break;
+                        }
                     }
                 }
             }

@@ -9,6 +9,7 @@ TagManager:
   - AllyCardDragPreview
   - EnemyUnit
   - AllyUnit
+  - AllyCardMask
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - CardConveyor
+  - UnitCardConveyor
   - 
   - 
   - 

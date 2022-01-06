@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     protected static GameManager s_Instance;
 
     public static GameManager Instance {
-        // [RuntimeInitializeOnLoadMethod]
+        [RuntimeInitializeOnLoadMethod]
         get {
             if (s_Instance == null) {
                 Debug.Log("GameManager: Create new instance.");

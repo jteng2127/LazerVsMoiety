@@ -6,7 +6,7 @@ public class AllyCardDragPreview : MonoBehaviour {
     public GameObject Origin { get; set; }
     public Vector3 CurrentPosition { get; set; }
 
-    StageGridTile GetHitGrid(Ray ray){
+    StageGridTile GetHitGrid(Ray ray) {
         StageGridTile stageGridTile = null;
         RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
         foreach (RaycastHit2D hit in hitAll) {
@@ -26,24 +26,28 @@ public class AllyCardDragPreview : MonoBehaviour {
         CurrentPosition += deltaPos;
 
         StageGridTile stageGridTile = GetHitGrid(ray);
-        if(stageGridTile == null) transform.position = CurrentPosition;
+        if (stageGridTile == null) transform.position = CurrentPosition;
         else transform.position = stageGridTile.gameObject.transform.position;
     }
 
     void EndDragging(Ray ray) {
         StageGridTile stageGridTile = GetHitGrid(ray);
-        if(stageGridTile == null) transform.position = CurrentPosition;
+        if (stageGridTile == null) transform.position = CurrentPosition;
         else transform.position = stageGridTile.gameObject.transform.position;
 
         if (stageGridTile != null) {
             AllyCard allyCard = Origin.GetComponent<AllyCard>();
-            allyCard.DestroySelf();
+            SpawnManager.DestroyUnit(allyCard.gameObject);
             stageGridTile.SetAllyUnit(allyCard.Id);
         }
         else {
             SpriteRenderer originSpriteRenderer = Origin.GetComponent<SpriteRenderer>();
             originSpriteRenderer.color = new Color(
-                originSpriteRenderer.color.r, originSpriteRenderer.color.g, originSpriteRenderer.color.b, 1.0f);
+                originSpriteRenderer.color.r,
+                originSpriteRenderer.color.g,
+                originSpriteRenderer.color.b,
+                1.0f
+            );
         }
         Destroy(transform.gameObject);
     }

@@ -53,5 +53,11 @@ public class EnemyUnit : Unit {
         _rigidbody2D.velocity = new Vector2(-_speed, 0.0f);
     }
 
+    void Update() {
+        Vector3 viewPortPoint = Camera.main.WorldToViewportPoint(transform.position);
+
+        if (viewPortPoint.x < 0.0) StageManager.CheckGameOver(isLose: true);
+    }
+
     #endregion
 }

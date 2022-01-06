@@ -52,6 +52,8 @@ public class StageManager : MonoBehaviour {
         public int Level { get; } // -1: custom
         public string StageName { get; }
         public string StageDescription { get; }
+        public int GameState { get; set; } // 0: prepare, 1: gaming, 2: game over
+        public bool IsLose { get; set; }
 
         /// Grid info
         static readonly int DefaultGridRowTotal = 5;
@@ -63,13 +65,19 @@ public class StageManager : MonoBehaviour {
         static readonly float DefaultEnemySpawnPositionX = 12.0f;
         static readonly float DefaultAllyCardSpawnPositionX = 8.0f;
         static readonly float DefaultAllyCardSpawnPositionY = 4.0f;
-        public int EnemyQuantityTotal { get; }
-        public int EnemyQuantityLeft { get; set; }
+        static readonly int DefaultAllyCardSpawnNumberMax = 8;
+
         public List<int> EnemyType { get; }
+        public int EnemySpawnNumberTotal { get; }
+        public int EnemySpawnNumberLeft { get; set; }
+        public int EnemyCount { get; set; }
         public float EnemySpawnInterval { get; }
         public float EnemySpawnIntervalDeviation { get; }
         public float EnemySpawnTimeLeft { get; set; }
         public float EnemySpawnPositionX { get; }
+
+        public int AllyCardCount { get; set; }
+        public int AllyCardSpawnNumberMax { get; }
         public float AllyCardSpawnInterval { get; }
         public float AllyCardSpawnIntervalDeviation { get; }
         public float AllyCardSpawnTimeLeft { get; set; }
@@ -85,7 +93,7 @@ public class StageManager : MonoBehaviour {
         public StageData(
                 List<int> enemyType,
                 int level = -1,
-                int enemyQuantityTotal = 10,
+                int enemySpawnNumberTotal = 10,
                 float enemySpeedMultiplier = 1.0f,
                 float enemySpawnInterval = 7.0f,
                 float enemySpawnIntervalDeviation = 0.0f,
@@ -94,6 +102,8 @@ public class StageManager : MonoBehaviour {
 
             /// Level info
             Level = level;
+            GameState = 0;
+            IsLose = false;
             // StageName = ""
             // StageDescription = ""
 
@@ -102,13 +112,17 @@ public class StageManager : MonoBehaviour {
             GridColumnTotal = DefaultGridColumnTotal;
 
             /// Spawn info
-            EnemyQuantityTotal = enemyQuantityTotal;
-            EnemyQuantityLeft = EnemyQuantityTotal;
             EnemyType = enemyType;
+            EnemySpawnNumberTotal = enemySpawnNumberTotal;
+            EnemySpawnNumberLeft = EnemySpawnNumberTotal;
+            EnemyCount = 0;
             EnemySpawnInterval = enemySpawnInterval;
             EnemySpawnIntervalDeviation = enemySpawnIntervalDeviation;
             EnemySpawnTimeLeft = EnemySpawnInterval;
             EnemySpawnPositionX = DefaultEnemySpawnPositionX;
+
+            AllyCardCount = 0;
+            AllyCardSpawnNumberMax = DefaultAllyCardSpawnNumberMax;
             AllyCardSpawnInterval = allyCardSpawnInterval;
             AllyCardSpawnIntervalDeviation = allyCardSpawnIntervalDeviation;
             AllyCardSpawnTimeLeft = AllyCardSpawnInterval;
@@ -124,13 +138,11 @@ public class StageManager : MonoBehaviour {
             // MaxEnemySpawnInterval = Mathf.Min(Mathf.Pow(1.03f, level - 1) + 1.97f, 2.0f);
             // MinAllyCardSpawnInterval = 5.0f;
             // MaxAllyCardSpawnInterval = 10.0f;
-            // EnemyQuantity = (int)Mathf.Min(Mathf.Pow(1.051f, level - 1) - 0.051f, 12) * 15;
+            // EnemySpawnNumber = (int)Mathf.Min(Mathf.Pow(1.051f, level - 1) - 0.051f, 12) * 15;
         }
     }
 
     public StageData Data { get; set; }
-
-    bool _isPlaying;
 
     #endregion
     #region Method
@@ -138,14 +150,22 @@ public class StageManager : MonoBehaviour {
     void InitialStage(StageData data) {
         GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
         Data = data;
-        _isPlaying = false;
+        Data.GameState = 0;
         SpawnManager.CreateNewSpawner();
     }
 
     void StageStart() {
+        Instance.Data.GameState = 1;
         SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => {
             SpawnManager.StartSpawn();
         };
+    }
+
+    void GameOver() {
+        Data.GameState = 2;
+        Debug.Log("Game Over");
+        if (Data.IsLose) Debug.Log("You Lose");
+        else Debug.Log("You Win!!!");
     }
 
     #endregion
@@ -189,9 +209,17 @@ public class StageManager : MonoBehaviour {
 
     }
 
-    public void GameOver() {
-        DestroyInstance();
-        SpawnManager.EndSpawn();
+    static public void CheckGameOver(bool isLose = false) {
+        if (Instance.Data.GameState == 1) {
+            if (Instance.Data.EnemyCount <= 0 &&
+                Instance.Data.EnemySpawnNumberLeft <= 0) {
+                Instance.GameOver();
+            }
+            if (isLose) {
+                Instance.Data.IsLose = true;
+                Instance.GameOver();
+            }
+        }
     }
 
     #endregion
@@ -211,7 +239,7 @@ public class StageManager : MonoBehaviour {
     }
 
     // public Coefficient coefficient = new Coefficient(checkpoint_level);
-    // public Tuple<int, int> getRemainQuantity(){
+    // public Tuple<int, int> getRemainSpawnNumber(){
     //     return new Tuple<int, int>(coefficient._wave_quantity, coefficient._fg_quantity);
     // }
     */

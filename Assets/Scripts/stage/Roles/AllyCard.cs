@@ -70,12 +70,7 @@ public class AllyCard : Unit {
         return go;
     }
 
-    public void DestroySelf() {
-        Destroy(transform.gameObject);
-    }
-
     #endregion
-
     #region MonoBehaviour
 
     void FixedUpdate() {

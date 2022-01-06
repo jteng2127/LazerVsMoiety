@@ -65,7 +65,7 @@ public class SpawnManager : MonoBehaviour {
     }
 
     /// <param name="type">0: Enemy, 1: AllyCard</param>
-    void Spawn(int type) {
+    void SpawnUnit(int type) {
         Vector3 spawnPosition;
         int id;
 
@@ -94,19 +94,24 @@ public class SpawnManager : MonoBehaviour {
     }
 
     void CheckAndSpawn() {
-        if (_data.EnemySpawnTimeLeft <= 0.0f) {
+        if (_data.EnemySpawnTimeLeft <= 0.0f &&
+            _data.EnemySpawnNumberLeft > 0) {
             _data.EnemySpawnTimeLeft = GenerateRandomDelay(
                 StageManager.Instance.Data.EnemySpawnInterval,
                 StageManager.Instance.Data.EnemySpawnIntervalDeviation
             );
-            Spawn(0);
+            SpawnUnit(0);
+            _data.EnemySpawnNumberLeft--;
+            _data.EnemyCount++;
         }
-        if (_data.AllyCardSpawnTimeLeft <= 0.0f) {
+        if (_data.AllyCardSpawnTimeLeft <= 0.0f &&
+            _data.AllyCardCount < _data.AllyCardSpawnNumberMax) {
             _data.AllyCardSpawnTimeLeft = GenerateRandomDelay(
                 StageManager.Instance.Data.AllyCardSpawnInterval,
                 StageManager.Instance.Data.AllyCardSpawnIntervalDeviation
             );
-            Spawn(1);
+            SpawnUnit(1);
+            _data.AllyCardCount++;
         }
     }
 
@@ -117,7 +122,12 @@ public class SpawnManager : MonoBehaviour {
     }
 
     void Update() {
-        if (_isSpawning) {
+        /// Test
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Debug.Log(_data.AllyCardCount + ", " + _data.EnemyCount);
+        }
+
+        if (_data.GameState == 1) {
             _data.EnemySpawnTimeLeft -= Time.deltaTime;
             _data.AllyCardSpawnTimeLeft -= Time.deltaTime;
             CheckAndSpawn();
@@ -138,8 +148,15 @@ public class SpawnManager : MonoBehaviour {
         Instance._stageGrid = GameObject.Find("StageGrid").GetComponent<StageGrid>();
     }
 
-    static public void EndSpawn() {
-        DestroyInstance();
+    static public void DestroyUnit(GameObject go) {
+        if (go.TryGetComponent<EnemyUnit>(out EnemyUnit enemyUnit)) {
+            Instance._data.EnemyCount--;
+            StageManager.CheckGameOver();
+        }
+        if (go.TryGetComponent<AllyCard>(out AllyCard allyCard)) {
+            Instance._data.AllyCardCount--;
+        }
+        Destroy(go);
     }
 
     public void TriggerPause() {

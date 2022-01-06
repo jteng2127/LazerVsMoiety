@@ -40,26 +40,29 @@ public class AllyUnit : Unit {
         _spriteRenderer.sprite = sprite;
     }
 
-    void HitEnemy(GameObject enemy) {
+    void HitEnemy(GameObject enemyUnit) {
         if (Id == 11) { /// lazer beam
-            Destroy(enemy);
+            SpawnManager.DestroyUnit(enemyUnit);
         }
         else if (_isActivate) {
             _isActivate = false;
             if (Id == 0) {
                 Debug.Log("cannon!!");
                 _boxCollider2D.size = new Vector2(100.0f, _boxCollider2D.size.y);
-                Destroy(Spawn(11, transform.position), 5.0f);
+                Destroy(Spawn(11, transform.position), 3.0f);
                 _spriteRenderer.color = new Color(
                     _spriteRenderer.color.r,
                     _spriteRenderer.color.g,
                     _spriteRenderer.color.b,
-                    0.2f
+                    0.3f
                 );
             }
-            else if (Id == enemy.GetComponent<EnemyUnit>().Id) {
-                Destroy(enemy);
+            else if (Id == enemyUnit.GetComponent<EnemyUnit>().Id) {
+                SpawnManager.DestroyUnit(enemyUnit);
                 if (Tile != null) Tile.GetComponent<StageGridTile>().Clear();
+            }
+            else {
+                _isActivate = true;
             }
         }
     }

@@ -64,6 +64,7 @@ public class StageGrid : MonoBehaviour {
         _gridList = new List<List<GameObject>>();
         RowYList = new List<float>();
         _stageGridTilePrefab = Resources.Load<GameObject>("Prefabs/Stage/StageGridTile");
+
     }
 
 

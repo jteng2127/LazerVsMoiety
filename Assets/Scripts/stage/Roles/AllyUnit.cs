@@ -35,7 +35,7 @@ public class AllyUnit : Unit {
             texture,
             new Rect(0, 0, texture.width, texture.height),
             new Vector2(0.5f, 0.5f),
-            (float)Screen.height / 10
+            GameManager.ImagePixelHeightReference / 10
         );
         _spriteRenderer.sprite = sprite;
     }

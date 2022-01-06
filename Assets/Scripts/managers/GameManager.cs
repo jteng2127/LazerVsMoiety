@@ -34,12 +34,13 @@ public class GameManager : MonoBehaviour {
 
     void OnEnable() {
         Debug.Log("GameManager Enable");
-        _initGameSceneManage();
+        _initGameSceneManager();
     }
 
     #endregion
+    #region Data
 
-    #region Scene
+    public const int ImagePixelHeightReference = 1440;
 
     public enum SceneType {
         /// <summary> Loding page </summary>
@@ -57,7 +58,10 @@ public class GameManager : MonoBehaviour {
     Dictionary<SceneType, string> _sceneTypeToString;
     Dictionary<string, SceneType> _stringToSceneType;
 
-    void _initGameSceneManage() {
+    #endregion
+    #region Method
+
+    void _initGameSceneManager() {
         _sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
             {SceneType.SignIn, "SignIn"},

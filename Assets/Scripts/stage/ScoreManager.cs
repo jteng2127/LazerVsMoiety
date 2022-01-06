@@ -9,7 +9,7 @@ using System.Reflection;
 public class ScoreManager : MonoBehaviour {
     #region Interface
 
-    static public void NewScore(){
+    static public void NewScore() {
         CreateNewInstance();
         Instance.Initial();
     }
@@ -17,8 +17,7 @@ public class ScoreManager : MonoBehaviour {
     public int TotalScore {
         get {
             int total = 0;
-            foreach (KeyValuePair<String, int> score in Scores)
-            {
+            foreach (KeyValuePair<String, int> score in Scores) {
                 total += score.Value;
             }
             return total;
@@ -31,7 +30,7 @@ public class ScoreManager : MonoBehaviour {
 
     public void ModifyScore(int addScore = 0, int target = -1) {
         AddScoreByKey("Other", addScore);
-        if (target != -1){
+        if (target != -1) {
             AllClear();
         }
     }
@@ -42,11 +41,13 @@ public class ScoreManager : MonoBehaviour {
         _combo++;
     }
 
-    public void GameOver(){
+    public void GameOver() {
         int addScore = 0;
-        if(!StageManager.Instance.Data.IsLose) addScore = StageManager.Instance.Data.EnemySpawnNumberTotal * 300;
-        AddScoreByKey("GameOver", addScore);
-        AddScoreByKey("CannonLeft", 500 * StageManager.Instance.Data.CannonLeft);
+        if (!StageManager.Instance.Data.IsLose) {
+            addScore = StageManager.Instance.Data.EnemySpawnNumberTotal * 300;
+            AddScoreByKey("GameOver", addScore);
+            AddScoreByKey("CannonLeft", 500 * StageManager.Instance.Data.CannonLeft);
+        }
     }
 
     public void ComboBreak() {
@@ -73,10 +74,12 @@ public class ScoreManager : MonoBehaviour {
         _combo = 0;
     }
 
-    void AddScoreByKey(String key, int addScore){
-        if(!Scores.ContainsKey(key)) Scores[key] = 0;
-        Scores[key] += addScore;
-        Log("add " + key + ": " + addScore);
+    void AddScoreByKey(String key, int addScore) {
+        if (StageManager.Instance.Data.GameState == 1) {
+            if (!Scores.ContainsKey(key)) Scores[key] = 0;
+            Scores[key] += addScore;
+            Log("add " + key + ": " + addScore);
+        }
     }
 
     #endregion

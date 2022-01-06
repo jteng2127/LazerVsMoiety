@@ -169,7 +169,7 @@ public class StageManager : MonoBehaviour {
         Data.GameState = 2;
         Debug.Log("Game Over");
         if (Data.IsLose) Debug.Log("You Lose");
-        else{
+        else {
             Debug.Log("You Win!!!");
             ScoreManager.Instance.GameOver();
         }
@@ -181,7 +181,7 @@ public class StageManager : MonoBehaviour {
 
     void Update() {
         /// Get touch input
-        if (Input.touchCount > 0) {
+        if (Data.GameState == 1 && Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
 
@@ -194,7 +194,7 @@ public class StageManager : MonoBehaviour {
             /// touch detect
             if (touch.phase == TouchPhase.Began) {
                 RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
-                if(!hitAll.Any(hit => hit.collider.tag == "AllyCardMask")){
+                if (!hitAll.Any(hit => hit.collider.tag == "AllyCardMask")) {
                     foreach (RaycastHit2D hit in hitAll) {
                         if (hit.collider.tag == "AllyCard") {
                             hit.collider.gameObject.GetComponent<AllyCard>().CreateDragPreview();

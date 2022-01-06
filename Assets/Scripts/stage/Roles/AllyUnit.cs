@@ -42,12 +42,16 @@ public class AllyUnit : Unit {
 
     void HitEnemy(GameObject enemyUnit) {
         if (Id == 11) { /// lazer beam
+            ScoreManager.Instance.ComboBreak();
+            ScoreManager.Instance.DefeatEnemy();
+            ScoreManager.Instance.ComboBreak();
             SpawnManager.DestroyUnit(enemyUnit);
         }
         else if (_isActivate) {
             _isActivate = false;
             if (Id == 0) {
-                Debug.Log("cannon!!");
+                Debug.Log("Cannon!!");
+                StageManager.Instance.Data.CannonLeft--;
                 _boxCollider2D.size = new Vector2(100.0f, _boxCollider2D.size.y);
                 Destroy(Spawn(11, transform.position), 3.0f);
                 _spriteRenderer.color = new Color(
@@ -58,10 +62,12 @@ public class AllyUnit : Unit {
                 );
             }
             else if (Id == enemyUnit.GetComponent<EnemyUnit>().Id) {
+                ScoreManager.Instance.DefeatEnemy();
                 SpawnManager.DestroyUnit(enemyUnit);
                 if (Tile != null) Tile.GetComponent<StageGridTile>().Clear();
             }
             else {
+                ScoreManager.Instance.ComboBreak();
                 _isActivate = true;
             }
         }

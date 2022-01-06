@@ -61,6 +61,7 @@ public class StageManager : MonoBehaviour {
         static readonly int DefaultGridColumnTotal = 9;
         public readonly int GridRowTotal;
         public readonly int GridColumnTotal;
+        public int CannonLeft { get; set; }
 
         /// Spawn info
         static readonly float DefaultEnemySpawnPositionX = 12.0f;
@@ -111,6 +112,7 @@ public class StageManager : MonoBehaviour {
             /// Grid info
             GridRowTotal = DefaultGridRowTotal;
             GridColumnTotal = DefaultGridColumnTotal;
+            CannonLeft = GridRowTotal;
 
             /// Spawn info
             EnemyType = enemyType;
@@ -153,6 +155,7 @@ public class StageManager : MonoBehaviour {
         Data = data;
         Data.GameState = 0;
         SpawnManager.CreateNewSpawner();
+        ScoreManager.NewScore();
     }
 
     void StageStart() {
@@ -166,7 +169,11 @@ public class StageManager : MonoBehaviour {
         Data.GameState = 2;
         Debug.Log("Game Over");
         if (Data.IsLose) Debug.Log("You Lose");
-        else Debug.Log("You Win!!!");
+        else{
+            Debug.Log("You Win!!!");
+            ScoreManager.Instance.GameOver();
+        }
+        Debug.Log("You're Score: " + ScoreManager.Instance.TotalScore);
     }
 
     #endregion

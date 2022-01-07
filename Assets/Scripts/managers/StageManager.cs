@@ -166,7 +166,6 @@ public class StageManager : MonoBehaviour {
     }
 
     void GameOver() {
-        Data.GameState = 2;
         Debug.Log("Game Over");
         if (Data.IsLose) Debug.Log("You Lose");
         else {
@@ -174,6 +173,7 @@ public class StageManager : MonoBehaviour {
             ScoreManager.Instance.GameOver();
         }
         Debug.Log("You're Score: " + ScoreManager.Instance.TotalScore);
+        Data.GameState = 2;
     }
 
     #endregion

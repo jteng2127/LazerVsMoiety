@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using System.Reflection;
@@ -146,6 +147,9 @@ public class StageManager : MonoBehaviour {
     }
 
     public StageData Data { get; set; }
+    
+    Transform _gameOverScreen;
+    Text _gameOverText;
 
     #endregion
     #region Method
@@ -162,17 +166,30 @@ public class StageManager : MonoBehaviour {
         Instance.Data.GameState = 1;
         SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => {
             SpawnManager.StartSpawn();
+            Transform gameOverCanvas = GameObject.Find("GameOverCanvas").transform;
+            _gameOverScreen = gameOverCanvas.Find("GameOverScreen");
+            _gameOverText = _gameOverScreen.Find("GameOverText").GetComponent<Text>();
+            Debug.Log("game over screen: " + _gameOverScreen);
+            Debug.Log("game over text: " + _gameOverText);
         };
     }
 
     void GameOver() {
-        Debug.Log("Game Over");
         if (Data.IsLose) Debug.Log("You Lose");
         else {
             Debug.Log("You Win!!!");
             ScoreManager.Instance.GameOver();
         }
         Debug.Log("You're Score: " + ScoreManager.Instance.TotalScore);
+
+        String gameOverMessage = "";
+        if(Data.IsLose) gameOverMessage = "You Lose...\n";
+        else gameOverMessage = "You Win!!!\n";
+        gameOverMessage += "Score: " + ScoreManager.Instance.TotalScore;
+
+        _gameOverScreen.gameObject.SetActive(true);
+        _gameOverText.text = gameOverMessage;
+
         Data.GameState = 2;
     }
 

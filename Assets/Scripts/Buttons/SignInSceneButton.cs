@@ -64,7 +64,9 @@ public class SignInSceneButton : MonoBehaviour {
         else if (_isSignedIn) {
             StageManager.StartNewStage(
                 new StageManager.StageData(
-                    new List<int> { 1, 2, 3 }
+                    new List<int> { 1, 2, 3 },
+                    enemySpawnInterval: 3,
+                    allyCardSpawnInterval: 1
                 )
             );
         }

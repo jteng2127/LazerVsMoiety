@@ -53,3 +53,6 @@ TagManager:
   - name: UI
     uniqueID: 963417867
     locked: 0
+  - name: GameOverScreen
+    uniqueID: 1679240289
+    locked: 0

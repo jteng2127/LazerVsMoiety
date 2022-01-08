@@ -94,6 +94,7 @@ public class SpawnManager : MonoBehaviour {
     }
 
     void CheckAndSpawn() {
+        Log(""+_data.EnemySpawnTimeLeft);
         if (_data.EnemySpawnTimeLeft <= 0.0f &&
             _data.EnemySpawnNumberLeft > 0) {
             _data.EnemySpawnTimeLeft = GenerateRandomDelay(

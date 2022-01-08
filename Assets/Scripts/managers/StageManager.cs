@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Reflection;
 using System.Linq;
+// using System.Xml.Serialization;
+// using System.IO;
 
 public class StageManager : MonoBehaviour {
     #region Debug
@@ -70,7 +72,7 @@ public class StageManager : MonoBehaviour {
         static readonly float DefaultAllyCardSpawnPositionY = 4.0f;
         static readonly int DefaultAllyCardSpawnNumberMax = 8;
 
-        public List<int> EnemyType { get; }
+        public List<int> EnemyType { get; set; }
         public int EnemySpawnNumberTotal { get; }
         public int EnemySpawnNumberLeft { get; set; }
         public int EnemyCount { get; set; }
@@ -94,7 +96,7 @@ public class StageManager : MonoBehaviour {
         public float AllyCardSpeed { get; }
 
         public StageData(
-                List<int> enemyType,
+                List<int> enemyType = null,
                 int level = -1,
                 int enemySpawnNumberTotal = 10,
                 float enemySpeedMultiplier = 1.0f,
@@ -116,7 +118,8 @@ public class StageManager : MonoBehaviour {
             CannonLeft = GridRowTotal;
 
             /// Spawn info
-            EnemyType = enemyType;
+            if(enemyType != null) EnemyType = enemyType;
+            else EnemyType = new List<int>() { 1, 2, 3 };
             EnemySpawnNumberTotal = enemySpawnNumberTotal;
             EnemySpawnNumberLeft = EnemySpawnNumberTotal;
             EnemyCount = 0;
@@ -250,6 +253,17 @@ public class StageManager : MonoBehaviour {
     }
 
     #endregion
+
+    // static public string SerializeObject(StageData toSerialize)
+    // {
+    //     XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
+
+    //     using(StringWriter textWriter = new StringWriter())
+    //     {
+    //         xmlSerializer.Serialize(textWriter, toSerialize);
+    //         return textWriter.ToString();
+    //     }
+    // }
 
     /* TODO: wait to check up
     double _startTime;

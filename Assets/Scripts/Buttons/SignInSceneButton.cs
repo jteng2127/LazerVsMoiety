@@ -62,13 +62,14 @@ public class SignInSceneButton : MonoBehaviour {
     public void Click() {
         if (!_isSignedIn) TriggerSignInWindow();
         else if (_isSignedIn) {
-            StageManager.StartNewStage(
-                new StageManager.StageData(
-                    new List<int> { 1, 2, 3 },
-                    enemySpawnInterval: 3,
-                    allyCardSpawnInterval: 1
-                )
-            );
+            GameManager.Instance.LoadScene(GameManager.SceneType.StageAdjust);
+            // StageManager.StartNewStage(
+            //     new StageManager.StageData(
+            //         new List<int> { 1, 2, 3 },
+            //         enemySpawnInterval: 3,
+            //         allyCardSpawnInterval: 1
+            //     )
+            // );
         }
     }
 

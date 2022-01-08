@@ -99,9 +99,9 @@ public class StageManager : MonoBehaviour {
                 int enemySpawnNumberTotal = 10,
                 float enemySpeedMultiplier = 1.0f,
                 float enemySpawnInterval = 7.0f,
-                float enemySpawnIntervalDeviation = 0.0f,
+                float enemySpawnIntervalDeviation = 0.5f,
                 float allyCardSpawnInterval = 4.5f,
-                float allyCardSpawnIntervalDeviation = 0.0f) {
+                float allyCardSpawnIntervalDeviation = 0.5f) {
 
             /// Level info
             Level = level;

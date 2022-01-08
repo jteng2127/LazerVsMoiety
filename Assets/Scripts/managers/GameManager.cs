@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour {
         User,
         Setting,
         StageSelect,
+        StageAdjust,
         Stage,
         GameOver,
     }
@@ -69,6 +70,7 @@ public class GameManager : MonoBehaviour {
             {SceneType.User, "User"},
             {SceneType.Setting, "Setting"},
             {SceneType.StageSelect, "StageSelect"},
+            {SceneType.StageAdjust, "StageAdjust"},
             {SceneType.Stage, "Stage"},
             {SceneType.GameOver, "GameOver"},
         };
@@ -79,6 +81,7 @@ public class GameManager : MonoBehaviour {
             {"User", SceneType.User},
             {"Setting", SceneType.Setting},
             {"StageSelect", SceneType.StageSelect},
+            {"StageAdjust", SceneType.StageAdjust},
             {"Stage", SceneType.Stage},
             {"GameOver", SceneType.GameOver},
         };

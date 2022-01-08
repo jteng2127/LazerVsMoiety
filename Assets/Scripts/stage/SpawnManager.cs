@@ -94,7 +94,6 @@ public class SpawnManager : MonoBehaviour {
     }
 
     void CheckAndSpawn() {
-        Log(""+_data.EnemySpawnTimeLeft);
         if (_data.EnemySpawnTimeLeft <= 0.0f &&
             _data.EnemySpawnNumberLeft > 0) {
             _data.EnemySpawnTimeLeft = GenerateRandomDelay(
@@ -123,11 +122,6 @@ public class SpawnManager : MonoBehaviour {
     }
 
     void Update() {
-        /// Test
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            Debug.Log(_data.AllyCardCount + ", " + _data.EnemyCount);
-        }
-
         if (_data.GameState == 1) {
             _data.EnemySpawnTimeLeft -= Time.deltaTime;
             _data.AllyCardSpawnTimeLeft -= Time.deltaTime;

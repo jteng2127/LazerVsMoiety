@@ -118,7 +118,7 @@ public class StageManager : MonoBehaviour {
             CannonLeft = GridRowTotal;
 
             /// Spawn info
-            if(enemyType != null) EnemyType = enemyType;
+            if (enemyType != null) EnemyType = enemyType;
             else EnemyType = new List<int>() { 1, 2, 3 };
             EnemySpawnNumberTotal = enemySpawnNumberTotal;
             EnemySpawnNumberLeft = EnemySpawnNumberTotal;
@@ -150,9 +150,10 @@ public class StageManager : MonoBehaviour {
     }
 
     public StageData Data { get; set; }
-    
+
     Transform _gameOverScreen;
     Text _gameOverText;
+    Button _restartButton;
 
     #endregion
     #region Method
@@ -165,16 +166,20 @@ public class StageManager : MonoBehaviour {
         ScoreManager.NewScore();
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        SpawnManager.StartSpawn();
+        Transform gameOverCanvas = GameObject.Find("GameOverCanvas").transform;
+        _gameOverScreen = gameOverCanvas.Find("GameOverScreen");
+        _gameOverText = _gameOverScreen.Find("GameOverText").GetComponent<Text>();
+        _restartButton = _gameOverScreen.Find("RestartButton").GetComponent<Button>();
+        Debug.Log("game over screen: " + _gameOverScreen);
+        Debug.Log("game over text: " + _gameOverText);
+    }
+
     void StageStart() {
+        Debug.Log("StageStart");
         Instance.Data.GameState = 1;
-        SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => {
-            SpawnManager.StartSpawn();
-            Transform gameOverCanvas = GameObject.Find("GameOverCanvas").transform;
-            _gameOverScreen = gameOverCanvas.Find("GameOverScreen");
-            _gameOverText = _gameOverScreen.Find("GameOverText").GetComponent<Text>();
-            Debug.Log("game over screen: " + _gameOverScreen);
-            Debug.Log("game over text: " + _gameOverText);
-        };
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void GameOver() {
@@ -186,15 +191,23 @@ public class StageManager : MonoBehaviour {
         Debug.Log("You're Score: " + ScoreManager.Instance.TotalScore);
 
         String gameOverMessage = "";
-        if(Data.IsLose) gameOverMessage = "You Lose...\n";
+        if (Data.IsLose) gameOverMessage = "You Lose...\n";
         else gameOverMessage = "You Win!!!\n";
         gameOverMessage += "Score: " + ScoreManager.Instance.TotalScore;
 
         _gameOverScreen.gameObject.SetActive(true);
         _gameOverText.text = gameOverMessage;
+        _restartButton.onClick.AddListener(RestartGame);
 
         Data.GameState = 2;
     }
+
+    void RestartGame() {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        GameManager.Instance.LoadScene(GameManager.SceneType.StageAdjust);
+    }
+
+
 
     #endregion
     #region MonoBehaviour
@@ -230,6 +243,7 @@ public class StageManager : MonoBehaviour {
     #region Interface
 
     static public void StartNewStage(StageData data) {
+        Debug.Log("StartNewStage");
         CreateNewInstance();
         Instance.InitialStage(data);
         Instance.StageStart();

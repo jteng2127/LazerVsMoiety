@@ -27,7 +27,8 @@ public class StageAdjustPanel : MonoBehaviour {
     #endregion
     #region Interface
 
-    public void StartStage(){
+    public void StartStage() {
+        Debug.Log("StartStage!!!");
         _stageData = new StageManager.StageData(
             enemyType: _stageData.EnemyType,
             enemySpawnNumberTotal: (int)_sliders["EnemySpawnNumberTotal"].value,

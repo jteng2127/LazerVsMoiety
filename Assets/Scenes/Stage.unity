@@ -849,9 +849,8 @@ GameObject:
   - component: {fileID: 1943910280}
   - component: {fileID: 1943910279}
   - component: {fileID: 1943910278}
-  - component: {fileID: 1943910277}
   m_Layer: 5
-  m_Name: StartButton
+  m_Name: RestartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -876,18 +875,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -338}
   m_SizeDelta: {x: 410, y: 116}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1943910277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1943910275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6186b25e23a9411489a48d7add959000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1943910278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -944,18 +931,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1943910280}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1943910277}
-        m_MethodName: RestartGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1943910280
 MonoBehaviour:
   m_ObjectHideFlags: 0

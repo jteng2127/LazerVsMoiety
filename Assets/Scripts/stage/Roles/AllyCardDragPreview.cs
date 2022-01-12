@@ -19,10 +19,7 @@ public class AllyCardDragPreview : MonoBehaviour {
         return stageGridTile;
     }
 
-    void Dragging(Touch touch, Ray ray) {
-        Vector3 deltaPos =
-            Camera.main.ScreenToWorldPoint(touch.position + touch.deltaPosition) -
-            Camera.main.ScreenToWorldPoint(touch.position);
+    void Dragging(Vector3 deltaPos, Ray ray) {
         CurrentPosition += deltaPos;
 
         StageGridTile stageGridTile = GetHitGrid(ray);
@@ -58,7 +55,10 @@ public class AllyCardDragPreview : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
 
             if (touch.phase == TouchPhase.Moved) {
-                Dragging(touch, ray);
+                Vector3 deltaPos =
+                    Camera.main.ScreenToWorldPoint(touch.position + touch.deltaPosition) -
+                    Camera.main.ScreenToWorldPoint(touch.position);
+                Dragging(deltaPos, ray);
             }
             else if (touch.phase == TouchPhase.Ended) {
                 EndDragging(ray);

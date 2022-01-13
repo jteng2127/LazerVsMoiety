@@ -90,8 +90,8 @@ public class StageManager : MonoBehaviour {
         public float AllyCardSpawnPositionY { get; }
 
         /// Unit info
-        static readonly float DefaultEnemySpeed = 0.5f;
-        static readonly float DefaultAllyCardSpeed = 0.8f;
+        static public readonly float DefaultEnemySpeed = 0.5f;
+        static public readonly float DefaultAllyCardSpeed = 0.8f;
         public float EnemySpeed { get; }
         public float AllyCardSpeed { get; }
 
@@ -153,7 +153,10 @@ public class StageManager : MonoBehaviour {
 
     Transform _gameOverScreen;
     Text _gameOverText;
+    Text _stageDataText;
     Button _restartButton;
+
+    Dictionary<int, string> _enemyIdToName;
 
     #endregion
     #region Method
@@ -164,6 +167,19 @@ public class StageManager : MonoBehaviour {
         Data.GameState = 0;
         SpawnManager.CreateNewSpawner();
         ScoreManager.NewScore();
+
+        _enemyIdToName = new Dictionary<int, string>{
+            {1, "C-O"},
+            {2, "C-N"},
+            {3, "O=O"},
+            {4, "C=C"},
+            {5, "C=O"},
+            {6, "C≡C"},
+            {7, "C≡N"},
+            {8, "C-H"},
+            {9, "N-H"},
+            {10, "O-H"}
+        };
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -171,6 +187,7 @@ public class StageManager : MonoBehaviour {
         Transform gameOverCanvas = GameObject.Find("GameOverCanvas").transform;
         _gameOverScreen = gameOverCanvas.Find("GameOverScreen");
         _gameOverText = _gameOverScreen.Find("GameOverText").GetComponent<Text>();
+        _stageDataText = _gameOverText.transform.Find("StageDataText").GetComponent<Text>();
         _restartButton = _gameOverScreen.Find("RestartButton").GetComponent<Button>();
         Debug.Log("game over screen: " + _gameOverScreen);
         Debug.Log("game over text: " + _gameOverText);
@@ -195,8 +212,21 @@ public class StageManager : MonoBehaviour {
         else gameOverMessage = "You Win!!!\n";
         gameOverMessage += "Score: " + ScoreManager.Instance.TotalScore;
 
+        String stageDataMessage = "";
+        stageDataMessage += "敵人種類： ";
+        bool firstItem = true;
+        foreach (int id in Data.EnemyType) {
+            if(!firstItem) stageDataMessage += ", ";
+            firstItem = false;
+            stageDataMessage += _enemyIdToName[id];
+        }
+        stageDataMessage += "\n敵人量： " + Data.EnemySpawnNumberTotal;
+        stageDataMessage += "\n敵人移動速度： " + (Data.EnemySpeed / StageData.DefaultEnemySpeed);
+        stageDataMessage += "\n敵人出現間隔： " + (Data.EnemySpawnInterval);
+
         _gameOverScreen.gameObject.SetActive(true);
         _gameOverText.text = gameOverMessage;
+        _stageDataText.text = stageDataMessage;
         _restartButton.onClick.AddListener(RestartGame);
 
         Data.GameState = 2;
@@ -206,8 +236,6 @@ public class StageManager : MonoBehaviour {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         GameManager.Instance.LoadScene(GameManager.SceneType.StageAdjust);
     }
-
-
 
     #endregion
     #region MonoBehaviour

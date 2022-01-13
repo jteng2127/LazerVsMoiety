@@ -5,6 +5,7 @@ using UnityEngine;
 public class AllyCardDragPreview : MonoBehaviour {
     public GameObject Origin { get; set; }
     public Vector3 CurrentPosition { get; set; }
+    Vector3 _lastMousePosition;
 
     StageGridTile GetHitGrid(Ray ray) {
         StageGridTile stageGridTile = null;
@@ -50,9 +51,12 @@ public class AllyCardDragPreview : MonoBehaviour {
     }
 
     void Update() {
+        Ray ray;
+
+        /// touch
         if (Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
-            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            ray = Camera.main.ScreenPointToRay(touch.position);
 
             if (touch.phase == TouchPhase.Moved) {
                 Vector3 deltaPos =
@@ -64,8 +68,25 @@ public class AllyCardDragPreview : MonoBehaviour {
                 EndDragging(ray);
             }
         }
-        else {
+
+        /// mouse
+        if(Input.GetMouseButton(0)){
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Input.GetMouseButtonDown(0)) { }
+            else{
+                if (Input.mousePosition != _lastMousePosition && _lastMousePosition != new Vector3(0, 0, 0)) {
+                    Vector3 deltaPos =
+                        Camera.main.ScreenToWorldPoint(Input.mousePosition) -
+                        Camera.main.ScreenToWorldPoint(_lastMousePosition);
+                    Dragging(deltaPos, ray);
+                }
+            }
+        }
+        else if(Input.GetMouseButtonUp(0)){
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            EndDragging(ray);
             Destroy(transform.gameObject);
         }
+        _lastMousePosition = Input.mousePosition;
     }
 }

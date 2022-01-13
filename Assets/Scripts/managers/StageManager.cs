@@ -237,6 +237,29 @@ public class StageManager : MonoBehaviour {
                 }
             }
         }
+
+        /// Get mouse input
+        if (Input.GetMouseButton(0)) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            /// show Debug
+            // Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // Debug.Log(pos);
+            // Debug.DrawRay(ray.origin, ray.direction*20);
+
+            /// mouse detect
+            if (Input.GetMouseButtonDown(0)) {
+                RaycastHit2D[] hitAll = Physics2D.RaycastAll(ray.origin, ray.direction);
+                if (!hitAll.Any(hit => hit.collider.tag == "AllyCardMask")) {
+                    foreach (RaycastHit2D hit in hitAll) {
+                        if (hit.collider.tag == "AllyCard") {
+                            hit.collider.gameObject.GetComponent<AllyCard>().CreateDragPreview();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     #endregion

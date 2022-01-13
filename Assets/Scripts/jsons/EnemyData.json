@@ -1,12 +1,12 @@
 [
-    {"id": 1, "name": "C-O"},
-    {"id": 2, "name": "C-N"},
-    {"id": 3, "name": "O=O"},
-    {"id": 4, "name": "C=C"},
-    {"id": 5, "name": "C=O"},
-    {"id": 6, "name": "C≡C"},
-    {"id": 7, "name": "C≡N"},
-    {"id": 8, "name": "C-H"},
-    {"id": 9, "name": "N-H"},
-    {"id": 10, "name": "O-H"}
+    {"enemy_id": 1, "name": "C-O"},
+    {"enemy_id": 2, "name": "C-N"},
+    {"enemy_id": 3, "name": "O=O"},
+    {"enemy_id": 4, "name": "C=C"},
+    {"enemy_id": 5, "name": "C=O"},
+    {"enemy_id": 6, "name": "C≡C"},
+    {"enemy_id": 7, "name": "C≡N"},
+    {"enemy_id": 8, "name": "C-H"},
+    {"enemy_id": 9, "name": "N-H"},
+    {"enemy_id": 10, "name": "O-H"}
 ]

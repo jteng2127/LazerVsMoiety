@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System;
 using System.IO;
 
@@ -8,7 +10,35 @@ public class JsonManager : MonoBehaviour {
 
     #region Data
 
-    static private List<EnemyAndAllyData> _enemyAndAllyDataList;
+    protected static JsonManager s_Instance;
+
+    public static JsonManager Instance {
+        get {
+            if (s_Instance == null) {
+                Debug.Log("JsonManager: Create new instance.");
+                CreateDefault();
+            }
+            return s_Instance;
+        }
+    }
+
+    static void CreateDefault() {
+        GameObject go = new GameObject("JsonManager", typeof(JsonManager));
+        go.name = "JsonManager";
+        DontDestroyOnLoad(go);
+        s_Instance = go.GetComponent<JsonManager>();
+        // reduce fps
+        // #if UNITY_EDITOR
+        //     Application.targetFrameRate = -1;
+        //     Debug.Log("Using Editor performance cap for my own sanity");
+        // #endif
+    }
+
+    // void OnEnable() {
+    //     Debug.Log("JsonManager Enable");
+    //     _initSceneTypeDictionary();
+    // }
+
     /*
         TODO:
         put all data into this class as static vairable
@@ -17,14 +47,44 @@ public class JsonManager : MonoBehaviour {
 
     #endregion
 
-    #region QueryEnemyAndAlly
+    #region JSONHELP
+
+    public static class JsonHelper {
+        public static T[] FromJson<T>(string json) {
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+            return wrapper.Items;
+        }
+
+        public static string ToJson<T>(T[] array) {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper);
+        }
+
+        public static string ToJson<T>(T[] array, bool prettyPrint) {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper, prettyPrint);
+        }
+
+        [Serializable]
+        private class Wrapper<T> {
+            public T[] Items;
+        }
+    }
+
+    #endregion
+
+    #region AllyJSON
 
     [Serializable]
-    public class EnemyAndAllyData {
+    public class AllyJson {
         // functaional Group and wave
-        public int enemy_unit_id;
-        public int ally_unit_id;
+        public int ally_id;
+        public string ally_name;
     }
+    static private AllyJson[] _AllyDataList;
+
 
     /// <summary>
     /// Query the Enemy and Ally data list from the Json.
@@ -34,29 +94,69 @@ public class JsonManager : MonoBehaviour {
     /// Data list format: <br/>
     /// [ {"enemy_unit_id": 1, "ally_unit_id": 1100},...]
     /// </returns>
-    static public List<EnemyAndAllyData> QueryEnemyAndAllyDataList() {
-        string load_enemy_and_ally_data = File.ReadAllText("../jsons/EnemyAndAlly.json");
-        List<EnemyAndAllyData> data_list = JsonUtility.FromJson<List<EnemyAndAllyData>>(load_enemy_and_ally_data);
-        return data_list;
+    static private void _loadAllyDataList() {
+        string json = File.ReadAllText("../jsons/AllyData.json");
+        _AllyDataList = JsonHelper.FromJson<AllyJson>(json);
+    }
+
+    static public string GetAllyName(int query_ally_id) {
+        // _loadAllyDataList();
+        foreach (AllyJson data in _AllyDataList) {
+            if (data.ally_id == query_ally_id) {
+                return data.ally_name;
+            }
+        }
+        return "";
     }
 
     #endregion
 
-    #region QueryEnemy
+    #region EnemyJSON
 
     [Serializable]
-    public class EnemyUnitData {
-        public int enemy_unit_id;
+    public class EnemyData {
+        public int enemy_id;
         public string name;
+    }
+
+    static private EnemyData[] _enemyAndAllyDataList;
+
+    static private void _loadEnemyDataList() {
+        string json = File.ReadAllText("../jsons/EnemyData.json");
+        _enemyAndAllyDataList = JsonHelper.FromJson<EnemyData>(json);
     }
 
     /// <summary>
     /// Query the enemy unit data from the Json.
     /// </summary>
-    static public string QueryEnemyUnitData(int enemy_unit_query_id) {
-        string load_enemy_unit_data = File.ReadAllText("../jsons/EnemyUnit.json");
-        List<EnemyUnitData> data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);
-        return data_list[enemy_unit_query_id].name;
+    static public string GameEnemyName(int query_enemy_id) {
+        // _loadEnemyDataList();
+        foreach (EnemyData enemy in _enemyAndAllyDataList) {
+            if (enemy.enemy_id == query_enemy_id) {
+                return enemy.name;
+            }
+        }
+        return "";
+    }
+
+    #endregion
+
+    #region StageJSON
+
+    [Serializable]
+    public class StageData {
+        public int stage_id;
+        public int unit_quantity;
+        public List<int> unit_id_list;
+        public int enemy_quantity;
+        public float enemy_speed_multiplier;
+    }
+
+    static private StageData[] _stageDataList;
+
+    static void _loadStageDataList() {
+        string json = File.ReadAllText("../jsons/StageData.json");
+        _stageDataList = JsonHelper.FromJson<StageData>(json);
     }
 
     #endregion

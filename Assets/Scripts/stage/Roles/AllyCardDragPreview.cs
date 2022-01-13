@@ -68,25 +68,26 @@ public class AllyCardDragPreview : MonoBehaviour {
                 EndDragging(ray);
             }
         }
-
-        /// mouse
-        if(Input.GetMouseButton(0)){
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Input.GetMouseButtonDown(0)) { }
-            else{
-                if (Input.mousePosition != _lastMousePosition && _lastMousePosition != new Vector3(0, 0, 0)) {
-                    Vector3 deltaPos =
-                        Camera.main.ScreenToWorldPoint(Input.mousePosition) -
-                        Camera.main.ScreenToWorldPoint(_lastMousePosition);
-                    Dragging(deltaPos, ray);
+        else{
+            /// mouse
+            if(Input.GetMouseButton(0)){
+                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Input.GetMouseButtonDown(0)) { }
+                else{
+                    if (Input.mousePosition != _lastMousePosition && _lastMousePosition != new Vector3(0, 0, 0)) {
+                        Vector3 deltaPos =
+                            Camera.main.ScreenToWorldPoint(Input.mousePosition) -
+                            Camera.main.ScreenToWorldPoint(_lastMousePosition);
+                        Dragging(deltaPos, ray);
+                    }
                 }
             }
+            else if(Input.GetMouseButtonUp(0)){
+                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                EndDragging(ray);
+                Destroy(transform.gameObject);
+            }
+            _lastMousePosition = Input.mousePosition;
         }
-        else if(Input.GetMouseButtonUp(0)){
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            EndDragging(ray);
-            Destroy(transform.gameObject);
-        }
-        _lastMousePosition = Input.mousePosition;
     }
 }

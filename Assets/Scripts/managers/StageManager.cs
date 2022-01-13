@@ -214,9 +214,14 @@ public class StageManager : MonoBehaviour {
 
         String stageDataMessage = "";
         stageDataMessage += "敵人種類： ";
+        int count = 0;
         bool firstItem = true;
         foreach (int id in Data.EnemyType) {
             if(!firstItem) stageDataMessage += ", ";
+            count++;
+            if(count == 6){
+                stageDataMessage += "\n　　　　　 ";
+            }
             firstItem = false;
             stageDataMessage += _enemyIdToName[id];
         }

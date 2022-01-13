@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StageAdjustPanel : MonoBehaviour {
+public class StageAdjust : MonoBehaviour {
     #region Data
 
     [SerializeField]
@@ -15,6 +15,14 @@ public class StageAdjustPanel : MonoBehaviour {
     private Transform _enemySpeedMultiplier;
     [SerializeField]
     private Transform _enemySpawnInterval;
+    [SerializeField]
+    private GameObject _infoPanel;
+    [SerializeField]
+    private Image _infoButtonImage;
+    [SerializeField]
+    private Sprite _infoSprite;
+    [SerializeField]
+    private Sprite _closeSprite;
 
     Dictionary<string, Slider> _sliders;
     Slider _enemySpawnNumberTotalSlider;
@@ -23,6 +31,7 @@ public class StageAdjustPanel : MonoBehaviour {
 
     StageManager.StageData _stageData;
     List<int> _enemyType;
+
 
     #endregion
     #region Interface
@@ -36,6 +45,19 @@ public class StageAdjustPanel : MonoBehaviour {
             enemySpawnInterval: _sliders["EnemySpawnInterval"].value * 0.1f
         );
         StageManager.StartNewStage(_stageData);
+    }
+
+    public void ToggleInfoPanel() {
+        if(_infoSprite == null) _infoSprite = Resources.Load<Sprite>("Images/SignIn/1x/sign_in_button");
+        if(_closeSprite == null) _closeSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
+        if(_infoPanel.activeSelf) {
+            _infoPanel.SetActive(false);
+            _infoButtonImage.sprite = _infoSprite;
+        }
+        else {
+            _infoPanel.SetActive(true);
+            _infoButtonImage.sprite = _closeSprite;
+        }
     }
 
     #endregion

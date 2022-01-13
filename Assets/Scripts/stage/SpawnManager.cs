@@ -146,6 +146,7 @@ public class SpawnManager : MonoBehaviour {
     static public void DestroyUnit(GameObject go) {
         if (go.TryGetComponent<EnemyUnit>(out EnemyUnit enemyUnit)) {
             Instance._data.EnemyCount--;
+            AudioManager.Instance.Play("kill", 0.2f);
             StageManager.CheckGameOver();
         }
         if (go.TryGetComponent<AllyCard>(out AllyCard allyCard)) {

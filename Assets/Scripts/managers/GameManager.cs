@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour {
     #region Method
 
     void _initGameSceneManager() {
+        AudioManager.Instance.StartBackgroundMusic();
+
         _sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
             {SceneType.SignIn, "SignIn"},

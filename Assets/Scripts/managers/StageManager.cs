@@ -200,10 +200,14 @@ public class StageManager : MonoBehaviour {
     }
 
     void GameOver() {
-        if (Data.IsLose) Debug.Log("You Lose");
+        if (Data.IsLose){
+            Debug.Log("You Lose");
+            AudioManager.Instance.Play("defeat", 0.6f, true, true);
+        }
         else {
             Debug.Log("You Win!!!");
             ScoreManager.Instance.GameOver();
+            AudioManager.Instance.Play("victory", 0.6f, true, true);
         }
         Debug.Log("You're Score: " + ScoreManager.Instance.TotalScore);
 

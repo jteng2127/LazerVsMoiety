@@ -1,0 +1,12 @@
+[
+    {"id": 1, "name": "C-O"},
+    {"id": 2, "name": "C-N"},
+    {"id": 3, "name": "O=O"},
+    {"id": 4, "name": "C=C"},
+    {"id": 5, "name": "C=O"},
+    {"id": 6, "name": "C≡C"},
+    {"id": 7, "name": "C≡N"},
+    {"id": 8, "name": "C-H"},
+    {"id": 9, "name": "N-H"},
+    {"id": 10, "name": "O-H"}
+]

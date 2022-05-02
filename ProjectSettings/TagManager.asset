@@ -4,7 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - defendTile
+  - AllyCard
+  - StageGridTile
+  - AllyCardDragPreview
+  - EnemyUnit
+  - AllyUnit
+  - AllyCardMask
   layers:
   - Default
   - TransparentFX
@@ -14,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - UnitCardConveyor
   - 
   - 
   - 
@@ -39,9 +44,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: background
+  - name: BackGround
     uniqueID: 1666810447
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 963417867
+    locked: 0
+  - name: GameOverScreen
+    uniqueID: 1679240289
     locked: 0

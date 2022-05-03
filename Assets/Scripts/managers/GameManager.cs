@@ -4,19 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour {
     #region Singleton
 
     protected static GameManager s_Instance;
 
-    public static GameManager Instance
-    {
+    public static GameManager Instance {
         // [RuntimeInitializeOnLoadMethod]
-        get
-        {
-            if(s_Instance == null)
-            {
+        get {
+            if (s_Instance == null) {
                 Debug.Log("GameManager: Create new instance.");
                 // s_Instance = ScriptableObject.CreateInstance<GameManager>();
                 CreateDefault();
@@ -25,7 +21,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    static void CreateDefault(){
+    static void CreateDefault() {
         GameObject go = new GameObject("GameManager", typeof(GameManager));
         DontDestroyOnLoad(go);
         s_Instance = go.GetComponent<GameManager>();
@@ -36,8 +32,7 @@ public class GameManager : MonoBehaviour
         // #endif
     }
 
-    void OnEnable()
-    {
+    void OnEnable() {
         Debug.Log("GameManager Enable");
         _initGameSceneManage();
     }
@@ -46,8 +41,7 @@ public class GameManager : MonoBehaviour
 
     #region Scene
 
-    public enum SceneType
-    {
+    public enum SceneType {
         /// <summary> Loding page </summary>
         Loading,
         SignIn,
@@ -61,8 +55,9 @@ public class GameManager : MonoBehaviour
     }
 
     Dictionary<SceneType, string> _sceneTypeToString;
+    Dictionary<string, SceneType> _stringToSceneType;
 
-    void _initGameSceneManage(){
+    void _initGameSceneManage() {
         Debug.Log("Initial SceneTypeDictionary");
         _sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
@@ -74,16 +69,26 @@ public class GameManager : MonoBehaviour
             {SceneType.Stage, "Stage"},
             {SceneType.GameOver, "GameOver"},
         };
+        _stringToSceneType = new Dictionary<string, SceneType>{
+            {"Loading", SceneType.Loading},
+            {"SignIn", SceneType.SignIn},
+            {"Menu", SceneType.Menu},
+            {"User", SceneType.User},
+            {"Setting", SceneType.Setting},
+            {"StageSelect", SceneType.StageSelect},
+            {"Stage", SceneType.Stage},
+            {"GameOver", SceneType.GameOver},
+        };
     }
 
-    IEnumerator LoadingSceneAsync(SceneType scene){
+    IEnumerator LoadingSceneAsync(SceneType scene) {
         SceneManager.LoadScene(_sceneTypeToString[SceneType.Loading]);
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(_sceneTypeToString[scene]);
 
         operation.allowSceneActivation = false;
 
-        while(!operation.isDone){
+        while (!operation.isDone) {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
 
             Debug.Log("progress: " + progress);
@@ -98,13 +103,15 @@ public class GameManager : MonoBehaviour
 
     #region Interface
 
-
-
-    public void LoadScene(SceneType scene, bool showLoading = true){
-        Debug.Log("Loading " + _sceneTypeToString[scene] + "...");
+    public void LoadScene(SceneType scene, bool showLoading = true) {
+        Debug.Log("LoadScene: " + _sceneTypeToString[scene]);
 
         StartCoroutine(LoadingSceneAsync(scene));
         // SceneManager.LoadScene(_sceneTypeToString[scene]);
+    }
+
+    public SceneType GetCurrentScene(){
+        return _stringToSceneType[SceneManager.GetActiveScene().name];
     }
 
     #endregion

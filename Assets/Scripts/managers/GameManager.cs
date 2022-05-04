@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     protected static GameManager s_Instance;
 
     public static GameManager Instance {
-        // [RuntimeInitializeOnLoadMethod]
+        [RuntimeInitializeOnLoadMethod]
         get {
             if (s_Instance == null) {
                 Debug.Log("GameManager: Create new instance.");
@@ -34,12 +34,13 @@ public class GameManager : MonoBehaviour {
 
     void OnEnable() {
         Debug.Log("GameManager Enable");
-        _initGameSceneManage();
+        _initGameSceneManager();
     }
 
     #endregion
+    #region Data
 
-    #region Scene
+    public const int ImagePixelHeightReference = 1440;
 
     public enum SceneType {
         /// <summary> Loding page </summary>
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour {
         User,
         Setting,
         StageSelect,
+        StageAdjust,
         Stage,
         GameOver,
     }
@@ -57,8 +59,10 @@ public class GameManager : MonoBehaviour {
     Dictionary<SceneType, string> _sceneTypeToString;
     Dictionary<string, SceneType> _stringToSceneType;
 
-    void _initGameSceneManage() {
-        Debug.Log("Initial SceneTypeDictionary");
+    #endregion
+    #region Method
+
+    void _initGameSceneManager() {
         _sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
             {SceneType.SignIn, "SignIn"},
@@ -66,6 +70,7 @@ public class GameManager : MonoBehaviour {
             {SceneType.User, "User"},
             {SceneType.Setting, "Setting"},
             {SceneType.StageSelect, "StageSelect"},
+            {SceneType.StageAdjust, "StageAdjust"},
             {SceneType.Stage, "Stage"},
             {SceneType.GameOver, "GameOver"},
         };
@@ -76,6 +81,7 @@ public class GameManager : MonoBehaviour {
             {"User", SceneType.User},
             {"Setting", SceneType.Setting},
             {"StageSelect", SceneType.StageSelect},
+            {"StageAdjust", SceneType.StageAdjust},
             {"Stage", SceneType.Stage},
             {"GameOver", SceneType.GameOver},
         };
@@ -103,14 +109,14 @@ public class GameManager : MonoBehaviour {
 
     #region Interface
 
-    public void LoadScene(SceneType scene, bool showLoading = true) {
+    public void LoadScene(SceneType scene, bool isAsync = false, bool showLoading = true) {
         Debug.Log("LoadScene: " + _sceneTypeToString[scene]);
 
-        StartCoroutine(LoadingSceneAsync(scene));
-        // SceneManager.LoadScene(_sceneTypeToString[scene]);
+        if (isAsync) StartCoroutine(LoadingSceneAsync(scene));
+        else SceneManager.LoadScene(_sceneTypeToString[scene]);
     }
 
-    public SceneType GetCurrentScene(){
+    public SceneType GetCurrentScene() {
         return _stringToSceneType[SceneManager.GetActiveScene().name];
     }
 

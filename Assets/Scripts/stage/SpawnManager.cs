@@ -5,7 +5,6 @@ using System;
 using System.Reflection;
 
 public class SpawnManager : MonoBehaviour {
-
     #region Debug
 
     protected static void Log(string s) {
@@ -13,7 +12,6 @@ public class SpawnManager : MonoBehaviour {
     }
 
     #endregion
-
     #region Singleton
 
     protected static SpawnManager s_Instance;
@@ -38,7 +36,7 @@ public class SpawnManager : MonoBehaviour {
         s_Instance = go.GetComponent<SpawnManager>();
     }
 
-    static void DestroyInstance(){
+    static void DestroyInstance() {
         if (s_Instance) {
             Log("Destroy instance");
             Destroy(s_Instance.gameObject);
@@ -46,12 +44,10 @@ public class SpawnManager : MonoBehaviour {
     }
 
     #endregion
-
     #region Data
 
+    StageManager.StageData _data;
     StageGrid _stageGrid;
-    float _enemySpawnDelay;
-    float _allyCardSpawnDelay;
 
     bool _isSpawning = false;
 
@@ -59,10 +55,9 @@ public class SpawnManager : MonoBehaviour {
 
     #region Method
 
-    void SpawnStart() {
-        _isSpawning = true;
-        _enemySpawnDelay = 0.0f;
-        _allyCardSpawnDelay = 0.0f;
+    void Initial() {
+        _data = StageManager.Instance.Data;
+        _isSpawning = false;
     }
 
     float GenerateRandomDelay(float interval, float deviation) {
@@ -70,7 +65,7 @@ public class SpawnManager : MonoBehaviour {
     }
 
     /// <param name="type">0: Enemy, 1: AllyCard</param>
-    void Spawn(int type){
+    void SpawnUnit(int type) {
         Vector3 spawnPosition;
         int id;
 
@@ -78,7 +73,7 @@ public class SpawnManager : MonoBehaviour {
         int randomIndex = UnityEngine.Random.Range(0, enemyType.Count);
         id = enemyType[randomIndex];
 
-        if(type == 0){
+        if (type == 0) {
             int spawnRow = UnityEngine.Random.Range(0, StageManager.Instance.Data.GridRowTotal);
             spawnPosition = new Vector3(
                 StageManager.Instance.Data.EnemySpawnPositionX,
@@ -88,7 +83,7 @@ public class SpawnManager : MonoBehaviour {
             EnemyUnit.Spawn(id, spawnPosition);
         }
 
-        if(type == 1){
+        if (type == 1) {
             spawnPosition = new Vector3(
                 StageManager.Instance.Data.AllyCardSpawnPositionX,
                 StageManager.Instance.Data.AllyCardSpawnPositionY,
@@ -99,33 +94,64 @@ public class SpawnManager : MonoBehaviour {
     }
 
     void CheckAndSpawn() {
-        if (_enemySpawnDelay <= 0.0f) {
-            _enemySpawnDelay = GenerateRandomDelay(
+        if (_data.EnemySpawnTimeLeft <= 0.0f &&
+            _data.EnemySpawnNumberLeft > 0) {
+            _data.EnemySpawnTimeLeft = GenerateRandomDelay(
                 StageManager.Instance.Data.EnemySpawnInterval,
                 StageManager.Instance.Data.EnemySpawnIntervalDeviation
             );
-            Spawn(0);
+            SpawnUnit(0);
+            _data.EnemySpawnNumberLeft--;
+            _data.EnemyCount++;
         }
-        if (_allyCardSpawnDelay <= 0.0f) {
-            _allyCardSpawnDelay = GenerateRandomDelay(
+        if (_data.AllyCardSpawnTimeLeft <= 0.0f &&
+            _data.AllyCardCount < _data.AllyCardSpawnNumberMax) {
+            _data.AllyCardSpawnTimeLeft = GenerateRandomDelay(
                 StageManager.Instance.Data.AllyCardSpawnInterval,
                 StageManager.Instance.Data.AllyCardSpawnIntervalDeviation
             );
-            Spawn(1);
+            SpawnUnit(1);
+            _data.AllyCardCount++;
         }
     }
 
     #endregion
+    #region MonoBehaviour
 
-    #region Interface
-
-    static public void StartNewSpawner() {
-        CreateNewInstance();
-        Instance.SpawnStart();
+    void Start() {
     }
 
-    static public void EndSpawn(){
-        DestroyInstance();
+    void Update() {
+        if (_data.GameState == 1) {
+            _data.EnemySpawnTimeLeft -= Time.deltaTime;
+            _data.AllyCardSpawnTimeLeft -= Time.deltaTime;
+            CheckAndSpawn();
+        }
+    }
+
+    #endregion
+    #region Interface
+
+    static public void CreateNewSpawner() {
+        CreateNewInstance();
+        Instance.Initial();
+    }
+
+    static public void StartSpawn() {
+        if (Instance == null) CreateNewSpawner();
+        Instance._isSpawning = true;
+        Instance._stageGrid = GameObject.Find("StageGrid").GetComponent<StageGrid>();
+    }
+
+    static public void DestroyUnit(GameObject go) {
+        if (go.TryGetComponent<EnemyUnit>(out EnemyUnit enemyUnit)) {
+            Instance._data.EnemyCount--;
+            StageManager.CheckGameOver();
+        }
+        if (go.TryGetComponent<AllyCard>(out AllyCard allyCard)) {
+            Instance._data.AllyCardCount--;
+        }
+        Destroy(go);
     }
 
     public void TriggerPause() {
@@ -133,49 +159,4 @@ public class SpawnManager : MonoBehaviour {
     }
 
     #endregion
-
-    #region MonoBehaviour
-
-    void Start() {
-        _stageGrid = GameObject.Find("StageGrid").GetComponent<StageGrid>();
-    }
-
-    void Update() {
-        if (_isSpawning) {
-            _enemySpawnDelay -= Time.deltaTime;
-            _allyCardSpawnDelay -= Time.deltaTime;
-            CheckAndSpawn();
-        }
-    }
-
-    void OnEnable() {
-        Log("Enable");
-    }
-
-    void OnDestroy() {
-        Log("Destroy");
-    }
-
-    #endregion
-
-
-    /* TODO: wait to check up
-    double _startTime;
-
-    [SerializeField]
-    public List<int> enemy_and_ally_id_list; // = queryEnemyAndAllyIdList(5);
-
-    // TODO: add JsonManager
-    public List<int> queryEnemyAndAllyIdList(int level) {
-        // string load_unit_data = File.ReadAllText("../jsons/StageUnit.json");
-        // List<EnemyUnitData> data_list = JsonUtility.FromJson<List<EnemyUnitData>>(load_enemy_unit_data);
-        // return data_list;
-        return new List<int>();
-    }
-
-    // public Coefficient coefficient = new Coefficient(checkpoint_level);
-    // public Tuple<int, int> getRemainQuantity(){
-    //     return new Tuple<int, int>(coefficient._wave_quantity, coefficient._fg_quantity);
-    // }
-    */
 }

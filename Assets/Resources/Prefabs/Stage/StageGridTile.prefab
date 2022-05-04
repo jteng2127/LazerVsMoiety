@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1760111886280804028}
   - component: {fileID: 1299233327743604602}
-  - component: {fileID: 4713571076360516083}
+  - component: {fileID: 6941462951551482220}
   m_Layer: 0
-  m_Name: GridTile
-  m_TagString: DefendTile
+  m_Name: StageGridTile
+  m_TagString: StageGridTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,7 +58,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.3093429, y: 1.5344362}
   m_EdgeRadius: 0
---- !u!114 &4713571076360516083
+--- !u!114 &6941462951551482220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,8 +67,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1868191188245721297}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e0f2dbdc5fad8244be4a957651f4257, type: 3}
+  m_Script: {fileID: 11500000, guid: 090e9090eab0b184987cf80952cb1be0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 8237549450503062948, guid: 4ddda64668a14aa418a322b26e59b8ce,
-    type: 3}

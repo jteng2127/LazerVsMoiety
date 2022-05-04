@@ -41,7 +41,7 @@ public class SignInSceneButton : MonoBehaviour {
             _isOpenSignInWindow = false;
             _signInWindow.SetActive(false);
             _rectTransform.anchoredPosition3D = _startPosition;
-            SignIn();
+            SignIn();            
         }
         else {
             _isOpenSignInWindow = true;
@@ -50,9 +50,13 @@ public class SignInSceneButton : MonoBehaviour {
         }
     }
 
-    void SignIn() {
+    public void LoginSuccess() {
         _isSignedIn = true;
         _image.sprite = _startSprite;
+    }
+
+    void SignIn() {
+        AuthManager.Instance.LoginButton();
     }
 
     #endregion

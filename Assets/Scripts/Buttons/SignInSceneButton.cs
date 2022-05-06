@@ -27,20 +27,28 @@ public class SignInSceneButton : MonoBehaviour {
         _startSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
 
         // Initial state
-        _isSignedIn = false;
+        SignedInStateInit();        
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
-        _image.sprite = _signInSprite;
+    }
+
+    private void SignedInStateInit(){
+        bool isSignedIn = AuthManager.Instance.isSignedIn();
+        if (isSignedIn) {
+            _isSignedIn = true;
+            _image.sprite = _startSprite;
+        }
+        else{
+            _isSignedIn = false;
+            _image.sprite = _signInSprite;
+        }
     }
 
     #region Click behavior
 
     void TriggerSignInWindow() {
         if (_isOpenSignInWindow == true) {
-            // _isOpenSignInWindow = false;
-            // _signInWindow.SetActive(false);
-            // _rectTransform.anchoredPosition3D = _startPosition;
             SignIn();            
         }
         else {
@@ -50,21 +58,21 @@ public class SignInSceneButton : MonoBehaviour {
         }
     }
 
-    public void LoginSuccess() {
+    public void SignInSuccess() {
         _isSignedIn = true;
-        _image.sprite = _startSprite;
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
+        _image.sprite = _startSprite;
     }
 
-    public void LoginFail(string message) {
+    public void SignInFail(string message) {
         // TODO: Show error message
         _isSignedIn = false;
     }
 
     void SignIn() {
-        AuthManager.Instance.LoginButton();
+        AuthManager.Instance.SignInButton();
     }
 
     #endregion

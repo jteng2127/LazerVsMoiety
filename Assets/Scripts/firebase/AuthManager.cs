@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using Firebase;
 using Firebase.Auth;
 
-public class AuthManager : MonoBehaviour
-{
+public class AuthManager : MonoBehaviour {
     #region Singleton
 
     protected static AuthManager s_Instance;
@@ -40,21 +39,21 @@ public class AuthManager : MonoBehaviour
     private FirebaseAuth auth;
     private FirebaseUser user;
 
-    [Header("LoginUI")]
+    [Header("SigninUI")]
     private Transform studentIDInput;
     private Transform passwordInput;
     private GameObject loginButton;
 
     private SignInSceneButton signInSceneButton;
-    
-    private void _init(){
+
+    private void _init() {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available) {
                 auth = FirebaseAuth.DefaultInstance;
                 auth.StateChanged += AuthStateChanged;
                 AuthStateChanged(this, null);
-            } 
+            }
             else {
                 Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus.ToString());
             }
@@ -63,7 +62,7 @@ public class AuthManager : MonoBehaviour
         Debug.Log("AuthManager test sInit");
 
         Transform SignInWindow = GameObject.Find("Canvas").transform.Find("SignInWindow");
-    
+
         studentIDInput = SignInWindow.Find("StudentIDInput");
         passwordInput = SignInWindow.Find("PasswordInput");
         loginButton = GameObject.Find("Button");
@@ -90,27 +89,41 @@ public class AuthManager : MonoBehaviour
 
     #region Methods
 
-    public void LoginButton(){
+    public void SignInButton() {
         string studentID = studentIDInput.GetComponent<InputField>().text + "@mail.ntou.edu.tw";
         string password = passwordInput.GetComponent<InputField>().text;
         Debug.Log(studentID + " " + password);
-        StartCoroutine(Login(studentID, password));
+        StartCoroutine(Signin(studentID, password));
+    }
+
+    public void SignOut() {
+        auth.SignOut();
+    }
+
+    public bool isSignedIn() {
+        Debug.LogError(user != null);
+        return user != null;
+    }
+
+    public string getStudentEmail() {
+        return user.Email;
     }
 
     #endregion
 
-    #region LoginAndRegister
+    #region SigninAndRegister
 
-    private IEnumerator Login(string studentID, string password){
+    private IEnumerator Signin(string studentID, string password) {
         var LoginTask = auth.SignInWithEmailAndPasswordAsync(studentID, password);
         yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
 
-        if(LoginTask.Exception != null){
+        if (LoginTask.Exception != null) {
             FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
             AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
             string message = "Login Failed!";
-            switch (errorCode){
+            bool isRegister = false;
+            switch (errorCode) {
                 case AuthError.MissingEmail:
                     message = "Missing Email";
                     break;
@@ -125,29 +138,30 @@ public class AuthManager : MonoBehaviour
                     break;
                 case AuthError.UserNotFound:
                     message = "Account does not exist";
+                    isRegister = true;
                     StartCoroutine(Register(studentID, password));
                     break;
             }
-            Debug.Log(message);   
-            signInSceneButton.LoginSuccess();
+            Debug.Log(message);
+            if (!isRegister) signInSceneButton.SignInFail(message);
         }
-        else{ // login success
+        else { // login success
             Debug.Log("Login Successful");
-            signInSceneButton.LoginSuccess();
+            signInSceneButton.SignInSuccess();
         }
     }
 
-    private IEnumerator Register(string studentID, string password){
+    private IEnumerator Register(string studentID, string password) {
         var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(studentID, password);
         yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
 
-        if (RegisterTask.Exception != null){
+        if (RegisterTask.Exception != null) {
             //If there are errors handle them
             FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
             AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
             string message = "Register Failed!";
-            switch (errorCode){
+            switch (errorCode) {
                 case AuthError.MissingEmail:
                     message = "Missing Email";
                     break;
@@ -161,25 +175,25 @@ public class AuthManager : MonoBehaviour
                     message = "Email Already In Use";
                     break;
             }
-            signInSceneButton.LoginFail(message);
+            signInSceneButton.SignInFail(message);
         }
-        else{
+        else {
             var User = RegisterTask.Result;
 
-            if (User != null){
+            if (User != null) {
                 UserProfile profile = new UserProfile { DisplayName = studentID };
                 var ProfileTask = User.UpdateUserProfileAsync(profile);
                 yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
 
-                if (ProfileTask.Exception != null){
+                if (ProfileTask.Exception != null) {
                     FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
                     AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
                     Debug.Log("studentID Set Failed!");
-                    signInSceneButton.LoginFail("studentID Set Failed!");
+                    signInSceneButton.SignInFail("studentID Set Failed!");
                 }
-                else{
+                else {
                     Debug.Log("studentID Set Successfully");
-                    signInSceneButton.LoginSuccess();
+                    signInSceneButton.SignInSuccess();
                 }
             }
         }

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "377792998877",
+    "project_id": "lazervsmoiety",
+    "storage_bucket": "lazervsmoiety.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377792998877:android:b8b3c29b1d6d691d59da34",
+        "android_client_info": {
+          "package_name": "com.fuyajo.lazervsmoiety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377792998877-m7ib28tjipd3e8umceeklr40ri6gdqu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDirQPCkS4Q9EzcBFIWayWA1J04u8be7_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377792998877-m7ib28tjipd3e8umceeklr40ri6gdqu9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "377792998877-rk444f8898nvl5uidfr6vb42vo02u8ko.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fuyajo.lazervsmoiety"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

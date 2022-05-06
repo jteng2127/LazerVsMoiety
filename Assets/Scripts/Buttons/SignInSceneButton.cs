@@ -38,9 +38,9 @@ public class SignInSceneButton : MonoBehaviour {
 
     void TriggerSignInWindow() {
         if (_isOpenSignInWindow == true) {
-            _isOpenSignInWindow = false;
-            _signInWindow.SetActive(false);
-            _rectTransform.anchoredPosition3D = _startPosition;
+            // _isOpenSignInWindow = false;
+            // _signInWindow.SetActive(false);
+            // _rectTransform.anchoredPosition3D = _startPosition;
             SignIn();            
         }
         else {
@@ -53,6 +53,14 @@ public class SignInSceneButton : MonoBehaviour {
     public void LoginSuccess() {
         _isSignedIn = true;
         _image.sprite = _startSprite;
+        _isOpenSignInWindow = false;
+        _signInWindow.SetActive(false);
+        _rectTransform.anchoredPosition3D = _startPosition;
+    }
+
+    public void LoginFail(string message) {
+        // TODO: Show error message
+        _isSignedIn = false;
     }
 
     void SignIn() {

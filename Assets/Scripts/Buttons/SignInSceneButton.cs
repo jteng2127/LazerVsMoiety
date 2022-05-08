@@ -16,6 +16,9 @@ public class SignInSceneButton : MonoBehaviour {
     Sprite _signInSprite;
     Sprite _startSprite;
 
+    private InputField _studentIDInput;
+    private InputField _passwordInput;
+
     void Awake() {
         // Initial variables
         _signInWindow = GameObject.Find("SignInWindow");
@@ -27,22 +30,15 @@ public class SignInSceneButton : MonoBehaviour {
         _startSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
 
         // Initial state
-        SignedInStateInit();        
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
-    }
+        _isSignedIn = false;
+        _image.sprite = _signInSprite;
 
-    private void SignedInStateInit(){
-        bool isSignedIn = AuthManager.Instance.isSignedIn();
-        if (isSignedIn) {
-            _isSignedIn = true;
-            _image.sprite = _startSprite;
-        }
-        else{
-            _isSignedIn = false;
-            _image.sprite = _signInSprite;
-        }
+        // Initial input field
+        _studentIDInput = _signInWindow.transform.Find("StudentIDInput").GetComponent<InputField>();
+        _passwordInput = _signInWindow.transform.Find("PasswordInput").GetComponent<InputField>();
     }
 
     #region Click behavior
@@ -58,6 +54,10 @@ public class SignInSceneButton : MonoBehaviour {
         }
     }
 
+    #endregion
+
+    #region SignMethods
+
     public void SignInSuccess() {
         _isSignedIn = true;
         _isOpenSignInWindow = false;
@@ -72,7 +72,9 @@ public class SignInSceneButton : MonoBehaviour {
     }
 
     void SignIn() {
-        AuthManager.Instance.SignInButton();
+        string studentID = _studentIDInput.text;
+        string password = _passwordInput.text;
+        AuthManager.Instance.SignInButton(studentID, password);
     }
 
     #endregion

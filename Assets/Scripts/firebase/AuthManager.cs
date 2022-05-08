@@ -47,6 +47,9 @@ public class AuthManager : MonoBehaviour {
     private SignInSceneButton signInSceneButton;
 
     private void _init() {
+        loginButton = GameObject.Find("Button");
+        signInSceneButton = loginButton.GetComponent<SignInSceneButton>();
+
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available) {
@@ -60,13 +63,6 @@ public class AuthManager : MonoBehaviour {
         });
 
         Debug.Log("AuthManager test sInit");
-
-        Transform SignInWindow = GameObject.Find("Canvas").transform.Find("SignInWindow");
-
-        studentIDInput = SignInWindow.Find("StudentIDInput");
-        passwordInput = SignInWindow.Find("PasswordInput");
-        loginButton = GameObject.Find("Button");
-        signInSceneButton = loginButton.GetComponent<SignInSceneButton>();
     }
 
     private void AuthStateChanged(object sender, System.EventArgs eventArgs) {
@@ -78,6 +74,7 @@ public class AuthManager : MonoBehaviour {
             user = auth.CurrentUser;
             if (signedIn) {
                 Debug.Log("Signed in " + user.Email);
+                signInSceneButton.SignInSuccess();
             }
         }
     }
@@ -89,10 +86,7 @@ public class AuthManager : MonoBehaviour {
 
     #region Methods
 
-    public void SignInButton() {
-        string studentID = studentIDInput.GetComponent<InputField>().text + "@mail.ntou.edu.tw";
-        string password = passwordInput.GetComponent<InputField>().text;
-        Debug.Log(studentID + " " + password);
+    public void SignInButton(string studentID, string password) {
         StartCoroutine(Signin(studentID, password));
     }
 
@@ -101,7 +95,6 @@ public class AuthManager : MonoBehaviour {
     }
 
     public bool isSignedIn() {
-        Debug.LogError(user != null);
         return user != null;
     }
 

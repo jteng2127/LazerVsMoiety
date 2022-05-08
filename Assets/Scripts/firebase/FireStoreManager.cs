@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
-using Firebase;
+using Firebase.Firestore;
 
 public class FireStoreManager : MonoBehaviour {
     #region Singleton
@@ -35,4 +35,8 @@ public class FireStoreManager : MonoBehaviour {
     #endregion
 
     private FirebaseFirestore db;
+
+    void _init(){
+        
+    }
 }

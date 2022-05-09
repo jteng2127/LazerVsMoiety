@@ -4,41 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour {
-    #region Singleton
+public class GameManager : MonoSingleton<GameManager> {
 
-    protected static GameManager s_Instance;
-
-    public static GameManager Instance {
-        [RuntimeInitializeOnLoadMethod]
-        get {
-            if (s_Instance == null) {
-                Debug.Log("GameManager: Create new instance.");
-                // s_Instance = ScriptableObject.CreateInstance<GameManager>();
-                CreateDefault();
-            }
-            return s_Instance;
-        }
-    }
-
-    static void CreateDefault() {
-        GameObject go = new GameObject("GameManager", typeof(GameManager));
-        DontDestroyOnLoad(go);
-        s_Instance = go.GetComponent<GameManager>();
-        // reduce fps
-        // #if UNITY_EDITOR
-        //     Application.targetFrameRate = -1;
-        //     Debug.Log("Using Editor performance cap for my own sanity");
-        // #endif
-    }
-
-    void OnEnable() {
-        Debug.Log("GameManager Enable");
-        _initGameSceneManager();
-    }
-
-    #endregion
-    #region Data
+    #region data
 
     public const int ImagePixelHeightReference = 1440;
 
@@ -56,16 +24,33 @@ public class GameManager : MonoBehaviour {
         GameOver,
     }
 
-    Dictionary<SceneType, string> _sceneTypeToString;
-    Dictionary<string, SceneType> _stringToSceneType;
+    private Dictionary<SceneType, string> _sceneTypeToString;
+    private Dictionary<string, SceneType> _stringToSceneType;
 
     #endregion
-    #region Method
 
-    void _initGameSceneManager() {
+    #region public method
+
+    public void LoadScene(SceneType scene, bool isAsync = false, bool showLoading = true) {
+        Debug.Log("LoadScene: " + _sceneTypeToString[scene]);
+
+        if (isAsync) StartCoroutine(LoadingSceneAsync(scene));
+        else SceneManager.LoadScene(_sceneTypeToString[scene]);
+    }
+
+    public SceneType GetCurrentScene() {
+        return _stringToSceneType[SceneManager.GetActiveScene().name];
+    }
+
+    #endregion
+
+    #region private method
+
+    [RuntimeInitializeOnLoadMethod]
+    private static void _initGameSceneManager() {
         AudioManager.Instance.StartBackgroundMusic();
 
-        _sceneTypeToString = new Dictionary<SceneType, string>{
+        Instance._sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
             {SceneType.SignIn, "SignIn"},
             {SceneType.Menu, "Menu"},
@@ -76,7 +61,7 @@ public class GameManager : MonoBehaviour {
             {SceneType.Stage, "Stage"},
             {SceneType.GameOver, "GameOver"},
         };
-        _stringToSceneType = new Dictionary<string, SceneType>{
+        Instance._stringToSceneType = new Dictionary<string, SceneType>{
             {"Loading", SceneType.Loading},
             {"SignIn", SceneType.SignIn},
             {"Menu", SceneType.Menu},
@@ -89,7 +74,8 @@ public class GameManager : MonoBehaviour {
         };
     }
 
-    IEnumerator LoadingSceneAsync(SceneType scene) {
+    // TODO: async didn't work
+    private IEnumerator LoadingSceneAsync(SceneType scene) {
         SceneManager.LoadScene(_sceneTypeToString[SceneType.Loading]);
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(_sceneTypeToString[scene]);
@@ -109,18 +95,4 @@ public class GameManager : MonoBehaviour {
 
     #endregion
 
-    #region Interface
-
-    public void LoadScene(SceneType scene, bool isAsync = false, bool showLoading = true) {
-        Debug.Log("LoadScene: " + _sceneTypeToString[scene]);
-
-        if (isAsync) StartCoroutine(LoadingSceneAsync(scene));
-        else SceneManager.LoadScene(_sceneTypeToString[scene]);
-    }
-
-    public SceneType GetCurrentScene() {
-        return _stringToSceneType[SceneManager.GetActiveScene().name];
-    }
-
-    #endregion
 }

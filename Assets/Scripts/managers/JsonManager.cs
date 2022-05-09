@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System;
 using System.IO;
 
+// TODO: rearrange JsonManager.cs
 public class JsonManager : MonoBehaviour {
 
     #region Data

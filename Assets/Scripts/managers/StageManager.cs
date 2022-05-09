@@ -4,52 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
-using System.Reflection;
 using System.Linq;
 // using System.Xml.Serialization;
 // using System.IO;
 
-public class StageManager : MonoBehaviour {
-    #region Debug
+// TODO: rearrange StageManager.cs
+public class StageManager : MonoSingleton<StageManager> {
 
-    protected static void Log(string s) {
-        Debug.Log(MethodBase.GetCurrentMethod().DeclaringType + ": " + s);
-    }
-
-    #endregion
-    #region Singleton
-
-    protected static StageManager s_Instance;
-
-    public static StageManager Instance {
-        get {
-            if (s_Instance == null) {
-                throw new NullReferenceException("StageManager Not Exist!");
-            }
-            return s_Instance;
-        }
-    }
-
-    static void CreateNewInstance() {
-        Log("Create new instance");
-        if (s_Instance) {
-            Log("Destroy last instance");
-            Destroy(s_Instance.gameObject);
-        }
-        GameObject go = new GameObject("StageManager", typeof(StageManager));
-        DontDestroyOnLoad(go);
-        s_Instance = go.GetComponent<StageManager>();
-    }
-
-    static void DestroyInstance() {
-        if (s_Instance) {
-            Destroy(s_Instance.gameObject);
-            s_Instance = null;
-        }
-    }
-
-    #endregion
-    #region Data
+    #region data
 
     public class StageData {
         /// Level info
@@ -151,17 +113,18 @@ public class StageManager : MonoBehaviour {
 
     public StageData Data { get; set; }
 
-    Transform _gameOverScreen;
-    Text _gameOverText;
-    Text _stageDataText;
-    Button _restartButton;
+    private Transform _gameOverScreen;
+    private Text _gameOverText;
+    private Text _stageDataText;
+    private Button _restartButton;
 
-    Dictionary<int, string> _enemyIdToName;
+    private Dictionary<int, string> _enemyIdToName;
 
     #endregion
-    #region Method
+    
+    #region private method
 
-    void InitialStage(StageData data) {
+    private void InitialStage(StageData data) {
         GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
         Data = data;
         Data.GameState = 0;
@@ -182,7 +145,7 @@ public class StageManager : MonoBehaviour {
         };
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         SpawnManager.StartSpawn();
         Transform gameOverCanvas = GameObject.Find("GameOverCanvas").transform;
         _gameOverScreen = gameOverCanvas.Find("GameOverScreen");
@@ -193,13 +156,13 @@ public class StageManager : MonoBehaviour {
         Debug.Log("game over text: " + _gameOverText);
     }
 
-    void StageStart() {
+    private void StageStart() {
         Debug.Log("StageStart");
         Instance.Data.GameState = 1;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void GameOver() {
+    private void GameOver() {
         if (Data.IsLose){
             Debug.Log("You Lose");
             AudioManager.Instance.Play("defeat", 0.6f, true, true);
@@ -241,12 +204,13 @@ public class StageManager : MonoBehaviour {
         Data.GameState = 2;
     }
 
-    void RestartGame() {
+    private void RestartGame() {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         GameManager.Instance.LoadScene(GameManager.SceneType.StageAdjust);
     }
 
     #endregion
+
     #region MonoBehaviour
 
     void Update() {
@@ -300,11 +264,12 @@ public class StageManager : MonoBehaviour {
     }
 
     #endregion
-    #region Interface
+
+    #region public method
 
     static public void StartNewStage(StageData data) {
         Debug.Log("StartNewStage");
-        CreateNewInstance();
+        DestroyInstance();
         Instance.InitialStage(data);
         Instance.StageStart();
     }

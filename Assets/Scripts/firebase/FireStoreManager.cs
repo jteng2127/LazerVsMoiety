@@ -29,18 +29,23 @@ public class FireStoreManager : MonoBehaviour {
 
     void OnEnable() {
         Debug.Log("FireStoreManager Enable");
-        _init();
+        // _init();
     }
 
     #endregion
 
     private FirebaseFirestore db;
 
-    void _init(){
+    void _init() {
         try {
             db = FirebaseFirestore.DefaultInstance;
-        } catch (System.Exception e) {
-            Debug.LogError("FireStoreManager: " + e.Message);
         }
+        catch (System.Exception e) {
+            // Debug.LogError("FireStoreManager: " + e.Message);
+        }
+    }
+
+    void Start() {
+        _init();
     }
 }

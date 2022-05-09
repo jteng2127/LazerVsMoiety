@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "377792998877",
     "project_id": "lazervsmoiety",
+    "firebase_url": "https://lazervsmoiety.firebaseio.com",
     "storage_bucket": "lazervsmoiety.appspot.com"
   },
   "client": [

@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Reflection;
 
 // Mono singleton generic class, can't initialize on load method
 // -> can't use Update() when game start without calling Instance
 public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour {
+
     private static T _instance;
+
     private static object _instanceLock = new object();
 
     public static T Instance {
@@ -17,6 +18,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour {
                         GameObject singleton = new GameObject(typeof(T).ToString());
                         _instance = singleton.AddComponent<T>();
                         DontDestroyOnLoad(singleton);
+                        Debug.Log("[Singleton] Created singleton object of type " + typeof(T).ToString());
                     }
                 }
                 return _instance;
@@ -24,5 +26,15 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour {
         }
     }
 
-    public static int testStatic = 0;
+    protected static void DestroyInstance() {
+        if (_instance != null) {
+            Destroy(_instance.gameObject);
+            _instance = null;
+        }
+    }
+
+    protected static void Log(string s) {
+        Debug.Log("[" + MethodBase.GetCurrentMethod().DeclaringType + "] " + s);
+    }
+
 }

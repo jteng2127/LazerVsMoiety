@@ -31,6 +31,7 @@ public class SignInSceneButton : MonoBehaviour {
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
+
     }
 
     private void SignedInStateInit(){

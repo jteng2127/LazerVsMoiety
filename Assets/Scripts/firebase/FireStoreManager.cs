@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
 using Firebase.Firestore;
+using System.Threading.Tasks;
 
 public class FireStoreManager : MonoBehaviour {
     #region Singleton
@@ -29,23 +30,34 @@ public class FireStoreManager : MonoBehaviour {
 
     void OnEnable() {
         Debug.Log("FireStoreManager Enable");
-        // _init();
+        // DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     #endregion
 
     private FirebaseFirestore db;
 
-    void _init() {
-        try {
-            db = FirebaseFirestore.DefaultInstance;
+    public void Init() {
+        Debug.Log("FireStoreManager Init");
+        Debug.Log(FireStoreData.Test.TEST_STRING);
+        db = FirebaseFirestore.DefaultInstance;
+    }
+
+    public async Task GetTest() {
+        Debug.Log("GetTest");
+        DocumentReference docRef = db.Collection("users").Document("00957301@mail.ntou.edu.tw");
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        if (snapshot.Exists) {
+            Debug.LogFormat("Document data for {0} document:", snapshot.Id);
+            Dictionary<string, object> city = snapshot.ToDictionary();
+            foreach (KeyValuePair<string, object> pair in city) {
+                Debug.LogFormat("{0}: {1}", pair.Key, pair.Value);
+            }
         }
-        catch (System.Exception e) {
-            // Debug.LogError("FireStoreManager: " + e.Message);
+        else {
+            Debug.LogFormat("Document {0} does not exist!", snapshot.Id);
         }
     }
 
-    void Start() {
-        _init();
-    }
+
 }

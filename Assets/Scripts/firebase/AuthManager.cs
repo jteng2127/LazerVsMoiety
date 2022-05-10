@@ -78,6 +78,8 @@ public class AuthManager : MonoBehaviour {
             user = auth.CurrentUser;
             if (signedIn) {
                 Debug.Log("Signed in " + user.Email);
+                FireStoreManager.Instance.Init();
+
             }
         }
     }

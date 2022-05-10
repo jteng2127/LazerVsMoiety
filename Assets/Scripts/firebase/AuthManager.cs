@@ -77,7 +77,7 @@ public class AuthManager : MonoBehaviour {
         }
     }
 
-    void OnDestroy() {
+    private void OnDestroy() {
         auth.StateChanged -= AuthStateChanged;
         auth = null;
     }

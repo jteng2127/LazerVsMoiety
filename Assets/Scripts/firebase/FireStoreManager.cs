@@ -11,8 +11,6 @@ public class FireStoreManager : ScriptableObject {
 
     protected static FireStoreManager s_Instance;
     private FirebaseFirestore db;
-    private AuthManager am;
-
     public static FireStoreManager Instance {
         [RuntimeInitializeOnLoadMethod]
         get {
@@ -30,7 +28,6 @@ public class FireStoreManager : ScriptableObject {
     }
 
     private void _init() {
-        am = AuthManager.Instance;
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available) {
@@ -52,7 +49,7 @@ public class FireStoreManager : ScriptableObject {
     }
 
     public async Task GetUserData() {
-        string uid = am.getUID();
+        string uid = AuthManager.Instance.getUID();
         DocumentReference docRef = db.Collection("users").Document(uid);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
         if (snapshot.Exists) {
@@ -70,26 +67,8 @@ public class FireStoreManager : ScriptableObject {
     public async Task RegisterUserData(FireStoreData.UserData userData, string uid) {
         Debug.Log(db != null);
         DocumentReference docRef = db.Collection("cities").Document("sjdsd");
-        Debug.Log("FireStoreManager: RegisterUserData");
         await docRef.SetAsync(userData);
     }
-
-    public async Task Test() {
-        // CheckFireStore();
-        Debug.Log("FireStoreManager: Test");
-        Debug.Log(db != null);
-        DocumentReference docRef = db.Collection("cities").Document("LA");
-        Debug.Log("FireStoreManager: Test: docRef");
-        Dictionary<string, object> city = new Dictionary<string, object>
-            {
-                { "name", "Los Angeles" },
-                { "state", "CA" },
-                { "country", "USA" }
-           };
-        Debug.Log("FireStoreManager: Test: city");
-        await docRef.SetAsync(city);
-        Debug.Log("FireStoreManager: Test: end");
-    }
-
+    
     #endregion
 }

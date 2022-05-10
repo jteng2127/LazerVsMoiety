@@ -77,6 +77,11 @@ public class AuthManager : MonoBehaviour {
         }
     }
 
+    void OnDestroy() {
+        auth.StateChanged -= AuthStateChanged;
+        auth = null;
+    }
+
     #region Methods
 
     public void SignInButton(string studentID, string password) {
@@ -189,7 +194,7 @@ public class AuthManager : MonoBehaviour {
                             UID = User.UserId,
                             studentID = studentID,
                             admin = false
-                        }, 
+                        },
                         User.UserId
                     );
                     signInSceneButton.SignInSuccess();

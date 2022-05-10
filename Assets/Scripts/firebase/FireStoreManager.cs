@@ -6,43 +6,33 @@ using Firebase;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 
-public class FireStoreManager : MonoBehaviour {
+public class FireStoreManager : ScriptableObject {
     #region Singleton
 
     protected static FireStoreManager s_Instance;
+    private FirebaseFirestore db;
+    private AuthManager am;
 
     public static FireStoreManager Instance {
         [RuntimeInitializeOnLoadMethod]
         get {
             if (s_Instance == null) {
-                Debug.Log("FireStoreManager: Create new instance.");
-                CreateDefault();
+                s_Instance = ScriptableObject.CreateInstance<FireStoreManager>();
+				s_Instance.hideFlags = HideFlags.HideAndDontSave;
             } 
             return s_Instance;
         }
     }
 
-    static void CreateDefault() {
-        GameObject go = new GameObject("FireStoreManager", typeof(FireStoreManager));
-        DontDestroyOnLoad(go);
-        s_Instance = go.GetComponent<FireStoreManager>();
-    }
-
     void OnEnable() {
         Debug.Log("FireStoreManager Enable");
-        // _init();
+        _init();
     }
-
-    #endregion
-
-    private FirebaseFirestore db;
-    private AuthManager am;
 
     private void _init() {
         am = AuthManager.Instance;
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             var dependencyStatus = task.Result;
-            Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus.ToString());
             if (dependencyStatus == DependencyStatus.Available) {
                 db = FirebaseFirestore.DefaultInstance;
             }
@@ -52,6 +42,9 @@ public class FireStoreManager : MonoBehaviour {
         });
     }
 
+    #endregion
+
+    #region Firestore API
     private void CheckFireStore() {
         if(db == null) {
             db = FirebaseFirestore.DefaultInstance;
@@ -82,7 +75,7 @@ public class FireStoreManager : MonoBehaviour {
     }
 
     public async Task Test() {
-        CheckFireStore();
+        // CheckFireStore();
         Debug.Log("FireStoreManager: Test");
         Debug.Log(db != null);
         DocumentReference docRef = db.Collection("cities").Document("LA");
@@ -97,4 +90,6 @@ public class FireStoreManager : MonoBehaviour {
         await docRef.SetAsync(city);
         Debug.Log("FireStoreManager: Test: end");
     }
+
+    #endregion
 }

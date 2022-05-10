@@ -61,8 +61,6 @@ public class AuthManager : MonoBehaviour {
                 Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus.ToString());
             }
         });
-
-        Debug.Log("AuthManager test sInit");
     }
 
     private void AuthStateChanged(object sender, System.EventArgs eventArgs) {
@@ -75,15 +73,8 @@ public class AuthManager : MonoBehaviour {
             if (signedIn) {
                 Debug.Log("Signed in " + user.Email);
                 signInSceneButton.SignInSuccess();
-                FireStoreManager.Instance.Init();
-
             }
         }
-    }
-
-    private void OnDestroy() {
-        auth.StateChanged -= AuthStateChanged;
-        auth = null;
     }
 
     #region Methods
@@ -94,6 +85,7 @@ public class AuthManager : MonoBehaviour {
 
     public void SignOut() {
         auth.SignOut();
+        signInSceneButton.SignOutSuccess();
     }
 
     public bool isSignedIn() {
@@ -102,6 +94,10 @@ public class AuthManager : MonoBehaviour {
 
     public string getStudentEmail() {
         return user.Email;
+    }
+
+    public string getUID() {
+        return user.UserId;
     }
 
     #endregion
@@ -188,6 +184,14 @@ public class AuthManager : MonoBehaviour {
                 }
                 else {
                     Debug.Log("studentID Set Successfully");
+                    FireStoreManager.Instance.RegisterUserData(
+                        new FireStoreData.UserData {
+                            UID = User.UserId,
+                            studentID = studentID,
+                            admin = false
+                        }, 
+                        User.UserId
+                    );
                     signInSceneButton.SignInSuccess();
                 }
             }

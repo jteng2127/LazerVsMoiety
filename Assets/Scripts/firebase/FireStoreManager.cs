@@ -17,7 +17,7 @@ public class FireStoreManager : MonoBehaviour {
             if (s_Instance == null) {
                 Debug.Log("FireStoreManager: Create new instance.");
                 CreateDefault();
-            }
+            } 
             return s_Instance;
         }
     }
@@ -30,22 +30,37 @@ public class FireStoreManager : MonoBehaviour {
 
     void OnEnable() {
         Debug.Log("FireStoreManager Enable");
-        // DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        // _init();
     }
 
     #endregion
 
     private FirebaseFirestore db;
+    private AuthManager am;
 
-    public void Init() {
-        Debug.Log("FireStoreManager Init");
-        Debug.Log(FireStoreData.Test.TEST_STRING);
-        db = FirebaseFirestore.DefaultInstance;
+    private void _init() {
+        am = AuthManager.Instance;
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+            var dependencyStatus = task.Result;
+            Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus.ToString());
+            if (dependencyStatus == DependencyStatus.Available) {
+                db = FirebaseFirestore.DefaultInstance;
+            }
+            else {
+                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus.ToString());
+            }
+        });
     }
 
-    public async Task GetTest() {
-        Debug.Log("GetTest");
-        DocumentReference docRef = db.Collection("users").Document("00957301@mail.ntou.edu.tw");
+    private void CheckFireStore() {
+        if(db == null) {
+            db = FirebaseFirestore.DefaultInstance;
+        }
+    }
+
+    public async Task GetUserData() {
+        string uid = am.getUID();
+        DocumentReference docRef = db.Collection("users").Document(uid);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
         if (snapshot.Exists) {
             Debug.LogFormat("Document data for {0} document:", snapshot.Id);
@@ -59,5 +74,27 @@ public class FireStoreManager : MonoBehaviour {
         }
     }
 
+    public async Task RegisterUserData(FireStoreData.UserData userData, string uid) {
+        Debug.Log(db != null);
+        DocumentReference docRef = db.Collection("cities").Document("sjdsd");
+        Debug.Log("FireStoreManager: RegisterUserData");
+        await docRef.SetAsync(userData);
+    }
 
+    public async Task Test() {
+        CheckFireStore();
+        Debug.Log("FireStoreManager: Test");
+        Debug.Log(db != null);
+        DocumentReference docRef = db.Collection("cities").Document("LA");
+        Debug.Log("FireStoreManager: Test: docRef");
+        Dictionary<string, object> city = new Dictionary<string, object>
+            {
+                { "name", "Los Angeles" },
+                { "state", "CA" },
+                { "country", "USA" }
+           };
+        Debug.Log("FireStoreManager: Test: city");
+        await docRef.SetAsync(city);
+        Debug.Log("FireStoreManager: Test: end");
+    }
 }

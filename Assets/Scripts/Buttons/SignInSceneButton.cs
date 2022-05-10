@@ -60,10 +60,15 @@ public class SignInSceneButton : MonoBehaviour {
 
     public void SignInSuccess() {
         _isSignedIn = true;
+        _image.sprite = _startSprite;
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
-        _image.sprite = _startSprite;
+    }
+
+    public void SignOutSuccess() {
+        _isSignedIn = false;
+        _image.sprite = _signInSprite;
     }
 
     public void SignInFail(string message) {
@@ -72,7 +77,7 @@ public class SignInSceneButton : MonoBehaviour {
     }
 
     void SignIn() {
-        string studentID = _studentIDInput.text;
+        string studentID = _studentIDInput.text + "@mail.ntou.edu.tw";
         string password = _passwordInput.text;
         AuthManager.Instance.SignInButton(studentID, password);
     }

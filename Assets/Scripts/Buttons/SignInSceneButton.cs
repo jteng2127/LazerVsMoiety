@@ -39,6 +39,9 @@ public class SignInSceneButton : MonoBehaviour {
         // Initial input field
         _studentIDInput = _signInWindow.transform.Find("StudentIDInput").GetComponent<InputField>();
         _passwordInput = _signInWindow.transform.Find("PasswordInput").GetComponent<InputField>();
+
+        // Initial AuthStateChanged
+        AuthManager.UserStateChanged += OnUserStateChanged;
     }
 
     #region Click behavior
@@ -64,22 +67,32 @@ public class SignInSceneButton : MonoBehaviour {
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
-    }
-
-    public void SignOutSuccess() {
-        _isSignedIn = false;
-        _image.sprite = _signInSprite;
+        // FireStoreManager.Instance.GetUserData();
+        StartCoroutine(DelayToInvoke.DelayToInvokeDo(() =>{
+              FireStoreManager.Instance.GetUserData();
+              FireStoreManager.Instance.GetUserStagesData();
+            }, 0.1f));
     }
 
     public void SignInFail(string message) {
         // TODO: Show error message
         _isSignedIn = false;
+        _image.sprite = _signInSprite;
     }
 
-    void SignIn() {
+    public void SignIn() {
         string studentID = _studentIDInput.text + "@mail.ntou.edu.tw";
         string password = _passwordInput.text;
         AuthManager.Instance.SignInButton(studentID, password);
+    }
+
+    private void OnUserStateChanged(bool isSignedIn) {
+        if (isSignedIn) {
+            SignInSuccess();
+        }
+        else {
+            SignInFail("");
+        }
     }
 
     #endregion

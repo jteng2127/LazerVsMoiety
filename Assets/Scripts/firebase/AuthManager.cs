@@ -37,7 +37,17 @@ public class AuthManager : MonoBehaviour {
     [Header("Firebase")]
     private DependencyStatus dependencyStatus;
     private FirebaseAuth auth;
-    private FirebaseUser user;
+    private FirebaseUser _user;
+    private FirebaseUser user {
+        get { return _user; }
+        set {
+            if(value != _user) {
+                UserStateChanged(value != null);
+            }
+            _user = value;
+        }
+    }
+    public static System.Action<bool> UserStateChanged;
 
     [Header("SigninUI")]
     private Transform studentIDInput;
@@ -72,7 +82,6 @@ public class AuthManager : MonoBehaviour {
             user = auth.CurrentUser;
             if (signedIn) {
                 Debug.Log("Signed in " + user.Email);
-                signInSceneButton.SignInSuccess();
             }
         }
     }
@@ -90,7 +99,7 @@ public class AuthManager : MonoBehaviour {
 
     public void SignOut() {
         auth.SignOut();
-        signInSceneButton.SignOutSuccess();
+        signInSceneButton.SignInFail("");
     }
 
     public bool isSignedIn() {
@@ -143,7 +152,6 @@ public class AuthManager : MonoBehaviour {
         }
         else { // login success
             Debug.Log("Login Successful");
-            signInSceneButton.SignInSuccess();
         }
     }
 
@@ -191,13 +199,12 @@ public class AuthManager : MonoBehaviour {
                     Debug.Log("studentID Set Successfully");
                     FireStoreManager.Instance.RegisterUserData(
                         new FireStoreData.UserData {
-                            UID = User.UserId,
+                            uid = User.UserId,
                             studentID = studentID,
                             admin = false
                         },
                         User.UserId
                     );
-                    signInSceneButton.SignInSuccess();
                 }
             }
         }

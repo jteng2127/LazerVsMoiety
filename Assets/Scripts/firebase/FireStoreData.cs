@@ -8,7 +8,7 @@ namespace FireStoreData {
     [FirestoreData]
     public class UserData {
         [FirestoreProperty]
-        public string UID { get; set; }
+        public string uid { get; set; }
         [FirestoreProperty]
         public string studentID {get; set; }
         [FirestoreProperty]
@@ -18,11 +18,9 @@ namespace FireStoreData {
     }
 
     [FirestoreData]
-    public class UserScoreData {
+    public class UserStagesData {
         [FirestoreProperty]
-        public string UID { get; set; }
-        [FirestoreProperty]
-        public ArrayList score { get; set; }
+        public List<Dictionary<string, object>> stagesData { get; set; }
     }
 
     public static class Test {

@@ -10,65 +10,63 @@ public class FireStoreManager : ScriptableObject {
     #region Singleton
 
     protected static FireStoreManager s_Instance;
-    private FirebaseFirestore db;
     public static FireStoreManager Instance {
         [RuntimeInitializeOnLoadMethod]
         get {
             if (s_Instance == null) {
                 s_Instance = ScriptableObject.CreateInstance<FireStoreManager>();
-				s_Instance.hideFlags = HideFlags.HideAndDontSave;
-            } 
+                s_Instance.hideFlags = HideFlags.HideAndDontSave;
+            }
             return s_Instance;
         }
     }
 
     void OnEnable() {
         Debug.Log("FireStoreManager Enable");
-        _init();
     }
 
-    private void _init() {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
-            var dependencyStatus = task.Result;
-            if (dependencyStatus == DependencyStatus.Available) {
-                db = FirebaseFirestore.DefaultInstance;
-            }
-            else {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus.ToString());
-            }
-        });
+    private FirebaseFirestore db {
+        get {
+            return FirebaseFirestore.DefaultInstance;
+        }
     }
 
     #endregion
 
     #region Firestore API
-    private void CheckFireStore() {
-        if(db == null) {
-            db = FirebaseFirestore.DefaultInstance;
-        }
-    }
-
     public async Task GetUserData() {
         string uid = AuthManager.Instance.getUID();
         DocumentReference docRef = db.Collection("users").Document(uid);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
         if (snapshot.Exists) {
-            Debug.LogFormat("Document data for {0} document:", snapshot.Id);
-            Dictionary<string, object> city = snapshot.ToDictionary();
-            foreach (KeyValuePair<string, object> pair in city) {
-                Debug.LogFormat("{0}: {1}", pair.Key, pair.Value);
-            }
+            FireStoreData.UserData data = snapshot.ConvertTo<FireStoreData.UserData>();
+            DataManager.instance.userData = data;
         }
         else {
-            Debug.LogFormat("Document {0} does not exist!", snapshot.Id);
+            Debug.LogError("No such document");
         }
     }
 
     public async Task RegisterUserData(FireStoreData.UserData userData, string uid) {
-        Debug.Log(db != null);
-        DocumentReference docRef = db.Collection("cities").Document("sjdsd");
+        DocumentReference docRef = db.Collection("users").Document(uid);
         await docRef.SetAsync(userData);
     }
-    
+
+    public async Task GetUserStagesData() {
+        string uid = AuthManager.Instance.getUID();
+        Debug.Log("uid:" + uid);
+        DocumentReference docRef = db.Collection("userStages").Document(uid);
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        if (snapshot.Exists) {
+            Debug.Log("snapshot: " + (snapshot.Exists).ToString());
+            FireStoreData.UserStagesData data = snapshot.ConvertTo<FireStoreData.UserStagesData>();
+            DataManager.instance.userStagesData = data;
+        }
+        else {
+            Debug.LogError("No such document");
+        }
+    }
+
     #endregion
 }
+

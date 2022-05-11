@@ -43,8 +43,22 @@ public class FireStoreManager : ScriptableObject {
             DataManager.instance.userData = data;
         }
         else {
+            // Firestore Error
+            // https://firebase.google.com/docs/reference/unity/namespace/firebase/firestore#firestoreerror
             Debug.LogError("No such document");
         }
+    }
+
+    public async Task UpdateUserData() {
+        string uid = AuthManager.Instance.getUID();
+        DocumentReference docRef = db.Collection("users").Document(uid);
+        await docRef.SetAsync(DataManager.instance.userData);
+    }
+
+    public async Task UpdateUserData(string actualName) {
+        string uid = AuthManager.Instance.getUID();
+        DocumentReference docRef = db.Collection("users").Document(uid);
+        await docRef.UpdateAsync("actualName", actualName);
     }
 
     public async Task RegisterUserData(FireStoreData.UserData userData, string uid) {
@@ -54,17 +68,21 @@ public class FireStoreManager : ScriptableObject {
 
     public async Task GetUserStagesData() {
         string uid = AuthManager.Instance.getUID();
-        Debug.Log("uid:" + uid);
         DocumentReference docRef = db.Collection("userStages").Document(uid);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
         if (snapshot.Exists) {
-            Debug.Log("snapshot: " + (snapshot.Exists).ToString());
             FireStoreData.UserStagesData data = snapshot.ConvertTo<FireStoreData.UserStagesData>();
             DataManager.instance.userStagesData = data;
         }
         else {
             Debug.LogError("No such document");
         }
+    }
+
+    public async Task UpdateUserStagesData() {
+        string uid = AuthManager.Instance.getUID();
+        DocumentReference docRef = db.Collection("userStages").Document(uid);
+        await docRef.SetAsync(DataManager.instance.userStagesData);
     }
 
     #endregion

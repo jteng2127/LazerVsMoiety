@@ -175,7 +175,19 @@ public class StageManager : MonoSingleton<StageManager> {
         Instance.StageStart();
     }
 
-    public void TriggerPause() {
+    static public void TriggerPause() {
+
+    }
+
+    static public void TriggerContinue() {
+
+    }
+
+    static public void TriggerGameOver() {
+
+    }
+
+    static public void TriggerGameWin() {
 
     }
 

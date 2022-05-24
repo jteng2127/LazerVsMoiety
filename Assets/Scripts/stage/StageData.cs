@@ -2,24 +2,24 @@ using System.Collections.Generic;
 
 public class StageData {
     /// Level info
-    public int Level { get; } // -1: custom
-    public string StageName { get; }
-    public string StageDescription { get; }
+    public readonly int LevelID; // -1: custom
+    public readonly string StageName;
+    public readonly string StageDescription;
     public int GameState { get; set; } // 0: prepare, 1: gaming, 2: game over
     public bool IsLose { get; set; }
 
     /// Grid info
-    static readonly int DefaultGridRowTotal = 5;
-    static readonly int DefaultGridColumnTotal = 9;
+    private static readonly int DefaultGridRowTotal = 5;
+    private static readonly int DefaultGridColumnTotal = 9;
     public readonly int GridRowTotal;
     public readonly int GridColumnTotal;
     public int CannonLeft { get; set; }
 
     /// Spawn info
-    static readonly float DefaultEnemySpawnPositionX = 12.0f;
-    static readonly float DefaultAllyCardSpawnPositionX = 8.0f;
-    static readonly float DefaultAllyCardSpawnPositionY = 4.0f;
-    static readonly int DefaultAllyCardSpawnNumberMax = 8;
+    private static readonly float DefaultEnemySpawnPositionX = 12.0f;
+    private static readonly float DefaultAllyCardSpawnPositionX = 8.0f;
+    private static readonly float DefaultAllyCardSpawnPositionY = 4.0f;
+    private static readonly int DefaultAllyCardSpawnNumberMax = 8;
 
     public List<int> EnemyType { get; set; }
     public int EnemySpawnNumberTotal { get; }
@@ -44,9 +44,10 @@ public class StageData {
     public float EnemySpeed { get; }
     public float AllyCardSpeed { get; }
 
+    // constructor
     public StageData(
             List<int> enemyType = null,
-            int level = -1,
+            int levelID = -1,
             int enemySpawnNumberTotal = 10,
             float enemySpeedMultiplier = 1.0f,
             float enemySpawnInterval = 7.0f,
@@ -55,7 +56,7 @@ public class StageData {
             float allyCardSpawnIntervalDeviation = 0.5f) {
 
         /// Level info
-        Level = level;
+        LevelID = levelID;
         GameState = 0;
         IsLose = false;
         // StageName = ""

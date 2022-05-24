@@ -27,7 +27,7 @@ public class StageManager : MonoSingleton<StageManager> {
     #region private method
 
     private void InitialStage(StageData data) {
-        GameManager.Instance.LoadScene(GameManager.SceneType.Stage);
+        GameManager.Instance.LoadScene(SceneType.Stage);
         Data = data;
         Data.GameState = 0;
         SpawnManager.CreateNewSpawner();
@@ -108,7 +108,7 @@ public class StageManager : MonoSingleton<StageManager> {
 
     private void RestartGame() {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        GameManager.Instance.LoadScene(GameManager.SceneType.StageAdjust);
+        GameManager.Instance.LoadScene(SceneType.StageAdjust);
     }
 
     #endregion
@@ -170,7 +170,6 @@ public class StageManager : MonoSingleton<StageManager> {
     #region public method
 
     static public void StartNewStage(StageData data) {
-        Debug.Log("StartNewStage");
         DestroyInstance();
         Instance.InitialStage(data);
         Instance.StageStart();

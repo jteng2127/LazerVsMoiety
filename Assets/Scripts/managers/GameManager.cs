@@ -10,20 +10,6 @@ public class GameManager : MonoSingleton<GameManager> {
 
     public const int ImagePixelHeightReference = 1440;
 
-    public enum SceneType {
-        /// <summary> Loding page </summary>
-        Loading,
-        SignIn,
-        Menu,
-        /// <summary> Logout etc. </summary>
-        User,
-        Setting,
-        StageSelect,
-        StageAdjust,
-        Stage,
-        GameOver,
-    }
-
     private Dictionary<SceneType, string> _sceneTypeToString;
     private Dictionary<string, SceneType> _stringToSceneType;
 
@@ -95,4 +81,18 @@ public class GameManager : MonoSingleton<GameManager> {
 
     #endregion
 
+}
+
+public enum SceneType {
+    /// <summary> Loding page </summary>
+    Loading,
+    SignIn,
+    Menu,
+    /// <summary> Logout etc. </summary>
+    User,
+    Setting,
+    StageSelect,
+    StageAdjust,
+    Stage,
+    GameOver,
 }

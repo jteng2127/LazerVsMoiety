@@ -8,7 +8,7 @@ public class SpawnManager : MonoSingleton<SpawnManager> {
     
     #region Data
 
-    private StageManager.StageData _data;
+    private StageData _data;
     private StageGrid _stageGrid;
 
     private bool _isSpawning = false;

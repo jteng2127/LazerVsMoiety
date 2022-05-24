@@ -29,7 +29,7 @@ public class StageAdjust : MonoBehaviour {
     Slider _enemySpeedMultiplierSlider;
     Slider _enemySpawnIntervalSlider;
 
-    StageManager.StageData _stageData;
+    StageData _stageData;
     List<int> _enemyType;
 
 
@@ -38,7 +38,7 @@ public class StageAdjust : MonoBehaviour {
 
     public void StartStage() {
         Debug.Log("StartStage!!!");
-        _stageData = new StageManager.StageData(
+        _stageData = new StageData(
             enemyType: _stageData.EnemyType,
             enemySpawnNumberTotal: (int)_sliders["EnemySpawnNumberTotal"].value,
             enemySpeedMultiplier: _sliders["EnemySpeedMultiplier"].value * 0.1f,
@@ -104,7 +104,7 @@ public class StageAdjust : MonoBehaviour {
     #region MonoBahaviour
 
     void Start() {
-        _stageData = new StageManager.StageData();
+        _stageData = new StageData();
 
         foreach (Transform child in _enemyTypeToggleList) {
             Toggle toggle = child.GetComponent<Toggle>();

@@ -4,68 +4,30 @@ using UnityEngine;
 using System;
 using System.Reflection;
 
-public class SpawnManager : MonoBehaviour {
-    #region Debug
-
-    protected static void Log(string s) {
-        Debug.Log(MethodBase.GetCurrentMethod().DeclaringType + ": " + s);
-    }
-
-    #endregion
-    #region Singleton
-
-    protected static SpawnManager s_Instance;
-
-    public static SpawnManager Instance {
-        get {
-            if (s_Instance == null) {
-                throw new NullReferenceException();
-            }
-            return s_Instance;
-        }
-    }
-
-    static void CreateNewInstance() {
-        Log("Create new instance");
-        if (s_Instance) {
-            Log("Destroy last instance");
-            Destroy(s_Instance.gameObject);
-        }
-        GameObject go = new GameObject("SpawnManager", typeof(SpawnManager));
-        DontDestroyOnLoad(go);
-        s_Instance = go.GetComponent<SpawnManager>();
-    }
-
-    static void DestroyInstance() {
-        if (s_Instance) {
-            Log("Destroy instance");
-            Destroy(s_Instance.gameObject);
-        }
-    }
-
-    #endregion
+public class SpawnManager : MonoSingleton<SpawnManager> {
+    
     #region Data
 
-    StageManager.StageData _data;
-    StageGrid _stageGrid;
+    private StageManager.StageData _data;
+    private StageGrid _stageGrid;
 
-    bool _isSpawning = false;
+    private bool _isSpawning = false;
 
     #endregion
 
-    #region Method
+    #region private method
 
-    void Initial() {
+    private void Initial() {
         _data = StageManager.Instance.Data;
         _isSpawning = false;
     }
 
-    float GenerateRandomDelay(float interval, float deviation) {
+    private float GenerateRandomDelay(float interval, float deviation) {
         return UnityEngine.Random.Range(interval - deviation, interval + deviation);
     }
 
     /// <param name="type">0: Enemy, 1: AllyCard</param>
-    void SpawnUnit(int type) {
+    private void SpawnUnit(int type) {
         Vector3 spawnPosition;
         int id;
 
@@ -93,7 +55,7 @@ public class SpawnManager : MonoBehaviour {
         }
     }
 
-    void CheckAndSpawn() {
+    private void CheckAndSpawn() {
         if (_data.EnemySpawnTimeLeft <= 0.0f &&
             _data.EnemySpawnNumberLeft > 0) {
             _data.EnemySpawnTimeLeft = GenerateRandomDelay(
@@ -116,6 +78,7 @@ public class SpawnManager : MonoBehaviour {
     }
 
     #endregion
+
     #region MonoBehaviour
 
     void Start() {
@@ -130,10 +93,11 @@ public class SpawnManager : MonoBehaviour {
     }
 
     #endregion
+
     #region Interface
 
     static public void CreateNewSpawner() {
-        CreateNewInstance();
+        DestroyInstance();
         Instance.Initial();
     }
 

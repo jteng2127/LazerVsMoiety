@@ -6,11 +6,11 @@ using System.IO;
 using System.Reflection;
 
 // TODO: need big modify
-public class ScoreManager : MonoBehaviour {
+public class ScoreManager : MonoSingleton<ScoreManager> {
     #region Interface
 
     static public void NewScore() {
-        CreateNewInstance();
+        DestroyInstance();
         Instance.Initial();
     }
 
@@ -79,45 +79,6 @@ public class ScoreManager : MonoBehaviour {
             if (!Scores.ContainsKey(key)) Scores[key] = 0;
             Scores[key] += addScore;
             Log("add " + key + ": " + addScore);
-        }
-    }
-
-    #endregion
-    #region Debug
-
-    protected static void Log(string s) {
-        Debug.Log(MethodBase.GetCurrentMethod().DeclaringType + ": " + s);
-    }
-
-    #endregion
-    #region Singleton
-
-    protected static ScoreManager s_Instance;
-
-    public static ScoreManager Instance {
-        get {
-            if (s_Instance == null) {
-                throw new NullReferenceException();
-            }
-            return s_Instance;
-        }
-    }
-
-    static void CreateNewInstance() {
-        Log("Create new instance");
-        if (s_Instance) {
-            Log("Destroy last instance");
-            Destroy(s_Instance.gameObject);
-        }
-        GameObject go = new GameObject("ScoreManager", typeof(ScoreManager));
-        DontDestroyOnLoad(go);
-        s_Instance = go.GetComponent<ScoreManager>();
-    }
-
-    static void DestroyInstance() {
-        if (s_Instance) {
-            Log("Destroy instance");
-            Destroy(s_Instance.gameObject);
         }
     }
 

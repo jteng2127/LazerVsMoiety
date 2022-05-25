@@ -2,6 +2,7 @@
 
 - [LazerVsMoiety](#lazervsmoiety)
   - [Level design](#level-design)
+  - [TODO](#todo)
 
 ## Level design
 
@@ -16,3 +17,20 @@ On the top of screan, there is a conveyor, will slide in some lazer card continu
 You can drag lazer into cells, when a moiety step on cell which has lazer on it, it will die.
 
 Your goal is to defend your home from moieties.
+
+## TODO
+
+stage:
+StageManager
+StagePause (board cast)
+
+Spawner
+EnemySpawner
+AllyCardSpawner
+CanonSpawner
+SpawnTimer
+EnemySpawnTimer
+AllyCardSpawnTimer
+
+StageScore
+GameoverHandler

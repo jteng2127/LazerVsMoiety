@@ -49,7 +49,7 @@ public class EnemySpawner : ISpawner {
     public void Spawn() {
         int enemyID = EnemyTypes[UnityEngine.Random.Range(0, EnemyTypesTotal)];
         Vector3 spawnPosition = SpawnPositions[UnityEngine.Random.Range(0, SpawnPositionsTotal)];
-        EnemyUnit.Spawn(enemyID, spawnPosition);
+        EnemyUnit.Spawn(enemyID, spawnPosition, MovingSpeed);
     }
     #endregion
 }

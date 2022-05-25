@@ -10,12 +10,12 @@ public class EnemyUnit : Unit {
     #endregion
     #region Method
 
-    void Initial(int id) {
+    void Initial(int id, float speed) {
         Id = id;
         _pictureSrc = "Images/Enemy/1x/enemy_" + id;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _speed = StageManager.Instance.Data.EnemySpeed;
+        _speed = speed;
 
         /// set PixelPerUnit by Screen height and camera size (half screen height of units, default is 5)
         Texture2D texture = Resources.Load<Texture2D>(_pictureSrc);
@@ -32,7 +32,7 @@ public class EnemyUnit : Unit {
 
     #region Interface
 
-    static public GameObject Spawn(int id, Vector3 position) {
+    static public GameObject Spawn(int id, Vector3 position, float speed) {
         if (_enemyUnitPrefab == null) {
             _enemyUnitPrefab = Resources.Load<GameObject>("Prefabs/Stage/EnemyUnit");
         }
@@ -41,7 +41,7 @@ public class EnemyUnit : Unit {
             position,
             Quaternion.identity
         );
-        go.GetComponent<EnemyUnit>().Initial(id);
+        go.GetComponent<EnemyUnit>().Initial(id, speed);
         return go;
     }
 

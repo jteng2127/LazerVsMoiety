@@ -10,12 +10,12 @@ public class AllyCard : Unit {
     #endregion
     #region Method
 
-    void Initial(int id) {
+    void Initial(int id, float speed) {
         Id = id;
         _pictureSrc = "Images/Ally/1x/Ally_" + Id;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _speed = StageManager.Instance.Data.AllyCardSpeed;
+        _speed = speed;
 
         /// set PixelPerUnit by Screen height and camera size (half screen height of units, default is 5)
         Texture2D texture = Resources.Load<Texture2D>(_pictureSrc);
@@ -32,7 +32,7 @@ public class AllyCard : Unit {
 
     #region Interface
 
-    static public GameObject Spawn(int id, Vector3 position) {
+    static public GameObject Spawn(int id, Vector3 position, float speed) {
         if (_allyCardPrefab == null) {
             _allyCardPrefab = Resources.Load<GameObject>("Prefabs/Stage/AllyCard");
         }
@@ -41,7 +41,7 @@ public class AllyCard : Unit {
             position,
             Quaternion.identity
         );
-        go.GetComponent<AllyCard>().Initial(id);
+        go.GetComponent<AllyCard>().Initial(id, speed);
         return go;
     }
 

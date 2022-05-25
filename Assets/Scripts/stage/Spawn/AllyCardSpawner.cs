@@ -71,7 +71,7 @@ public class AllyCardSpawner : ISpawner {
         if (allyCardID == -1) {
             allyCardID = Types[UnityEngine.Random.Range(0, TypesTotal)];
         }
-        AllyCard.Spawn(allyCardID, SpawnPosition); // TODO: ally card and enemy should have a moving speed
+        AllyCard.Spawn(allyCardID, SpawnPosition, MovingSpeed);
     }
     #endregion
 }

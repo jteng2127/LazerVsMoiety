@@ -16,6 +16,9 @@ public class SignInSceneButton : MonoBehaviour {
     Sprite _signInSprite;
     Sprite _startSprite;
 
+    private InputField _studentIDInput;
+    private InputField _passwordInput;
+
     void Awake() {
         // Initial variables
         _signInWindow = GameObject.Find("SignInWindow");
@@ -27,20 +30,24 @@ public class SignInSceneButton : MonoBehaviour {
         _startSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
 
         // Initial state
-        _isSignedIn = false;
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
+        _isSignedIn = false;
         _image.sprite = _signInSprite;
+
+        // Initial input field
+        _studentIDInput = _signInWindow.transform.Find("StudentIDInput").GetComponent<InputField>();
+        _passwordInput = _signInWindow.transform.Find("PasswordInput").GetComponent<InputField>();
+
+        // Initial AuthStateChanged
+        AuthManager.UserStateChanged += OnUserStateChanged;
     }
 
     #region Click behavior
 
     void TriggerSignInWindow() {
         if (_isOpenSignInWindow == true) {
-            _isOpenSignInWindow = false;
-            _signInWindow.SetActive(false);
-            _rectTransform.anchoredPosition3D = _startPosition;
             SignIn();            
         }
         else {
@@ -50,13 +57,42 @@ public class SignInSceneButton : MonoBehaviour {
         }
     }
 
-    public void LoginSuccess() {
+    #endregion
+
+    #region SignMethods
+
+    public void SignInSuccess() {
         _isSignedIn = true;
         _image.sprite = _startSprite;
+        _isOpenSignInWindow = false;
+        _signInWindow.SetActive(false);
+        _rectTransform.anchoredPosition3D = _startPosition;
+        // FireStoreManager.Instance.GetUserData();
+        StartCoroutine(DelayToInvoke.DelayToInvokeDo(() =>{
+              FireStoreManager.Instance.GetUserData();
+              FireStoreManager.Instance.GetUserStagesData();
+            }, 0.1f));
     }
 
-    void SignIn() {
-        AuthManager.Instance.LoginButton();
+    public void SignInFail(string message) {
+        // TODO: Show error message
+        _isSignedIn = false;
+        _image.sprite = _signInSprite;
+    }
+
+    public void SignIn() {
+        string studentID = _studentIDInput.text + "@mail.ntou.edu.tw";
+        string password = _passwordInput.text;
+        AuthManager.Instance.SignInButton(studentID, password);
+    }
+
+    private void OnUserStateChanged(bool isSignedIn) {
+        if (isSignedIn) {
+            SignInSuccess();
+        }
+        else {
+            SignInFail("");
+        }
     }
 
     #endregion

@@ -5,11 +5,12 @@ public abstract class SpawnHandlerBase : StageStateReactBase {
     private static readonly int DefaultAllyCardSpawnNumberMax = 8; // TODO: move to somewhere else
 
     #region Data
-    protected int SpawnNumberTotal;
-    protected float SpawnInterval;
-    protected float SpawnIntervalDeviation;
-    protected int SpawnNumberCount;
-    protected float SpawnCountDown;
+    public int SpawnNumberTotal { get; protected set; }
+    public float SpawnInterval { get; protected set; }
+    public float SpawnIntervalDeviation { get; protected set; }
+    public int SpawnNumberCount { get; protected set; }
+    public float SpawnCountDown { get; protected set; }
+    public float MovingSpeedMultiplier { get; protected set; }
     protected ISpawner Spawner;
     #endregion
     
@@ -19,10 +20,5 @@ public abstract class SpawnHandlerBase : StageStateReactBase {
     protected float GenerateRandomDelay(float interval, float deviation) {
         return UnityEngine.Random.Range(interval - deviation, interval + deviation);
     }
-    #endregion
-
-    #region StageStateReactBase
-    public override void GameLose() {}
-    public override void GameWin() {}
     #endregion
 }

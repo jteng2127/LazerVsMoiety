@@ -8,10 +8,9 @@ using System.Reflection;
 // TODO: need big modify
 public class ScoreManager : MonoSingleton<ScoreManager> {
     #region Interface
-
-    static public void NewScore() {
+    static public void NewScore(EnemySpawnHandler enemySpawnHandler) {
         DestroyInstance();
-        Instance.Initial();
+        Instance.Initial(enemySpawnHandler);
     }
 
     public int TotalScore {
@@ -41,13 +40,11 @@ public class ScoreManager : MonoSingleton<ScoreManager> {
         _combo++;
     }
 
-    public void GameOver() {
+    public void GameWin() {
         int addScore = 0;
-        if (!StageManager.Instance.Data.IsLose) {
-            addScore = StageManager.Instance.Data.EnemySpawnNumberTotal * 300;
-            AddScoreByKey("GameOver", addScore);
-            AddScoreByKey("CannonLeft", 500 * StageManager.Instance.Data.CannonLeft);
-        }
+        addScore = EnemySpawnHandler.SpawnNumberTotal * 300;
+        AddScoreByKey("GameOver", addScore);
+        AddScoreByKey("CannonLeft", 500 * StageManager.Instance.CannonLeft);
     }
 
     public void ComboBreak() {
@@ -57,31 +54,28 @@ public class ScoreManager : MonoSingleton<ScoreManager> {
     public void AllClear() {
         Scores = new Dictionary<String, int>();
     }
-
     #endregion
-    #region Data
 
+    #region Data
     /// Score type
     public Dictionary<String, int> Scores { get; protected set; }
-
-    int _combo;
-
+    private int _combo;
+    private EnemySpawnHandler EnemySpawnHandler;
     #endregion
-    #region Method
 
-    void Initial() {
+    #region Method
+    private void Initial(EnemySpawnHandler enemySpawnHandler) {
         Scores = new Dictionary<string, int>();
         _combo = 0;
+        EnemySpawnHandler = enemySpawnHandler;
     }
-
-    void AddScoreByKey(String key, int addScore) {
-        if (StageManager.Instance.Data.GameState == 1) {
+    private void AddScoreByKey(String key, int addScore) {
+        if (StageManager.Instance.StageState.GetType() == typeof(StagePlayState)) {
             if (!Scores.ContainsKey(key)) Scores[key] = 0;
             Scores[key] += addScore;
             Log("add " + key + ": " + addScore);
         }
     }
-
     #endregion
 
     /* TODO: check up

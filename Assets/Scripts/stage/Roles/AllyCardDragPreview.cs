@@ -35,7 +35,8 @@ public class AllyCardDragPreview : MonoBehaviour {
 
         if (stageGridTile != null) {
             AllyCard allyCard = Origin.GetComponent<AllyCard>();
-            SpawnManager.DestroyUnit(allyCard.gameObject);
+            StageManager.Instance.TriggerUnitDestroyed(allyCard.gameObject);
+            Destroy(allyCard.gameObject);
             stageGridTile.SetAllyUnit(allyCard.Id);
         }
         else {

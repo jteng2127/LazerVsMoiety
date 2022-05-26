@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StageGrid : MonoBehaviour {
+    #region default data
+    public const int DefGridRowTotal = 5;
+    public const int DefGridColumnTotal = 9;
+    #endregion
+
     #region Data
 
     RectTransform _rectTransform;
@@ -41,7 +46,6 @@ public class StageGrid : MonoBehaviour {
                 dy
             ));
 
-            RowYList.Add(transform.position.y + dy);
             List<GameObject> gridRow = new List<GameObject>();
             for (var col = 0; col < _gridColumnTotal; col++) {
                 dx = TileWidth * (col - _gridColumnTotal / 2);
@@ -52,18 +56,25 @@ public class StageGrid : MonoBehaviour {
 
     }
 
+    void InitialRowYList() {
+        RowYList = new List<float>();
+        for (var row = 0; row < _gridRowTotal; row++) {
+            RowYList.Add(transform.position.y + TileHeight * (row - _gridRowTotal / 2));
+        }
+    }
+
     #endregion
     #region MonoBehavior
 
     void Awake() {
         _rectTransform = GetComponent<RectTransform>();
-        _gridRowTotal = StageManager.Instance.Data.GridRowTotal;
-        _gridColumnTotal = StageManager.Instance.Data.GridColumnTotal;
+        _gridRowTotal = DefGridRowTotal;
+        _gridColumnTotal = DefGridColumnTotal; 
         TileHeight = _rectTransform.sizeDelta.y / _gridRowTotal;
         TileWidth = _rectTransform.sizeDelta.x / _gridColumnTotal;
         _gridList = new List<List<GameObject>>();
-        RowYList = new List<float>();
         _stageGridTilePrefab = Resources.Load<GameObject>("Prefabs/Stage/StageGridTile");
+        InitialRowYList();
 
     }
 

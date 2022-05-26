@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class StageAdjust : MonoBehaviour {
     #region Data
-
     [SerializeField]
     private Transform _enemyTypeToggleList;
     [SerializeField]
@@ -24,27 +23,25 @@ public class StageAdjust : MonoBehaviour {
     [SerializeField]
     private Sprite _closeSprite;
 
-    Dictionary<string, Slider> _sliders;
-    Slider _enemySpawnNumberTotalSlider;
-    Slider _enemySpeedMultiplierSlider;
-    Slider _enemySpawnIntervalSlider;
+    private Dictionary<string, Slider> _sliders;
 
-    StageData _stageData;
-    List<int> _enemyType;
-
-
+    private StageSettingData StageSettingData;
+    private List<int> UnitType;
     #endregion
-    #region Interface
 
+    #region Method
     public void StartStage() {
-        Debug.Log("StartStage!!!");
-        _stageData = new StageData(
-            enemyType: _stageData.EnemyType,
+        UpdateUnitTypeToggle();
+        StageSettingData = new StageSettingData(
+            unitType: UnitType,
             enemySpawnNumberTotal: (int)_sliders["EnemySpawnNumberTotal"].value,
             enemySpeedMultiplier: _sliders["EnemySpeedMultiplier"].value * 0.1f,
             enemySpawnInterval: _sliders["EnemySpawnInterval"].value * 0.1f
         );
-        StageManager.StartNewStage(_stageData);
+
+        StageManager
+            .CreateNewStage(StageSettingData)
+            .TriggerReady();
     }
 
     public void ToggleInfoPanel() {
@@ -60,20 +57,16 @@ public class StageAdjust : MonoBehaviour {
         }
     }
 
-    #endregion
-    #region Method
-
-    void ToggleEnemyType(bool isSelect, int type) {
-        if (isSelect && !_stageData.EnemyType.Contains(type)) {
-            _stageData.EnemyType.Add(type);
+    private void ToggleEnemyType(bool isSelect, int type) {
+        if (isSelect && !UnitType.Contains(type)) {
+            UnitType.Add(type);
         }
-        if (!isSelect && _stageData.EnemyType.Contains(type)) {
-            _stageData.EnemyType.Remove(type);
+        if (!isSelect && UnitType.Contains(type)) {
+            UnitType.Remove(type);
         }
-        Debug.Log(String.Join(", ", _stageData.EnemyType.ToArray()));
     }
 
-    void ConnectSliderAndInput(Slider slider, InputField input, float mul = 1) {
+    private void ConnectSliderAndInput(Slider slider, InputField input, float mul = 1) {
         slider.onValueChanged.AddListener(
             value => {
                 if (float.TryParse(input.text, out float result)) {
@@ -99,18 +92,26 @@ public class StageAdjust : MonoBehaviour {
         );
         input.text = "" + (slider.value * mul);
     }
-
+    private void UpdateUnitTypeToggle() {
+        foreach (Transform child in _enemyTypeToggleList) {
+            Toggle toggle = child.GetComponent<Toggle>();
+            if (toggle.isOn) {
+                UnitType.Add(int.Parse(child.name));
+            }
+        }
+    }
     #endregion
-    #region MonoBahaviour
 
+    #region MonoBahaviour
     void Start() {
-        _stageData = new StageData();
+        UnitType = new List<int>();
+        UpdateUnitTypeToggle();
 
         foreach (Transform child in _enemyTypeToggleList) {
             Toggle toggle = child.GetComponent<Toggle>();
             toggle.onValueChanged.AddListener(
                 isSelect => {
-                    if (!isSelect && _stageData.EnemyType.Count <= 1) toggle.isOn = true;
+                    if (!isSelect && UnitType.Count <= 1) toggle.isOn = true;
                     else ToggleEnemyType(isSelect, Int32.Parse(child.name));
                 }
             );
@@ -135,6 +136,5 @@ public class StageAdjust : MonoBehaviour {
             0.1f
         );
     }
-
     #endregion
 }

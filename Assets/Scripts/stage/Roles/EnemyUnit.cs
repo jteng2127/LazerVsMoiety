@@ -56,7 +56,10 @@ public class EnemyUnit : Unit {
     void Update() {
         Vector3 viewPortPoint = Camera.main.WorldToViewportPoint(transform.position);
 
-        if (viewPortPoint.x < 0.0) StageManager.CheckGameOver(isLose: true);
+        if (viewPortPoint.x < 0.0) {
+            StageManager.Instance.TriggerGameLose();
+            Debug.Log("Game Lose by Enemy");
+        }
     }
 
     #endregion

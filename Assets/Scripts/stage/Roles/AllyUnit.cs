@@ -30,7 +30,6 @@ public class AllyUnit : Unit {
 
         /// set PixelPerUnit by Screen height and camera size (half screen height of units, default is 5)
         Texture2D texture = Resources.Load<Texture2D>(_pictureSrc);
-        Debug.Log("Spawn Unit: " + Screen.height + " " + texture.height);
         Sprite sprite = Sprite.Create(
             texture,
             new Rect(0, 0, texture.width, texture.height),
@@ -45,13 +44,14 @@ public class AllyUnit : Unit {
             ScoreManager.Instance.ComboBreak();
             ScoreManager.Instance.DefeatEnemy();
             ScoreManager.Instance.ComboBreak();
-            SpawnManager.DestroyUnit(enemyUnit);
+            StageManager.Instance.TriggerUnitDestroyed(enemyUnit);
+            Destroy(enemyUnit);
         }
         else if (_isActivate) {
             _isActivate = false;
             if (Id == 0) {
                 Debug.Log("Cannon!!");
-                StageManager.Instance.Data.CannonLeft--;
+                StageManager.Instance.CannonLeft--;
                 _boxCollider2D.size = new Vector2(100.0f, _boxCollider2D.size.y);
                 Destroy(Spawn(11, transform.position), 3.0f);
                 _spriteRenderer.color = new Color(
@@ -63,7 +63,8 @@ public class AllyUnit : Unit {
             }
             else if (Id == enemyUnit.GetComponent<EnemyUnit>().Id) {
                 ScoreManager.Instance.DefeatEnemy();
-                SpawnManager.DestroyUnit(enemyUnit);
+                StageManager.Instance.TriggerUnitDestroyed(enemyUnit);
+                Destroy(enemyUnit);
                 if (Tile != null) Tile.GetComponent<StageGridTile>().Clear();
             }
             else {

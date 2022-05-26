@@ -5,5 +5,6 @@ using UnityEngine;
 public class SignOutSceneButton : MonoBehaviour {
     public void Click() {
         AuthManager.Instance.SignOut();
+        transform.gameObject.SetActive(false);
     }
 }

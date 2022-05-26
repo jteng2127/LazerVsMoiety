@@ -1,3 +1,3 @@
 public interface ISpawner{
-    void Spawn();
+    int Spawn();
 }

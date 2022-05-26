@@ -11,113 +11,11 @@ using System.Linq;
 // TODO: rearrange StageManager.cs
 public class StageManager : MonoSingleton<StageManager> {
 
-    #region data
-
-    public StageData Data { get; set; }
-
-    private Transform _gameOverScreen;
-    private Text _gameOverText;
-    private Text _stageDataText;
-    private Button _restartButton;
-
-    private Dictionary<int, string> _enemyIdToName;
-
-    #endregion
-    
-    #region private method
-
-    private void InitialStage(StageData data) {
-        GameManager.Instance.LoadScene(SceneType.Stage);
-        Data = data;
-        Data.GameState = 0;
-        SpawnManager.CreateNewSpawner();
-        ScoreManager.NewScore();
-
-        _enemyIdToName = new Dictionary<int, string>{
-            {1, "C-O"},
-            {2, "C-N"},
-            {3, "O=O"},
-            {4, "C=C"},
-            {5, "C=O"},
-            {6, "C≡C"},
-            {7, "C≡N"},
-            {8, "C-H"},
-            {9, "N-H"},
-            {10, "O-H"}
-        };
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        SpawnManager.StartSpawn();
-        Transform gameOverCanvas = GameObject.Find("GameOverCanvas").transform;
-        _gameOverScreen = gameOverCanvas.Find("GameOverScreen");
-        _gameOverText = _gameOverScreen.Find("GameOverText").GetComponent<Text>();
-        _stageDataText = _gameOverText.transform.Find("StageDataText").GetComponent<Text>();
-        _restartButton = _gameOverScreen.Find("RestartButton").GetComponent<Button>();
-        Debug.Log("game over screen: " + _gameOverScreen);
-        Debug.Log("game over text: " + _gameOverText);
-    }
-
-    private void StageStart() {
-        Debug.Log("StageStart");
-        Instance.Data.GameState = 1;
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void GameOver() {
-        if (Data.IsLose){
-            Debug.Log("You Lose");
-            AudioManager.Instance.Play("defeat", 0.6f, true, true);
-        }
-        else {
-            Debug.Log("You Win!!!");
-            ScoreManager.Instance.GameOver();
-            AudioManager.Instance.Play("victory", 0.6f, true, true);
-        }
-        Debug.Log("You're Score: " + ScoreManager.Instance.TotalScore);
-
-        String gameOverMessage = "";
-        if (Data.IsLose) gameOverMessage = "You Lose...\n";
-        else gameOverMessage = "You Win!!!\n";
-        gameOverMessage += "Score: " + ScoreManager.Instance.TotalScore;
-
-        String stageDataMessage = "";
-        stageDataMessage += "敵人種類： ";
-        int count = 0;
-        bool firstItem = true;
-        foreach (int id in Data.EnemyType) {
-            if(!firstItem) stageDataMessage += ", ";
-            count++;
-            if(count == 6){
-                stageDataMessage += "\n　　　　　 ";
-            }
-            firstItem = false;
-            stageDataMessage += _enemyIdToName[id];
-        }
-        stageDataMessage += "\n敵人量： " + Data.EnemySpawnNumberTotal;
-        stageDataMessage += "\n敵人移動速度： " + (Data.EnemySpeed / StageData.DefaultEnemySpeed);
-        stageDataMessage += "\n敵人出現間隔： " + (Data.EnemySpawnInterval);
-
-        _gameOverScreen.gameObject.SetActive(true);
-        _gameOverText.text = gameOverMessage;
-        _stageDataText.text = stageDataMessage;
-        _restartButton.onClick.AddListener(RestartGame);
-
-        Data.GameState = 2;
-    }
-
-    private void RestartGame() {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        GameManager.Instance.LoadScene(SceneType.StageAdjust);
-    }
-
-    #endregion
-
     #region MonoBehaviour
 
     void Update() {
         /// Get touch input
-        if (Data.GameState == 1 && Input.touchCount > 0) {
+        if (StageState.GetType() == typeof(StagePlayState) && Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
 
@@ -140,9 +38,8 @@ public class StageManager : MonoSingleton<StageManager> {
                 }
             }
         }
-
         /// Get mouse input
-        if (Input.GetMouseButton(0)) {
+        else if (StageState.GetType() == typeof(StagePlayState) && Input.GetMouseButton(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             /// show Debug
@@ -167,43 +64,105 @@ public class StageManager : MonoSingleton<StageManager> {
 
     #endregion
 
-    #region public method
+    #region data
+    public int CannonLeft; // TODO: bad code, should move Cannon Left to some where else
+    public StageState StageState { get; private set; }
+    private StageSettingData StageSettingData;
+    public List<StageStateReactBase> ReactList = new List<StageStateReactBase>();
+    private EnemySpawnHandler EnemySpawnHandler;
+    private AllyCardSpawnHandler AllyCardSpawnHandler;
+    public EntityEventHandler EntityEventHandler;
+    private GameOverEventHandler GameOverEventHandler;
+    #endregion
 
-    static public void StartNewStage(StageData data) {
+    #region methods
+    static public StageManager CreateNewStage(StageSettingData stageSettingData) {
         DestroyInstance();
-        Instance.InitialStage(data);
-        Instance.StageStart();
+        Instance.Initial(stageSettingData);
+        return Instance;
     }
 
-    static public void TriggerPause() {
-
+    // main stage initial method
+    private void Initial(StageSettingData stageSettingData) {
+        StageState = new StageInitialState(this);
+        StageSettingData = stageSettingData;
     }
 
-    static public void TriggerContinue() {
+    public void OnStageSceneLoaded(Scene scene, LoadSceneMode mode) {
+        Log("OnStageSceneLoaded");
+        StageGrid stageGrid = GameObject.Find("StageGrid").GetComponent<StageGrid>();
+        AllyCardSpawnHandler = AllyCardSpawnHandler
+            .Create(allyCardTypes: StageSettingData.UnitType)
+            .SetSpawnInterval(StageSettingData.AllyCardSpawnInterval)
+            .SetSpawnIntervalDeviation(StageSettingData.AllyCardSpawnIntervalDeviation);
+        EnemySpawnHandler = EnemySpawnHandler
+            .Create(
+                AllyCardSpawnHandler,
+                stageGrid.RowYList,
+                enemyTypes: StageSettingData.UnitType,
+                movingSpeedMultiplier: StageSettingData.EnemySpeedMultiplier)
+            .SetSpawnNumberTotal(StageSettingData.EnemySpawnNumberTotal)
+            .SetSpawnInterval(StageSettingData.EnemySpawnInterval)
+            .SetSpawnIntervalDeviation(StageSettingData.EnemySpawnIntervalDeviation);
+        EntityEventHandler = EntityEventHandler
+            .Create(EnemySpawnHandler, AllyCardSpawnHandler);
+        GameOverEventHandler = GameOverEventHandler
+            .Create(EnemySpawnHandler);
+        ScoreManager.NewScore(EnemySpawnHandler);
 
+        RegisterStageStateReact(AllyCardSpawnHandler);
+        RegisterStageStateReact(EnemySpawnHandler);
+        RegisterStageStateReact(EntityEventHandler);
+        RegisterStageStateReact(GameOverEventHandler);
+
+        CannonLeft = StageGrid.DefGridRowTotal; 
+
+        TriggerStart();
     }
 
-    static public void TriggerGameOver() {
-
+    public void changeState(StageState state) {
+        StageState = state;
+    }
+    public void RegisterStageStateReact(StageStateReactBase react) {
+        ReactList.Add(react);
+    }
+    public void UnregisterStageStateReact(StageStateReactBase react) {
+        ReactList.Remove(react);
     }
 
-    static public void TriggerGameWin() {
-
+    public void TriggerReady() {
+        Log("TriggerReady");
+        StageState.GameReady();
     }
 
-    static public void CheckGameOver(bool isLose = false) {
-        if (Instance.Data.GameState == 1) {
-            if (Instance.Data.EnemyCount <= 0 &&
-                Instance.Data.EnemySpawnNumberLeft <= 0) {
-                Instance.GameOver();
-            }
-            if (isLose) {
-                Instance.Data.IsLose = true;
-                Instance.GameOver();
-            }
-        }
+    public void TriggerStart() {
+        Log("TriggerStart");
+        StageState.GameStart();
     }
 
+    public void TriggerPause() {
+        StageState.Pause();
+    }
+
+    public void TriggerContinue() {
+        StageState.Continue();
+    }
+
+    public void TriggerGameLose() {
+        StageState.GameLose();
+    }
+
+    public void TriggerGameWin() {
+        StageState.GameWin();
+    }
+
+    public void TriggerRestart() {
+        StageState.Restart();
+    }
+
+    public void TriggerUnitDestroyed(GameObject go) {
+        StageState.UnitDestroyed(go);
+    }
     #endregion
 
     // static public string SerializeObject(StageData toSerialize)

@@ -18,6 +18,7 @@ public class SignInSceneButton : MonoBehaviour {
 
     private InputField _studentIDInput;
     private InputField _passwordInput;
+    private Button SignOutButton;
 
     void Awake() {
         // Initial variables
@@ -28,6 +29,7 @@ public class SignInSceneButton : MonoBehaviour {
         _signInWindowPosition = new Vector3(0.0f, -335.5f, 0.0f);
         _signInSprite = Resources.Load<Sprite>("Images/SignIn/1x/sign_in_button");
         _startSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
+        SignOutButton = transform.parent.Find("SignOutButton").GetComponent<Button>();
 
         // Initial state
         _isOpenSignInWindow = false;
@@ -67,6 +69,7 @@ public class SignInSceneButton : MonoBehaviour {
         _isOpenSignInWindow = false;
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
+        SignOutButton.gameObject.SetActive(true);
         // FireStoreManager.Instance.GetUserData();
         StartCoroutine(DelayToInvoke.DelayToInvokeDo(() =>{
               FireStoreManager.Instance.GetUserData();

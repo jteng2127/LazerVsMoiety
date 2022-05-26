@@ -18,7 +18,7 @@ public class GameManager : MonoSingleton<GameManager> {
     #region public method
 
     public void LoadScene(SceneType scene, bool isAsync = false, bool showLoading = true) {
-        Debug.Log("LoadScene: " + _sceneTypeToString[scene]);
+        Log("LoadScene: " + _sceneTypeToString[scene]);
 
         if (isAsync) StartCoroutine(LoadingSceneAsync(scene));
         else SceneManager.LoadScene(_sceneTypeToString[scene]);

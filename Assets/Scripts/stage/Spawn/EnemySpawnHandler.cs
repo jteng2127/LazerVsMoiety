@@ -3,15 +3,18 @@ using UnityEngine;
 
 public class EnemySpawnHandler : SpawnHandlerBase {
     #region data
-    AllyCardSpawnHandler AllyCardSpawnHandler;
+    public List<int> EnemyTypes { get; protected set; }
+    private AllyCardSpawnHandler AllyCardSpawnHandler;
+    private int EnemyDeadCount;
     #endregion
 
     #region creator
     public static EnemySpawnHandler Create(
-            List<int> enemyTypes,
-            List<float> spawnPositionsY,
             AllyCardSpawnHandler allyCardSpawnHandler,
+            List<float> spawnPositionsY,
+            List<int> enemyTypes = null,
             float movingSpeedMultiplier = 1.0f) {
+        if (enemyTypes == null) enemyTypes = new List<int>() {1, 2, 3};
         // create new GameObject to hold the EnemySpawnHandler
         GameObject go = new GameObject("EnemySpawnHandler");
         EnemySpawnHandler enemySpawnHandler = go.AddComponent<EnemySpawnHandler>();
@@ -24,17 +27,43 @@ public class EnemySpawnHandler : SpawnHandlerBase {
             AllyCardSpawnHandler allyCardSpawnHandler,
             float movingSpeedMultiplier = 1.0f) {
         Spawner = new EnemySpawner(enemyTypes, spawnPositionsY, movingSpeedMultiplier);
+        EnemyTypes = enemyTypes;
+        AllyCardSpawnHandler = allyCardSpawnHandler;
+
         SpawnNumberTotal = 10;
         SpawnInterval = 7.0f;
         SpawnIntervalDeviation = 0.3f;
         SpawnNumberCount = 0;
         SpawnCountDown = 0.0f;
+        EnemyDeadCount = 0;
+    }
+    #endregion
+
+    #region setter
+    public EnemySpawnHandler SetSpawnNumberTotal(int spawnNumberTotal) {
+        SpawnNumberTotal = spawnNumberTotal;
+        return this;
+    }
+    public EnemySpawnHandler SetSpawnInterval(float spawnInterval) {
+        SpawnInterval = spawnInterval;
+        return this;
+    }
+    public EnemySpawnHandler SetSpawnIntervalDeviation(float spawnIntervalDeviation) {
+        SpawnIntervalDeviation = spawnIntervalDeviation;
+        return this;
     }
     #endregion
 
     #region method
-    public bool IsEnemyAllSpawned() {
-        return SpawnNumberCount >= SpawnNumberTotal;
+    public bool IsEnemyAllDead() {
+        bool isAllDead = EnemyDeadCount >= SpawnNumberTotal;
+        return isAllDead;
+    }
+    #endregion
+
+    #region StageStateReactBase
+    public override void EnemyDestroyed() {
+        EnemyDeadCount++;
     }
     #endregion
 
@@ -45,7 +74,8 @@ public class EnemySpawnHandler : SpawnHandlerBase {
                 if (SpawnNumberCount < SpawnNumberTotal) {
                     SpawnCountDown = GenerateRandomDelay(SpawnInterval, SpawnIntervalDeviation);
                     SpawnNumberCount++;
-                    Spawner.Spawn();
+                    int spawnID = Spawner.Spawn();
+                    AllyCardSpawnHandler.SetPrioritySpawn(spawnID);
                 }
             }
             SpawnCountDown -= Time.deltaTime;

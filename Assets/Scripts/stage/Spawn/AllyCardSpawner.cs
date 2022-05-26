@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -32,9 +33,12 @@ public class AllyCardSpawner : ISpawner {
     #endregion
 
     #region public method
-    public void SetPrioritySpawn(int id, int withinSpawningRound = 3) {
+    public void SetPrioritySpawn(int id, int withinSpawningRound = 5) {
         // make sure the specified ally card will spawn in given round
         // but if the queue is full, it will be inserted to the end of the queue
+        while (SpawnIDQueue.Count < withinSpawningRound) {
+            SpawnIDQueue.AddLast(-1);
+        }
         LinkedListNode<int> node = SpawnIDQueue.First;
         int count = 0;
         for (int i = 0; i < withinSpawningRound && node != null; i++) {
@@ -46,22 +50,25 @@ public class AllyCardSpawner : ISpawner {
 
         if (count == 0) {
             SpawnIDQueue.AddLast(id);
-            return;
+        } else {
+            int spaceNumber = UnityEngine.Random.Range(0, count);
+            node = SpawnIDQueue.First;
+            while (node.Value != -1) {
+                node = node.Next;
+            }
+            for (int i = 0; i < spaceNumber; i++) {
+                node = node.Next;
+                while (node.Value != -1) {
+                    node = node.Next;
+                }
+            }
+            node.Value = id;
         }
-
-        int index = UnityEngine.Random.Range(0, count);
-        if (SpawnIDQueue.First == null) {
-            SpawnIDQueue.AddFirst(-1);
-        }
-        node = SpawnIDQueue.First;
-        for (int i = 0; i < index; i++) {
-            if (node.Next == null) SpawnIDQueue.AddLast(-1);
-            node = node.Next;
-        }
-        node.Value = id;
+        Debug.Log("[AllyCardSpawner] SetPrioritySpawn: " + id + " within " + withinSpawningRound + " round(s)");
+        Debug.Log("[AllyCardSpawner] SpawnIDQueue: " + String.Join(", ", SpawnIDQueue.Select(x => x.ToString()).ToArray()));
     }
 
-    public void Spawn() {
+    public int Spawn() {
         if (SpawnIDQueue.Count == 0) {
             SpawnIDQueue.AddFirst(-1);
         }
@@ -72,6 +79,7 @@ public class AllyCardSpawner : ISpawner {
             allyCardID = Types[UnityEngine.Random.Range(0, TypesTotal)];
         }
         AllyCard.Spawn(allyCardID, SpawnPosition, MovingSpeed);
+        return allyCardID;
     }
     #endregion
 }

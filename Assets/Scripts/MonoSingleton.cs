@@ -34,7 +34,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour {
     }
 
     protected static void Log(string s) {
-        Debug.Log("[" + MethodBase.GetCurrentMethod().DeclaringType + "] " + s);
+        Debug.Log("[" + typeof(T) + "] " + s);
     }
 
 }

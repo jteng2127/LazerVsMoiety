@@ -19,18 +19,3 @@ You can drag lazer into cells, when a moiety step on cell which has lazer on it,
 Your goal is to defend your home from moieties.
 
 ## TODO
-
-stage:
-StageManager
-StagePause (board cast)
-
-Spawner
-EnemySpawner
-AllyCardSpawner
-CanonSpawner
-SpawnTimer
-EnemySpawnTimer
-AllyCardSpawnTimer
-
-StageScore
-GameoverHandler

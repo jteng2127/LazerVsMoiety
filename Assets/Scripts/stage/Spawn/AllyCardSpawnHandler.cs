@@ -7,8 +7,8 @@ public class AllyCardSpawnHandler : SpawnHandlerBase {
     #endregion
 
     #region creator
-    public static AllyCardSpawnHandler Create(
-            List<int> allyCardTypes) {
+    public static AllyCardSpawnHandler Create(List<int> allyCardTypes = null) {
+        if (allyCardTypes == null) allyCardTypes = new List<int>() {1, 2, 3};
         // create new GameObject to hold the AllyCardSpawnHandler
         GameObject go = new GameObject("AllyCardSpawnHandler");
         AllyCardSpawnHandler allyCardSpawnHandler = go.AddComponent<AllyCardSpawnHandler>();
@@ -26,9 +26,23 @@ public class AllyCardSpawnHandler : SpawnHandlerBase {
     }
     #endregion
 
+    #region setter
+    public AllyCardSpawnHandler SetSpawnInterval(float spawnInterval) {
+        SpawnInterval = spawnInterval;
+        return this;
+    }
+    public AllyCardSpawnHandler SetSpawnIntervalDeviation(float spawnIntervalDeviation) {
+        SpawnIntervalDeviation = spawnIntervalDeviation;
+        return this;
+    }
+    #endregion
+
     #region method
     public void FreeSpawnSpace(int space = 1) {
         SpawnSpaceLeft += space;
+    }
+    public void SetPrioritySpawn(int id, int withinSpawningRound = 5) {
+        ((AllyCardSpawner)Spawner).SetPrioritySpawn(id, withinSpawningRound);
     }
     #endregion
 

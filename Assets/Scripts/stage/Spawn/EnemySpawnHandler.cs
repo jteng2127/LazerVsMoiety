@@ -33,6 +33,7 @@ public class EnemySpawnHandler : SpawnHandlerBase {
         SpawnNumberTotal = 10;
         SpawnInterval = 7.0f;
         SpawnIntervalDeviation = 0.3f;
+        MovingSpeedMultiplier = movingSpeedMultiplier;
         SpawnNumberCount = 0;
         SpawnCountDown = 0.0f;
         EnemyDeadCount = 0;

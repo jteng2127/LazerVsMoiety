@@ -14,14 +14,6 @@ public class StageAdjust : MonoBehaviour {
     private Transform _enemySpeedMultiplier;
     [SerializeField]
     private Transform _enemySpawnInterval;
-    [SerializeField]
-    private GameObject _infoPanel;
-    [SerializeField]
-    private Image _infoButtonImage;
-    [SerializeField]
-    private Sprite _infoSprite;
-    [SerializeField]
-    private Sprite _closeSprite;
 
     private Dictionary<string, Slider> _sliders;
 
@@ -42,19 +34,6 @@ public class StageAdjust : MonoBehaviour {
         StageManager
             .CreateNewStage(StageSettingData)
             .TriggerReady();
-    }
-
-    public void ToggleInfoPanel() {
-        if(_infoSprite == null) _infoSprite = Resources.Load<Sprite>("Images/SignIn/1x/sign_in_button");
-        if(_closeSprite == null) _closeSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
-        if(_infoPanel.activeSelf) {
-            _infoPanel.SetActive(false);
-            _infoButtonImage.sprite = _infoSprite;
-        }
-        else {
-            _infoPanel.SetActive(true);
-            _infoButtonImage.sprite = _closeSprite;
-        }
     }
 
     private void ToggleEnemyType(bool isSelect, int type) {

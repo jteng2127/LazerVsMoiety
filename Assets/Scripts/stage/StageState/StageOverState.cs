@@ -10,6 +10,6 @@ public class StageOverState : StageState {
             react.Restart();
         }
         SceneManager.sceneLoaded -= StageManager.Instance.OnStageSceneLoaded;
-        GameManager.Instance.LoadScene(SceneType.StageAdjust);
+        GameManager.Instance.LoadScene(SceneType.StageSelector);
     }
 }

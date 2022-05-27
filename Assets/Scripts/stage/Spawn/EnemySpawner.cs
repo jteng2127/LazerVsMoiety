@@ -49,7 +49,8 @@ public class EnemySpawner : ISpawner {
     public int Spawn() {
         int enemyID = EnemyTypes[UnityEngine.Random.Range(0, EnemyTypesTotal)];
         Vector3 spawnPosition = SpawnPositions[UnityEngine.Random.Range(0, SpawnPositionsTotal)];
-        EnemyUnit.Spawn(enemyID, spawnPosition, MovingSpeed);
+        GameObject enemy = EnemyUnit.Spawn(enemyID, spawnPosition, MovingSpeed);
+        StageManager.Instance.RegisterStageStateReact(enemy.GetComponent<EnemyUnit>());
         return enemyID;
     }
     #endregion

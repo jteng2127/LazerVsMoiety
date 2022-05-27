@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 
-public class Unit : MonoBehaviour {
+public abstract class Unit : StageStateReactBase {
     #region Debug
 
     protected static void Log(string s) {

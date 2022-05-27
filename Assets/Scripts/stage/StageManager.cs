@@ -131,16 +131,15 @@ public class StageManager : MonoSingleton<StageManager> {
     }
 
     public void TriggerReady() {
-        Log("TriggerReady");
         StageState.GameReady();
     }
 
     public void TriggerStart() {
-        Log("TriggerStart");
         StageState.GameStart();
     }
 
     public void TriggerPause() {
+        Log("TriggerPause");
         StageState.Pause();
     }
 

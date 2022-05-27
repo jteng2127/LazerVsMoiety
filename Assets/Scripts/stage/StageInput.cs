@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// TODO: StageInput not complete, current using old version (in StageManager.cs)
 public class StageInput : StageStateReactBase {
     #region Creator
     public static StageInput Create() {

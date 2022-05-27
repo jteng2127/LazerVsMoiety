@@ -78,7 +78,8 @@ public class AllyCardSpawner : ISpawner {
         if (allyCardID == -1) {
             allyCardID = Types[UnityEngine.Random.Range(0, TypesTotal)];
         }
-        AllyCard.Spawn(allyCardID, SpawnPosition, MovingSpeed);
+        GameObject allyCard = AllyCard.Spawn(allyCardID, SpawnPosition, MovingSpeed);
+        StageManager.Instance.RegisterStageStateReact(allyCard.GetComponent<AllyCard>());
         return allyCardID;
     }
     #endregion

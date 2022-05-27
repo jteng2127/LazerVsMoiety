@@ -74,7 +74,12 @@ public class AllyCard : Unit {
     #region MonoBehaviour
 
     void FixedUpdate() {
-        _rigidbody2D.velocity = new Vector2(-_speed, 0.0f);
+        Debug.Log("[AllyCard] IsPaused: " + IsPaused);
+        if (IsPaused) {
+            _rigidbody2D.velocity = new Vector2(0.0f, 0.0f);
+        } else {
+            _rigidbody2D.velocity = new Vector2(-_speed, 0.0f);
+        }
     }
 
     #endregion

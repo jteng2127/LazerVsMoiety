@@ -45,13 +45,13 @@ public class SignInSceneButton : MonoBehaviour {
         _passwordInput = _signInWindow.transform.Find("PasswordInput").GetComponent<InputField>();
 
         // Initial AuthStateChanged
-        AuthManager.UserStateChanged += OnUserStateChanged;
+        // AuthManager.UserStateChanged += OnUserStateChanged;
 
-        if(AuthManager.Instance.IsSignedIn()) {
-            SignInSuccess();
-        } else {
-            SignInFail("");
-        }
+        // if(AuthManager.Instance.IsSignedIn()) {
+        //     SignInSuccess();
+        // } else {
+        //     SignInFail("");
+        // }
     }
 
     #region Click behavior
@@ -80,10 +80,10 @@ public class SignInSceneButton : MonoBehaviour {
         SignOutButton.gameObject.SetActive(true);
         ViewScoreButton.gameObject.SetActive(true);
         // FireStoreManager.Instance.GetUserData();
-        StartCoroutine(DelayToInvoke.DelayToInvokeDo(() =>{
-              FireStoreManager.Instance.GetUserData();
-              FireStoreManager.Instance.GetUserStagesData();
-            }, 0.1f));
+        // StartCoroutine(DelayToInvoke.DelayToInvokeDo(() =>{
+        //       FireStoreManager.Instance.GetUserData();
+        //       FireStoreManager.Instance.GetUserStagesData();
+        //     }, 0.1f));
     }
 
     public void SignInFail(string message) {

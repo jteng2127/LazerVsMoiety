@@ -55,6 +55,12 @@ public class GameOverEventHandler : StageStateReactBase {
         AudioManager.Instance.Play("victory", 0.6f, true, true);
         ShowGameOverScreen("You Win!!!", ScoreManager.Instance.TotalScore);
         if(StageID.HasValue) {
+            if(DataManager.instance.userStagesData.ContainStageData(StageID.Value)) {
+                DataManager.instance.userStagesData.UpdateStageData(StageID.Value, ScoreManager.Instance.TotalScore, 0);
+            } else {
+                DataManager.instance.userStagesData.AddStageData(StageID.Value, ScoreManager.Instance.TotalScore, 0);
+            }
+            FireStoreManager.Instance.UpdateUserStagesData();
             PlayerPrefs.SetInt("Stage" + StageID + " Best Score", ScoreManager.Instance.TotalScore);
         }
         RestartButton.onClick.AddListener(StageManager.Instance.TriggerRestart);
@@ -64,6 +70,12 @@ public class GameOverEventHandler : StageStateReactBase {
         AudioManager.Instance.Play("defeat", 0.6f, true, true);
         ShowGameOverScreen("You Lose...", ScoreManager.Instance.TotalScore);
         if(StageID.HasValue) {
+            if(DataManager.instance.userStagesData.ContainStageData(StageID.Value)) {
+                DataManager.instance.userStagesData.UpdateStageData(StageID.Value, ScoreManager.Instance.TotalScore, 0);
+            } else {
+                DataManager.instance.userStagesData.AddStageData(StageID.Value, ScoreManager.Instance.TotalScore, 0);
+            }
+            FireStoreManager.Instance.UpdateUserStagesData();
             PlayerPrefs.SetInt("Stage" + StageID + " Best Score", ScoreManager.Instance.TotalScore);
         }
         RestartButton.onClick.AddListener(StageManager.Instance.TriggerRestart);

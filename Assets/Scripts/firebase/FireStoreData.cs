@@ -20,21 +20,48 @@ namespace FireStoreData {
     [FirestoreData]
     public class UserStagesData {
         [FirestoreProperty]
-        public List<Dictionary<string, object>> stagesData { get; set; }
+        public List<Dictionary<string, int>> stagesData { get; set; }
 
         public void AddStageData (int stage, int score, int time) {
-            Dictionary<string, object> stageData = new Dictionary<string, object>();
+            Dictionary<string, int> stageData = new Dictionary<string, int>();
             stageData.Add("stage", stage);
             stageData.Add("score", score);
             stageData.Add("time", time);
             stagesData.Add(stageData);
         }
 
-        public void UpdataStageData (int index, int stage, int score, int time) {
-            Dictionary<string, object> stageData = stagesData[index];
-            stageData["stage"] = stage;
-            stageData["score"] = score;
-            stageData["time"] = time;
+        public void UpdateStageData (int stage, int score, int time) {
+            for (int i = 0; i < stagesData.Count; i++) {
+                if (stagesData[i]["stage"].ToString() == stage.ToString()) {
+                    if(stagesData[i]["score"] < score) stagesData[i]["score"] = score;
+                    if(stagesData[i]["time"] > time) stagesData[i]["time"] = time;
+                }
+            }
+        }
+
+        public bool ContainStageData (int stage) {
+            foreach (Dictionary<string, int> stageData in stagesData) {
+                if (stageData["stage"].ToString() == stage.ToString()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public int GetStageDataScore (int stage) {
+            if (stagesData.Count == 0) {
+                return -1;
+            }
+            foreach (Dictionary<string, int> stageData in stagesData) {
+                if (stageData["stage"].ToString() == stage.ToString()) {
+                    return (int)stageData["score"];
+                }
+            }
+            return -1;
+        }
+
+        public bool hasData() {
+            return stagesData.Count != 0;
         }
     }
 }

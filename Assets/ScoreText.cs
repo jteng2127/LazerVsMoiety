@@ -6,10 +6,27 @@ using UnityEngine.UI;
 public class ScoreText : MonoBehaviour {
     public int StageID = -1;
 
+    private int score;
+
     void Start() {
         // from GameOverEventHandler
-        int score = PlayerPrefs.GetInt("Stage" + StageID + " Best Score", -1);
+        if(DataManager.instance.userStagesData.ContainStageData(StageID)) {
+            score = DataManager.instance.userStagesData.GetStageDataScore(StageID);
+        } else {
+            score = PlayerPrefs.GetInt("Stage" + StageID + " Best Score", -1);
+        }
         if(score != -1) transform.GetComponent<Text>().text = " " + score;
+        else transform.GetComponent<Text>().text = " 未通過";
+        DataManager.UserStagesDataChanged += OnUserStagesDataChanged;
+    }
+
+    void OnUserStagesDataChanged(FireStoreData.UserStagesData data) {
+        int new_score = DataManager.instance.userStagesData.GetStageDataScore(StageID);
+        if(new_score != -1 && score < new_score) {
+            score = new_score;
+            PlayerPrefs.SetInt("Stage" + StageID + " Best Score", score);
+            transform.GetComponent<Text>().text = " " + score;
+        }
         else transform.GetComponent<Text>().text = " 未通過";
     }
 

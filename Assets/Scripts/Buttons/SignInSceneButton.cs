@@ -58,7 +58,7 @@ public class SignInSceneButton : MonoBehaviour {
 
     void TriggerSignInWindow() {
         if (_isOpenSignInWindow == true) {
-            SignIn();            
+            SignIn();
         }
         else {
             _isOpenSignInWindow = true;
@@ -95,7 +95,9 @@ public class SignInSceneButton : MonoBehaviour {
     public void SignIn() {
         string studentID = _studentIDInput.text + "@mail.ntou.edu.tw";
         string password = _passwordInput.text;
-        AuthManager.Instance.SignInButton(studentID, password);
+        // TODO: fix firebase problem
+        // AuthManager.Instance.SignInButton(studentID, password);
+        SignInSuccess();
     }
 
     private void OnUserStateChanged(bool isSignedIn) {

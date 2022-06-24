@@ -11,6 +11,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
         }
 
         if (stageID >= 1 && stageID <= 10){
+            Log("Selected stage " + stageID);
             StageManager
                 .CreateNewStage(StageSettingData[stageID])
                 .TriggerReady();

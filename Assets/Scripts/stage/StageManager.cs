@@ -84,6 +84,7 @@ public class StageManager : MonoSingleton<StageManager> {
 
     // main stage initial method
     private void Initial(StageSettingData stageSettingData) {
+        Log("StageManager.Initial()");
         StageState = new StageInitialState(this);
         StageSettingData = stageSettingData;
     }
@@ -121,6 +122,7 @@ public class StageManager : MonoSingleton<StageManager> {
 
     public void changeState(StageState state) {
         StageState = state;
+        LogStageState();
     }
     public void RegisterStageStateReact(StageStateReactBase react) {
         ReactList.Add(react);
@@ -135,6 +137,18 @@ public class StageManager : MonoSingleton<StageManager> {
     }
     public void UnregisterStageStateReact(StageStateReactBase react) {
         ReactList.Remove(react);
+    }
+
+    public void LogStageState() {
+        try {
+            Log("Current Stage State: " + StageState.GetType().Name);
+        }
+        catch(Exception e) {
+            Log("LogStageState Error: " + e.Message);
+            if(StageState == null) {
+                Log("StageState is null");
+            }
+        }
     }
 
     public void TriggerReady() {

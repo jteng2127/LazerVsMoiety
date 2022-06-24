@@ -1,8 +1,8 @@
 {
   "project_info": {
     "project_number": "377792998877",
+    "firebase_url": "https://lazervsmoiety-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "lazervsmoiety",
-    "firebase_url": "https://lazervsmoiety-default-rtdb.asia-southeast1.firebasedatabase.app/",
     "storage_bucket": "lazervsmoiety.appspot.com"
   },
   "client": [

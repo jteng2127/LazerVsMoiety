@@ -24,21 +24,25 @@ public class StageSelector : MonoSingleton<StageSelector> {
             {
                 1,
                 new StageSettingData(
+                    stageID: 1,
                     unitType: new List<int>() { 1, 2, 3 }
                 )
             }, {
                 2,
                 new StageSettingData(
+                    stageID: 2,
                     unitType: new List<int>() { 4, 5, 6 }
                 )
             }, {
                 3,
                 new StageSettingData(
+                    stageID: 3,
                     unitType: new List<int>() { 7, 8, 9, 10 },
                     enemySpawnNumberTotal: 15)
             }, {
                 4,
                 new StageSettingData(
+                    stageID: 4,
                     unitType: new List<int>() { 2, 4, 6, 10 },
                     enemySpawnNumberTotal: 17,
                     enemySpawnInterval: 6.5f,
@@ -46,6 +50,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
             }, {
                 5,
                 new StageSettingData(
+                    stageID: 5,
                     unitType: new List<int>() { 1, 3, 5, 7 },
                     enemySpawnNumberTotal: 20,
                     enemySpeedMultiplier: 1.2f,
@@ -54,6 +59,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
             }, {
                 6,
                 new StageSettingData(
+                    stageID: 6,
                     unitType: new List<int>() { 1, 2, 3, 4, 5 },
                     enemySpawnNumberTotal: 23,
                     enemySpeedMultiplier: 1.2f,
@@ -62,6 +68,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
             }, {
                 7,
                 new StageSettingData(
+                    stageID: 7,
                     unitType: new List<int>() { 6, 7, 8, 9, 10 },
                     enemySpawnNumberTotal: 25,
                     enemySpeedMultiplier: 1.2f,
@@ -70,6 +77,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
             }, {
                 8,
                 new StageSettingData(
+                    stageID: 8,
                     unitType: new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
                     enemySpawnNumberTotal: 28,
                     enemySpeedMultiplier: 1.4f,
@@ -78,6 +86,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
             }, {
                 9,
                 new StageSettingData(
+                    stageID: 9,
                     unitType: new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
                     enemySpawnNumberTotal: 30,
                     enemySpeedMultiplier: 0.5f,
@@ -86,6 +95,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
             }, {
                 10,
                 new StageSettingData(
+                    stageID: 10,
                     unitType: new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
                     enemySpawnNumberTotal: 40,
                     enemySpeedMultiplier: 1.7f,

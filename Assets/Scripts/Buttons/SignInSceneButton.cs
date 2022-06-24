@@ -19,6 +19,7 @@ public class SignInSceneButton : MonoBehaviour {
     private InputField _studentIDInput;
     private InputField _passwordInput;
     private Button SignOutButton;
+    private Button ViewScoreButton;
 
     void Awake() {
         // Initial variables
@@ -30,6 +31,7 @@ public class SignInSceneButton : MonoBehaviour {
         _signInSprite = Resources.Load<Sprite>("Images/SignIn/1x/sign_in_button");
         _startSprite = Resources.Load<Sprite>("Images/SignIn/1x/start_button");
         SignOutButton = transform.parent.Find("SignOutButton").GetComponent<Button>();
+        ViewScoreButton = transform.parent.Find("ViewScoreButton").GetComponent<Button>();
 
         // Initial state
         _isOpenSignInWindow = false;
@@ -44,6 +46,12 @@ public class SignInSceneButton : MonoBehaviour {
 
         // Initial AuthStateChanged
         AuthManager.UserStateChanged += OnUserStateChanged;
+
+        if(AuthManager.Instance.IsSignedIn()) {
+            SignInSuccess();
+        } else {
+            SignInFail("");
+        }
     }
 
     #region Click behavior
@@ -70,6 +78,7 @@ public class SignInSceneButton : MonoBehaviour {
         _signInWindow.SetActive(false);
         _rectTransform.anchoredPosition3D = _startPosition;
         SignOutButton.gameObject.SetActive(true);
+        ViewScoreButton.gameObject.SetActive(true);
         // FireStoreManager.Instance.GetUserData();
         StartCoroutine(DelayToInvoke.DelayToInvokeDo(() =>{
               FireStoreManager.Instance.GetUserData();

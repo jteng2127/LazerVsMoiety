@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 
 public class StageSettingData {
+    
+    #region stage data
+    public int StageID { get; private set; }
+    #endregion
 
     #region spawn info
     public List<int> UnitType { get; private set; }
@@ -18,6 +22,7 @@ public class StageSettingData {
 
     #region constructor
     public StageSettingData(
+            int stageID = -1,
             List<int> unitType = null,
             int enemySpawnNumberTotal = 10,
             float enemySpeedMultiplier = 1.0f,
@@ -25,6 +30,9 @@ public class StageSettingData {
             float enemySpawnIntervalDeviation = 0.3f,
             float allyCardSpawnInterval = 4.5f,
             float allyCardSpawnIntervalDeviation = 0.3f) {
+
+        /// stage data
+        this.StageID = stageID;
 
         /// Spawn info
         if (unitType != null) UnitType = unitType;

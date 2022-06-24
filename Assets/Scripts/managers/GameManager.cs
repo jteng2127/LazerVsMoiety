@@ -39,6 +39,7 @@ public class GameManager : MonoSingleton<GameManager> {
         Instance._sceneTypeToString = new Dictionary<SceneType, string>{
             {SceneType.Loading, "Loading"},
             {SceneType.SignIn, "SignIn"},
+            {SceneType.ViewScore, "ViewScore"},
             {SceneType.Menu, "Menu"},
             {SceneType.User, "User"},
             {SceneType.Setting, "Setting"},
@@ -50,6 +51,7 @@ public class GameManager : MonoSingleton<GameManager> {
         Instance._stringToSceneType = new Dictionary<string, SceneType>{
             {"Loading", SceneType.Loading},
             {"SignIn", SceneType.SignIn},
+            {"ViewScore", SceneType.ViewScore},
             {"Menu", SceneType.Menu},
             {"User", SceneType.User},
             {"Setting", SceneType.Setting},
@@ -87,6 +89,7 @@ public enum SceneType {
     /// <summary> Loding page </summary>
     Loading,
     SignIn,
+    ViewScore,
     Menu,
     /// <summary> Logout etc. </summary>
     User,

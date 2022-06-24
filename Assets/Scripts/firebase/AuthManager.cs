@@ -102,7 +102,7 @@ public class AuthManager : MonoBehaviour {
         signInSceneButton.SignInFail("");
     }
 
-    public bool isSignedIn() {
+    public bool IsSignedIn() {
         return user != null;
     }
 

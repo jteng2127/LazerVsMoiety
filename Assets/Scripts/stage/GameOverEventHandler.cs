@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class GameOverEventHandler : StageStateReactBase {
     #region data
+    private int? StageID;
     private Dictionary<int, string> EnemyIDToName;
     private EnemySpawnHandler EnemySpawnHandler;
     private Transform GameOverScreen;
@@ -14,15 +15,18 @@ public class GameOverEventHandler : StageStateReactBase {
     #endregion
 
     #region Creator
-    public static GameOverEventHandler Create(EnemySpawnHandler enemySpawnHandler) {
+    public static GameOverEventHandler Create(
+            EnemySpawnHandler enemySpawnHandler,
+            int? stageID = null) {
         // create new GameObject to hold the GameOverEventHandler
         GameObject go = new GameObject("GameOverEventHandler");
         GameOverEventHandler gameOverEventHandler = go.AddComponent<GameOverEventHandler>();
-        gameOverEventHandler.Initial(enemySpawnHandler);
+        gameOverEventHandler.Initial(enemySpawnHandler, stageID);
         return gameOverEventHandler;
     }
-    private void Initial(EnemySpawnHandler enemySpawnHandler) {
+    private void Initial(EnemySpawnHandler enemySpawnHandler, int? stageID) {
         EnemySpawnHandler = enemySpawnHandler;
+        StageID = stageID;
 
         EnemyIDToName = new Dictionary<int, string>{
             {1, "C-O"},
@@ -50,12 +54,18 @@ public class GameOverEventHandler : StageStateReactBase {
         ScoreManager.Instance.GameWin();
         AudioManager.Instance.Play("victory", 0.6f, true, true);
         ShowGameOverScreen("You Win!!!", ScoreManager.Instance.TotalScore);
+        if(StageID.HasValue) {
+            PlayerPrefs.SetInt("Stage" + StageID + " Best Score", ScoreManager.Instance.TotalScore);
+        }
         RestartButton.onClick.AddListener(StageManager.Instance.TriggerRestart);
     }
 
     protected override void GameLose() {
         AudioManager.Instance.Play("defeat", 0.6f, true, true);
         ShowGameOverScreen("You Lose...", ScoreManager.Instance.TotalScore);
+        if(StageID.HasValue) {
+            PlayerPrefs.SetInt("Stage" + StageID + " Best Score", ScoreManager.Instance.TotalScore);
+        }
         RestartButton.onClick.AddListener(StageManager.Instance.TriggerRestart);
     }
 

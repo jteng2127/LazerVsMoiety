@@ -22,15 +22,17 @@ namespace FireStoreData {
         [FirestoreProperty]
         public List<Dictionary<string, object>> stagesData { get; set; }
 
-        public void AddStageData (int score, int time) {
+        public void AddStageData (int stage, int score, int time) {
             Dictionary<string, object> stageData = new Dictionary<string, object>();
+            stageData.Add("stage", stage);
             stageData.Add("score", score);
             stageData.Add("time", time);
             stagesData.Add(stageData);
         }
 
-        public void UpdataStageData (int index, int score, int time) {
+        public void UpdataStageData (int index, int stage, int score, int time) {
             Dictionary<string, object> stageData = stagesData[index];
+            stageData["stage"] = stage;
             stageData["score"] = score;
             stageData["time"] = time;
         }

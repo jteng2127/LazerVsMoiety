@@ -73,6 +73,7 @@ public class FireStoreManager : ScriptableObject {
         if (snapshot.Exists) {
             FireStoreData.UserStagesData data = snapshot.ConvertTo<FireStoreData.UserStagesData>();
             DataManager.instance.userStagesData = data;
+            Debug.Log("data seted");
         }
         else {
             Debug.LogError("[FireStoreManager] No such document");

@@ -15,7 +15,7 @@ public class StageManager : MonoSingleton<StageManager> {
 
     void Update() {
         /// Get touch input
-        if (StageState.GetType() == typeof(StagePlayState) && Input.touchCount > 0) {
+        if (StageState is StagePlayState && Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
 
@@ -39,7 +39,7 @@ public class StageManager : MonoSingleton<StageManager> {
             }
         }
         /// Get mouse input
-        else if (StageState.GetType() == typeof(StagePlayState) && Input.GetMouseButton(0)) {
+        else if (StageState is StagePlayState && Input.GetMouseButton(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             /// show Debug
@@ -106,7 +106,7 @@ public class StageManager : MonoSingleton<StageManager> {
         EntityEventHandler = EntityEventHandler
             .Create(EnemySpawnHandler, AllyCardSpawnHandler);
         GameOverEventHandler = GameOverEventHandler
-            .Create(EnemySpawnHandler);
+            .Create(EnemySpawnHandler, StageSettingData.StageID);
         ScoreManager.NewScore(EnemySpawnHandler);
 
         RegisterStageStateReact(AllyCardSpawnHandler);
@@ -124,6 +124,14 @@ public class StageManager : MonoSingleton<StageManager> {
     }
     public void RegisterStageStateReact(StageStateReactBase react) {
         ReactList.Add(react);
+        if(!(StageState is StageInitialState) &&
+           !(StageState is StageReadyState) && 
+           StageState != null) {
+            react.GameStart();
+        }
+        if(StageState is StagePauseState) {
+            react.Pause();
+        }
     }
     public void UnregisterStageStateReact(StageStateReactBase react) {
         ReactList.Remove(react);

@@ -50,7 +50,6 @@ public class AllyUnit : Unit {
         else if (_isActivate) {
             _isActivate = false;
             if (Id == 0) {
-                Debug.Log("Cannon!!");
                 StageManager.Instance.CannonLeft--;
                 _boxCollider2D.size = new Vector2(100.0f, _boxCollider2D.size.y);
                 Destroy(Spawn(11, transform.position), 3.0f);

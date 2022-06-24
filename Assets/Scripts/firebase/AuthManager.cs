@@ -14,7 +14,7 @@ public class AuthManager : MonoBehaviour {
         [RuntimeInitializeOnLoadMethod]
         get {
             if (s_Instance == null) {
-                Debug.Log("AuthManager: Create new instance.");
+                Debug.Log("[AuthManager] Create new instance.");
                 CreateDefault();
             }
             return s_Instance;
@@ -28,7 +28,7 @@ public class AuthManager : MonoBehaviour {
     }
 
     void OnEnable() {
-        Debug.Log("AuthManager Enable");
+        Debug.Log("[AuthManager] Enable");
         _init();
     }
 
@@ -77,11 +77,11 @@ public class AuthManager : MonoBehaviour {
         if (auth.CurrentUser != user) {
             bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
             if (!signedIn && user != null) {
-                Debug.Log("Signed out " + user.Email);
+                Debug.Log("[AuthManager] Signed out " + user.Email);
             }
             user = auth.CurrentUser;
             if (signedIn) {
-                Debug.Log("Signed in " + user.Email);
+                Debug.Log("[AuthManager] Signed in " + user.Email);
             }
         }
     }
@@ -147,11 +147,11 @@ public class AuthManager : MonoBehaviour {
                     StartCoroutine(Register(studentID, password));
                     break;
             }
-            Debug.Log(message);
+            Debug.Log("[AuthManager] " + message);
             if (!isRegister) signInSceneButton.SignInFail(message);
         }
         else { // login success
-            Debug.Log("Login Successful");
+            Debug.Log("[AuthManager] Login Successful");
         }
     }
 
@@ -192,11 +192,11 @@ public class AuthManager : MonoBehaviour {
                 if (ProfileTask.Exception != null) {
                     FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
                     AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-                    Debug.Log("studentID Set Failed!");
+                    Debug.Log("[AuthManager] studentID Set Failed!");
                     signInSceneButton.SignInFail("studentID Set Failed!");
                 }
                 else {
-                    Debug.Log("studentID Set Successfully");
+                    Debug.Log("[AuthManager] studentID Set Successfully");
                     FireStoreManager.Instance.RegisterUserData(
                         new FireStoreData.UserData {
                             uid = User.UserId,

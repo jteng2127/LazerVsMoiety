@@ -14,7 +14,6 @@ public class AudioManager : MonoSingleton<AudioManager> {
 
     #region MonoBehaviour
     void Awake() {
-        Debug.Log("AudioManager Enable");
         _backGroundMusic = gameObject.AddComponent<AudioSource>();
     }
 

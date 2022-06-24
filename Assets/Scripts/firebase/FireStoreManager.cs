@@ -22,7 +22,7 @@ public class FireStoreManager : ScriptableObject {
     }
 
     void OnEnable() {
-        Debug.Log("FireStoreManager Enable");
+        Debug.Log("[FireStoreManager] FireStoreManager Enable");
     }
 
     private FirebaseFirestore db {
@@ -45,7 +45,7 @@ public class FireStoreManager : ScriptableObject {
         else {
             // Firestore Error
             // https://firebase.google.com/docs/reference/unity/namespace/firebase/firestore#firestoreerror
-            Debug.LogError("No such document");
+            Debug.LogError("[FireStoreManager] No such document");
         }
     }
 
@@ -75,7 +75,7 @@ public class FireStoreManager : ScriptableObject {
             DataManager.instance.userStagesData = data;
         }
         else {
-            Debug.LogError("No such document");
+            Debug.LogError("[FireStoreManager] No such document");
         }
     }
 

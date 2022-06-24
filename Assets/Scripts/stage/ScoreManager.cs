@@ -73,7 +73,7 @@ public class ScoreManager : MonoSingleton<ScoreManager> {
         if (StageManager.Instance.StageState.GetType() == typeof(StagePlayState)) {
             if (!Scores.ContainsKey(key)) Scores[key] = 0;
             Scores[key] += addScore;
-            Log("add " + key + ": " + addScore);
+            Log("add score " + key + ": " + addScore);
         }
     }
     #endregion

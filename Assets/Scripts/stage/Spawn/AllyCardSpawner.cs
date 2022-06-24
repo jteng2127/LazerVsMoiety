@@ -64,8 +64,7 @@ public class AllyCardSpawner : ISpawner {
             }
             node.Value = id;
         }
-        Debug.Log("[AllyCardSpawner] SetPrioritySpawn: " + id + " within " + withinSpawningRound + " round(s)");
-        Debug.Log("[AllyCardSpawner] SpawnIDQueue: " + String.Join(", ", SpawnIDQueue.Select(x => x.ToString()).ToArray()));
+        Debug.Log("[AllyCardSpawner] SpawnIDQueue: (" + String.Join(", ", SpawnIDQueue.Select(x => x.ToString()).ToArray()) + ")");
     }
 
     public int Spawn() {
@@ -74,6 +73,7 @@ public class AllyCardSpawner : ISpawner {
         }
         int allyCardID = SpawnIDQueue.First.Value;
         SpawnIDQueue.RemoveFirst();
+        Debug.Log("[AllyCardSpawner] SpawnIDQueue: (" + String.Join(", ", SpawnIDQueue.Select(x => x.ToString()).ToArray()) + ")");
 
         if (allyCardID == -1) {
             allyCardID = Types[UnityEngine.Random.Range(0, TypesTotal)];

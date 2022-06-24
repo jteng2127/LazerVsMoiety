@@ -7,7 +7,7 @@ public abstract class Unit : StageStateReactBase {
     #region Debug
 
     protected static void Log(string s) {
-        Debug.Log(MethodBase.GetCurrentMethod().DeclaringType + ": " + s);
+        Debug.Log("[" + MethodBase.GetCurrentMethod().DeclaringType + "] " + s);
     }
 
     #endregion

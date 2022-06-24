@@ -89,7 +89,6 @@ public class StageManager : MonoSingleton<StageManager> {
     }
 
     public void OnStageSceneLoaded(Scene scene, LoadSceneMode mode) {
-        Log("OnStageSceneLoaded");
         StageGrid stageGrid = GameObject.Find("StageGrid").GetComponent<StageGrid>();
         AllyCardSpawnHandler = AllyCardSpawnHandler
             .Create(allyCardTypes: StageSettingData.UnitType)
@@ -139,7 +138,6 @@ public class StageManager : MonoSingleton<StageManager> {
     }
 
     public void TriggerPause() {
-        Log("TriggerPause");
         StageState.Pause();
     }
 

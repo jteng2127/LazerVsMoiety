@@ -16,7 +16,6 @@ public class JsonManager : MonoBehaviour {
     public static JsonManager Instance {
         get {
             if (s_Instance == null) {
-                Debug.Log("JsonManager: Create new instance.");
                 CreateDefault();
             }
             return s_Instance;

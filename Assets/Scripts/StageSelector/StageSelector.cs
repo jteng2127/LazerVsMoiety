@@ -25,10 +25,7 @@ public class StageSelector : MonoSingleton<StageSelector> {
                 1,
                 new StageSettingData(
                     stageID: 1,
-                    // unitType: new List<int>() { 1, 2, 3 }
-                    enemySpawnNumberTotal: 10,
-                    enemySpeedMultiplier: 2.7f,
-                    unitType: new List<int>() { 1 }
+                    unitType: new List<int>() { 1, 2, 3 }
                 )
             }, {
                 2,
